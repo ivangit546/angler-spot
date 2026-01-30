@@ -13,8 +13,6 @@ class UserRegistrationForm(forms.ModelForm):
         fields = ('username','password','email')
 
 class ProfileForm(forms.ModelForm):    
-    profile_image = forms.ImageField()
-
     class Meta:
         model = Profile
-        fields = ['profile_image']
+        fields = ['profile_image', 'profile_name', ]

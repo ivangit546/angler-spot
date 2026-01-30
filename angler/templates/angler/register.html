@@ -1,0 +1,76 @@
+{% extends 'angler/base.html' %}
+{% load static %}
+
+{% block content%}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}">
+
+    <div class="registration">
+        <div class="container min-vh-100 d-flex justify-content-center align-items-start">
+        <div class="registration-wrapper w-100">            
+            <div class="card p-4 shadow mx-auto registration-card">
+
+                <div class="registration-card-top">
+                    <div class="registration-title">
+                    <h2>Register</h2>
+                    <p class="text-muted">Fill form to create an account</p>
+                    </div>
+                </div>
+
+                    <form class="row g-3 needs-validation" novalidate>
+                    <div class="col-md-4">
+                        <label for="validationCustom01" class="form-label">First name</label>
+                        <input type="text" class="form-control" id="validationCustom01" value="Mark" required>
+                        <div class="valid-feedback">
+                        Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationCustom02" class="form-label">Last name</label>
+                        <input type="text" class="form-control" id="validationCustom02" value="Otto" required>
+                        <div class="valid-feedback">
+                        Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="validationCustomUsername" class="form-label">Username</label>
+                        <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@</span>
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
+                        <div class="invalid-feedback">
+                            Please choose a username.
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email_address"class="form-label"></label>Email</label>
+                        <input type="email" id="email_address" name="email_address" required class="form-control">                      
+                    </div>
+                    <p>
+                    <div class="col-md-6">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="confirmPassword" class="form-label">Confirm</label>
+                        <input type="password" class="form-control" id="confirmPassword">
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                        <label class="form-check-label" for="invalidCheck">
+                            Agree to terms and conditions
+                        </label>
+                        <div class="invalid-feedback">
+                            You must agree before submitting.
+                        </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Submit form</button>
+                    </div>
+                    </form>
+                </div>    
+            </div>
+        </div>
+    </div>
+{% endblock %}

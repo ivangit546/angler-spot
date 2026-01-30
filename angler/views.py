@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
 from django.views import View
 from .models import Post, User, Profile
-# from django.contrib import messages
-from angler.forms.user import UserRegistrationForm
+from .forms.user import UserRegistrationForm, ProfileForm
+from django.contrib.auth import login
 
 class MainFeed_View(View):
 
@@ -13,28 +13,31 @@ class MainFeed_View(View):
         context = {
             'posts': posts
         }
-        return render(request, 'angler/post_list.html', context)
+        return render(request, 'angler/main_feed.html', context)
 
 
 class Register_View(View):
     
     def get(self, request):
         user_form = UserRegistrationForm
-        return render(request, 'angler/register.html', {'user_form':user_form})
+        profile_form = ProfileForm
+        return render(request, 'angler/register.html', {'user_form':user_form, 'profile_form':profile_form})
     
     def post(request):
         user_form = UserRegistrationForm(data=request.post)
-        if user_form.is_valid():
+        profile_form = ProfileForm(data=request.post, files=request.files)
+        if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            Profile.objects.create()
+            profile = profile_form.save(commit=False) #stop django from saving this instance of profile into the database without a user object in its one to one relationship yet
+            profile.user = user
+            profile.save()
+            login(request, user)
+            return redirect('login')
         else:
-            print(user_form.errors)
-        return redirect('/login/')        
+            print(user_form.errors, profile_form.errors)
+        return render(request, 'angler/register.html', {'user_form':user_form, 'profile_form':profile_form})        
     
-class Login_View(View):
-    
+class Login_View(View):    
     def get(self, request):
         return render(request, 'angler/login.html')    
 

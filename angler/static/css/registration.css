@@ -1,0 +1,71 @@
+
+.registration-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: clamp(800px, 90vw, 1200px);
+  min-height: clamp(500px, 70vh, 900px);
+  padding: clamp(3rem, 5vw, 6rem);
+  margin-top: clamp(50px, 10vh, 150px);
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+  border-radius: 0.75rem;
+  background-color: #e9ecef;
+}
+
+
+.registration-card-top {
+
+  flex-shrink: 0;
+}
+
+
+.registration-title {
+  position: absolute;
+  top: clamp(1rem, 3vh, 3rem);    
+  left: clamp(1rem, 3vw, 3rem);   
+  text-align: left;
+  max-width: 50%;               
+}
+
+
+.registration-title h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+
+.registration-title p {
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+
+.registration-card-bottom {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;             
+  justify-content: space-between; 
+}
+
+
+.registration-card .form-control,
+.registration-card .form-select {
+  height: clamp(50px, 6vw, 70px);
+  font-size: clamp(1.2rem, 1.5vw, 1.3rem);
+  padding: 0.5rem 1rem;
+}
+
+
+.registration-card .btn-primary {
+  padding: clamp(0.75rem, 1.5vw, 1.25rem) 2rem;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+}
+
+
+.registration-card .row.g-3 > div {
+  margin-bottom: clamp(1.5rem, 2vh, 2.5rem);
+}
