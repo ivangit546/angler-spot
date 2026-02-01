@@ -1,5 +1,6 @@
 from django import forms
-from angler.models import User, Profile
+from angler.models.user import User
+from angler.models.user import Profile
 
 
 
@@ -23,11 +24,11 @@ class UserRegistrationForm(forms.ModelForm):
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
         
-        if password is None:
-            self.add_error('password', "Enter a password")
-            return cleaned_data
-        if password != confirm_password:
-            raise forms.ValidationError("Passwords must match")
+        if password and confirm_password and password != confirm_password:
+            self.add_error(
+                "confirm_password",
+                "Passwords must match"
+            )
             
 
 

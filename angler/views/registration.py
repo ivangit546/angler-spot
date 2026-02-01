@@ -1,15 +1,14 @@
 from django.shortcuts import redirect, render
 from django.views import View
-from angler.models import Post, User, Profile
 from angler.forms.user import UserRegistrationForm, ProfileForm
 from django.contrib.auth import login
-
-
 
 
 class Register_View(View):
     
     def get(self, request):
+        if request.user is not None and request.user.is_authenticated:
+            return redirect ('/')
         user_form = UserRegistrationForm
         profile_form = ProfileForm
         return render(request, 'angler/register.html', {'user_form':user_form, 'profile_form':profile_form})
@@ -24,8 +23,8 @@ class Register_View(View):
             profile = profile_form.save(commit=False) #stop django from saving this instance of profile into the database without a user object in its one to one relationship yet
             profile.user = user
             profile.save()
-            # login(request, user) TODO uncomment after login form/view and template are done
-            return redirect('login')
+            login(request, user)
+            return redirect('/')
         else:
             print(user_form.errors, profile_form.errors)
         return render(request, 'angler/register.html', {'user_form':user_form, 'profile_form':profile_form})        

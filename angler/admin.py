@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import User, Post, Profile
-
+from .models.user import User
+from .models.user import Profile
+from .models.post import Post
+from .models.fish import Fish, FishDex
 
 
 admin.site.register(User),

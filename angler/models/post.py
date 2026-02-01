@@ -1,20 +1,7 @@
 from django.db import models
-from django.conf import settings
 from django.forms import ImageField
 from django.utils import timezone
-from django.contrib.auth.models import AbstractUser
-
-class User(AbstractUser):
-
-    def __str__(self):
-        return self.username
-    
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_image = models.ImageField(default='default_profile_img.jpg', upload_to='profile_img/', null=False, blank=True)
-    profile_name = models.CharField(max_length=16, blank=True)
-    bio = models.TextField(max_length=500, blank=True)
-
+from .user import User
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     title = models.CharField(max_length=200)
@@ -29,9 +16,3 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title    
-    
-# class Fish(models.Model):
-
-#     fish_variety = models.
-
-# class FishDex(models.Model):
