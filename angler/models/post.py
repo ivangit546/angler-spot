@@ -1,7 +1,7 @@
 from django.db import models
-from django.forms import ImageField
 from django.utils import timezone
-from .user import User
+from angler.models.user import User
+
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     title = models.CharField(max_length=200)
