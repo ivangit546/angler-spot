@@ -1,5 +1,5 @@
-from .user import User, Profile
-from .fish import Fish, FishDex, FishEntry
-from .post import Post
+from angler.models.user import User, Profile
+from angler.models.fish import Fish, FishDex, FishEntry
+from angler.models.post import Post
 
 

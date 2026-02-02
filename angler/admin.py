@@ -9,8 +9,14 @@ admin.site.register(User),
 admin.site.register(Post),
 admin.site.register(Profile),
 admin.site.register(Fish),
-admin.site.register(FishDex),
 admin.site.register(FishEntry),
 
+
+class FishEntryInline(admin.TabularInline): # 
+    model = FishEntry
+
+@admin.register(FishDex)
+class FishDexAdmin(admin.ModelAdmin):
+    inlines = [FishEntryInline] 
 
 

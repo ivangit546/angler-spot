@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from angler.forms.user import UserRegistrationForm, ProfileForm
 from django.contrib.auth import login
-
+from angler.models.fish import Fish, FishDex, FishEntry
 
 class Register_View(View):
     
@@ -23,6 +23,8 @@ class Register_View(View):
             profile = profile_form.save(commit=False) #stop django from saving this instance of profile into the database without a user object in its one to one relationship yet
             profile.user = user
             profile.save()
+            fish_dex = FishDex.objects.create(user=user) #TODO replace and do logic in fish model file upon user creation via signal
+            fish_dex.save()
             login(request, user)
             return redirect('/')
         else:
