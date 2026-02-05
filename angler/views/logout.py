@@ -6,7 +6,7 @@ from django.contrib import messages
 
 
 class Logout_View(View):
-    def post(self, request):
+    def get(self, request): #TODO switch to post after logout button has been added to html templates
         logout(request)
-        return redirect('logout') # eventual change to feed for non authenticated users (limited function that will display posts)
+        return redirect('/') # eventual change to feed for non authenticated users (limited function that will display posts)
 

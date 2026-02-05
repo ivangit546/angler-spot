@@ -1,0 +1,12 @@
+{% extends 'angler/base.html'%}
+{% block content %}
+
+<body>
+    <h2>Your Fish</h2>
+    <form method="POST", action="{% url 'fishdex_entry'%}", enctype="multipart/form-data" class="data">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+{% endblock %}

@@ -7,7 +7,7 @@ class Fish(models.Model):
     fish_group = models.CharField(max_length=100, blank=True) #i.e bass is the group and the fish name would be large mouth bass
     weight = models.DecimalField(max_digits=5, decimal_places=1) # i.e 1230.9 
     length = models.DecimalField(max_digits=5, decimal_places=2) # standard unnit will be inches (form will accept feet and or inches then convert to inches) i.e 234.43
-    shiny = models.CharField(max_length=100, null=True, blank=True) # might remove later as it could be redundant-> change 'shiny' to charfield and if not null then alr has boolean value assumed(true)
+    shiny = models.BooleanField(default=False) 
     fish_avatar = models.ImageField(upload_to='fish_avatar/', blank=True) #will be stock image for type of fish
 
     def __str__(self):
@@ -30,7 +30,7 @@ class FishEntry(models.Model):
     class Meta:
         unique_together = ('fish', 'fish_dex')
 
-
+    
 
 
 
