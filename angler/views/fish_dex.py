@@ -15,7 +15,7 @@ class FishDex_View(View):
             is_users_account = True
 
         # user_fish_dex = FishDex.objects.get(user=user) might keep for clarification
-        user_fishes = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id)).all()
+        user_fishes = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
         locked_fishes = Fish.objects.exclude(id__in=user_fishes.values_list('fish_id'))
    
       
@@ -25,7 +25,11 @@ class FishDex_View(View):
 class FishDexEntry(View):
 
     def get(self, request):
-        form = FishDexEntryForm
+        form = FishDexEntryForm()
+        form.fields['fish'].queryset = Fish.objects.exclude(
+            id__in=FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=request.user.id)).all()
+            .values_list('fish_id')) # only want user to see locked fish in options of fish to enter in their fishdex
+        
         return render(request, 'angler/fish_dex_entry.html',{'form':form})
 
     def post(self, request):
@@ -38,5 +42,7 @@ class FishDexEntry(View):
             fish_entry_form = fish_entry_form.save(commit=False)
             fish_entry_form.fish_dex = fish_dex
             fish_entry_form.save()
+            fish_dex.unlocked +=1 
+            fish_dex.save()
             return redirect('fishdex', user_id=user.id)
         

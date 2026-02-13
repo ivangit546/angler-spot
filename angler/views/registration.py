@@ -9,7 +9,7 @@ class Register_View(View):
     def get(self, request):
         if request.user is not None and request.user.is_authenticated:
             return redirect ('/')
-        user_form = UserRegistrationForm
+        user_form = UserRegistrationForm()
         profile_form = ProfileForm
         return render(request, 'angler/register.html', {'user_form':user_form, 'profile_form':profile_form})
     

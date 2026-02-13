@@ -1,0 +1,13 @@
+{% extends 'angler/base.html'%}
+{% block content %}
+
+<body>
+    <h2>Your Fish</h2>
+    <form method="POST", action="{% url 'tackle'%}", class="data">
+        {% csrf_token %}
+        {{ rod_real_form.as_p}}
+        {{ lure_form.as_p}}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+{% endblock %}

@@ -15,6 +15,7 @@ class RodAndReel(models.Model):
                           ('extra fast', 'Extra Fast'))
     name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rod_action = models.CharField(max_length=100, choices=ROD_ACTION_CHOICES)
     rod_length = models.DecimalField(default=6, max_digits=3, decimal_places=1)
     line = models.CharField(max_length=100, choices=LINE_CHOICES)
     line_length = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
