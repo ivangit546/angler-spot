@@ -10,4 +10,4 @@ class ReelAndRod(forms.ModelForm):
 class Lure(forms.ModelForm):
     class Meta:
         model = Lure
-        fields = ('name','live_bait', 'lure_type', 'trailer', 'description')
+        fields = ('name', 'live_bait', 'lure_type', 'trailer', 'description')

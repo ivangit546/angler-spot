@@ -1,0 +1,16 @@
+{% extends 'angler/base.html'%}
+{% block content %}
+
+<body>
+    {% if friends %}
+            <ul>
+                {% for friend in friends %}
+                <li>
+                    <h2>{{friend.username}}</h2>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}    
+            {{ is_friend }}
+</body>
+{% endblock %}

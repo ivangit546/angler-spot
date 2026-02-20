@@ -34,5 +34,6 @@ class Lure(models.Model):
     lure_type = models.CharField(max_length=100, choices=LURE_CHOICES)
     live_bait = models.BooleanField(default=False)
     trailer = models.CharField(max_length=100, null=True, blank=True)
+    
     def __str__(self):
         return self.name

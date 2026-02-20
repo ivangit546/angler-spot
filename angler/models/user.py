@@ -6,21 +6,25 @@ class User(AbstractUser):
     points = models.PositiveIntegerField(default=0) #previous idea have a cap on points validators=[MaxValueValidator(5000)]
     @property
     def level(self):
-        if self.points == 0:
+        if self.points <= 0:
             return 'None'
-        elif self.points <= 1000:
+        elif self.points <= 999:
             return 'Bronze'
-        elif self.points <= 2000:
+        elif self.points <= 1999:
             return 'Silver'
-        elif self.points <= 3000:
+        elif self.points <= 2999:
             return 'Gold'
-        elif self.points <= 4000:
+        elif self.points <= 3999:
             return 'Diamond'
         else:
             return 'Platinum'
         
     def __str__(self):
         return self.username
+    
+    def add_login_points(self):
+        self.points += 10
+        self.save()
      
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
