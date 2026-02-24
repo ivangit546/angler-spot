@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator
 
 class User(AbstractUser):
+    is_private = models.BooleanField(default=False)
     points = models.PositiveIntegerField(default=0) #previous idea have a cap on points validators=[MaxValueValidator(5000)]
     @property
     def level(self):
@@ -19,19 +20,20 @@ class User(AbstractUser):
         else:
             return 'Platinum'
         
+
     def __str__(self):
         return self.username
     
     def add_login_points(self):
         self.points += 10
         self.save()
-     
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(default='default_profile_img.jpg', upload_to='profile_img/', null=False, blank=True)
     profile_name = models.CharField(max_length=16, blank=True)
     bio = models.TextField(max_length=500, blank=True)
-
     def __str__(self):
         return self.profile_name
    

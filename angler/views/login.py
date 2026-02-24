@@ -5,7 +5,7 @@ from django.contrib import messages
 
 
 
-class Login_View(View):    
+class LoginView(View):    
     def get(self, request):
         if request.user is not None and request.user.is_authenticated:
             return redirect ('/')

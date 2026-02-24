@@ -6,7 +6,7 @@ from angler.models.user import User
 from angler.forms.tackle import ReelAndRod, Lure
 
 
-class Tackle_View(View):
+class TackleView(View):
 
     def get (self, request):
         rod_real_form = ReelAndRod()

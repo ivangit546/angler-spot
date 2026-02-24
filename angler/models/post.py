@@ -3,7 +3,7 @@ from django.utils import timezone
 from angler.models.user import User
 
 class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
     image = models.ImageField (upload_to='post_img/', blank=True)

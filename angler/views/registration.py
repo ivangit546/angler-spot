@@ -3,8 +3,9 @@ from django.views import View
 from angler.forms.user import UserRegistrationForm, ProfileForm
 from django.contrib.auth import login
 from angler.models.fish import Fish, FishDex, FishEntry
+from angler.models.friends import FriendList
 
-class Register_View(View):
+class RegisterView(View):
     
     def get(self, request):
         if request.user is not None and request.user.is_authenticated:
@@ -25,6 +26,8 @@ class Register_View(View):
             profile.save()
             fish_dex = FishDex.objects.create(user=user) #TODO replace and do logic in fish model file upon user creation via signal
             fish_dex.save()
+            friends_list = FriendList.objects.create(user=user)
+            friends_list.save()
             login(request, user)
             return redirect('/')
         else:

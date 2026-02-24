@@ -5,7 +5,7 @@ from angler.models.fish import Fish, FishDex, FishEntry
 from angler.models.user import User
 from angler.forms.fish_dex import FishDexEntryForm
 
-class FishDex_View(View):
+class FishDexView(View):
 
     def get (self, request, user_id):
         req_user = self.request.user

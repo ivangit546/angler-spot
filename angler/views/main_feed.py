@@ -3,7 +3,7 @@ from django.views import View
 from angler.models.post import Post
 
 
-class MainFeed_View(View):
+class MainFeedView(View):
 
     def get(self, request):
         if not request.user.is_authenticated:
