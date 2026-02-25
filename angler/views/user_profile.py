@@ -19,7 +19,7 @@ class UserProfileView(LoginRequiredMixin, View):
         is_friend = FriendList.is_friend(user, request.user)
         pending_sent_friend_request = FriendRequest.objects.filter(request_sender=request.user, request_reciever=user, request_status=0).exists()  
         pending_recieved_friend_request = FriendRequest.objects.filter(request_sender=user, request_reciever=request.user, request_status=0).exists()   
-        print(is_friend)     
+        # print(is_friend)     
         context = {
             'user':user,
             'user_profile':user_profile,

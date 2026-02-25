@@ -10,17 +10,25 @@ class FriendList(models.Model):
 
     def add_friend(self, account):
         account_friendlist = FriendList.objects.get(user=account)
-        if account not in self.friends.all() and self.user not in account_friendlist.friends.all():
+        if account not in self.friends.all():
             self.friends.add(account)
             self.save()
 
-            # account_friendlist.friends.add(self.user)
-            # account_friendlist.save()
+    def unfriend(self, account):
+        self.remove_friend(account)
+        self.save()
+        account_friendlist = FriendList.objects.get(user=account)
+        account_friendlist.remove_friend(account)
+        account_friendlist.save()
 
     def remove_friend(self, friend):
         if self.friends.filter(pk=friend.pk).exists():    
             self.friends.remove(friend)
-            self.save()
+            
+            if FriendRequest.objects.filter(request_sender=self.user, request_reciever=friend).exists():
+                FriendRequest.objects.get(request_sender=self.user, request_reciever=friend).delete_request()
+        self.save()
+
             
     def is_friend(user1, user2):
         user_friend_list = FriendList.objects.get(user=user1)
@@ -30,7 +38,7 @@ class FriendList(models.Model):
                 return True 
         
     def __str__(self):
-        return f"{self.user}'s friendlist: {self.friends.all()}"
+        return f"{self.user}'s friendlist"
 class FriendRequest(models.Model):
     STATUS_CHOICES = ((0,'Pending'),
                       (1, 'Accepted')
@@ -46,7 +54,7 @@ class FriendRequest(models.Model):
     def accept_request(self):
         reciever_friendlist = FriendList.objects.get(user=self.request_reciever)
         if reciever_friendlist:
-            reciever_friendlist.add_friend(self.request_reciever)
+            reciever_friendlist.add_friend(self.request_sender)
             self.request_status = 1
             sender_friendlist = FriendList.objects.get(user=self.request_sender)
             if sender_friendlist:
@@ -54,8 +62,8 @@ class FriendRequest(models.Model):
                 self.save()
 
             
-    def reject_request(self):
-        self.delete()
+    # def reject_request(self):
+    #     self.delete()
 
-    def cancel_request(self):
+    def delete_request(self):
         self.delete()

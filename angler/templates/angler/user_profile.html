@@ -21,7 +21,7 @@
     {% if is_friend %}
     <form method="post" action="{% url 'remove_friend' user_id=user.id %}"> 
             {% csrf_token %}
-            <button type="submit" disabled>Unfriend</button>
+            <button type="submit">Unfriend</button>
         </form>
     {% endif %}
     <br>

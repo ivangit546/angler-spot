@@ -43,10 +43,13 @@ class ManageFriendRequestView(View):
         if action == 'accept':
             friend_request.accept_request()
         elif action == 'reject':
-            friend_request.reject_request()
+            friend_request.delete_request()
         return redirect('friendslist',user_id=user_reciever.id) 
 
 class RemoveFriendView(View):
     def post(self, request, user_id):
-        pass    
+        user_to_remove = get_object_or_404(User, id=user_id)
+        users_friendlist = get_object_or_404(FriendList, user=request.user)
+        users_friendlist.unfriend(user_to_remove)
+        return redirect('user_profile', user_id=user_to_remove.id)    
       
