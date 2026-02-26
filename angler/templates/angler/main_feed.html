@@ -13,10 +13,15 @@
                         <img src="{{post.post_image.url}}">
                     {% endif %}
                 </li>
+                <details>
+                    <summary>Reply</summary>
+                    <div>
+                        <textarea rows="4" cols="50" placeholder="Enter your reply here..."></textarea>
+                        <br>
+                        <button type="submit">Post</button>
+                    </div>
+                </details>
                 {% endfor %}
             </ul>
         {% endif %}    
-        <p>Hi there!</p>
-        <p>It works!</p>
-
 {% endblock %}
