@@ -9,25 +9,23 @@ class FriendList(models.Model):
         return f"{self.user.username}'s friendlist"
 
     def add_friend(self, account):
-        account_friendlist = FriendList.objects.get(user=account)
         if account not in self.friends.all():
             self.friends.add(account)
             self.save()
 
     def unfriend(self, account):
         self.remove_friend(account)
-        self.save()
         account_friendlist = FriendList.objects.get(user=account)
-        account_friendlist.remove_friend(account)
-        account_friendlist.save()
+        account_friendlist.remove_friend(self.user)
+
 
     def remove_friend(self, friend):
-        if self.friends.filter(pk=friend.pk).exists():    
-            self.friends.remove(friend)
-            
-            if FriendRequest.objects.filter(request_sender=self.user, request_reciever=friend).exists():
-                FriendRequest.objects.get(request_sender=self.user, request_reciever=friend).delete_request()
-        self.save()
+       if friend in self.friends.all():
+           self.friends.remove(friend)
+           self.save()
+       if FriendRequest.objects.filter(request_sender=self.user, request_reciever=friend).exists():
+           FriendRequest.objects.get(request_sender=self.user, request_reciever=friend).delete_request()
+
 
             
     def is_friend(user1, user2):
