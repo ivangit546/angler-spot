@@ -8,6 +8,7 @@ from angler.views.tackle import TackleView
 from angler.views.friends import FriendsListView
 from angler.views.user_profile import UserProfileView
 from angler.views.friends import SendFriendRequestView, ManageFriendRequestView, RemoveFriendView
+from angler.views.post import CreatePostView, CreateCommentView, LikePostView, DeletePostView, DeleteCommentView
 urlpatterns = [
     path('', MainFeedView.as_view(), name='home_feed'),
     path('register/', RegisterView.as_view(), name='register'),
@@ -19,5 +20,8 @@ urlpatterns = [
     path('user_profile/<int:user_id>/', UserProfileView.as_view(), name='user_profile'),
     path('friend_request/<int:user_id>', SendFriendRequestView.as_view(), name='send_friend_request'),
     path('manage_friend_request/<int:user_id>', ManageFriendRequestView.as_view(), name='manage_friend_request'),
-    path('remove_friend/<int:user_id>/', RemoveFriendView.as_view(), name='remove_friend')
+    path('remove_friend/<int:user_id>/', RemoveFriendView.as_view(), name='remove_friend'),
+    path('post_create', CreatePostView.as_view(), name='post_create'),
+    path('post_like/<int:post_id>', LikePostView.as_view(), name='post_like'),
+    path('comment_create/<int:post_id>', CreateCommentView.as_view(), name='comment_create')
 ]

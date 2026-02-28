@@ -12,7 +12,7 @@ class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         user_profile = get_object_or_404(Profile, user=user)
-        posts = Post.objects.filter(author=user)
+        posts = Post.objects.filter(user=user)
         is_users_acc = False
         if user == request.user:
             is_users_acc = True

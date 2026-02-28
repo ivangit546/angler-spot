@@ -9,17 +9,33 @@
                 <li>
                     <h2>{{post.title}}</h2>
                     <p>{{post.text}}</p>
-                    {% if post.post_image %}
-                        <img src="{{post.post_image.url}}">
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}">
                     {% endif %}
                 </li>
+                <br>
+                <span>
+                    {{ post.like_count }}
+                    <form method="POST", action="{% url 'post_like' post_id=post.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="submit" value="Like">
+                    </form>
+                </span>
+
                 <details>
-                    <summary>Reply</summary>
+                    <summary>Comments</summary>
                     <div>
-                        <textarea rows="4" cols="50" placeholder="Enter your reply here..."></textarea>
-                        <br>
-                        <button type="submit">Post</button>
+                        {% for comment in post.get_comments %}
+                            @{{comment.user.username}}:
+                            {{ comment.text }}
+                            <br>
+                        {% endfor %}
                     </div>
+                    <form method="post" action="{% url 'comment_create' post_id=post.id %}">
+                        {% csrf_token %}
+                        {{ comment_form }}
+                        <button type="submit">Submit</button>
+                    </form>
                 </details>
                 {% endfor %}
             </ul>
