@@ -29,7 +29,7 @@ class FishEntry(models.Model):
     entry_weight = models.DecimalField(max_digits=5, decimal_places=1)
     entry_length = models.DecimalField(max_digits=5, decimal_places=2)
     fish_dex_image = models.ImageField(upload_to='fishdex_img/')
-    caught_at = models.DateTimeField()
+    caught_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('fish', 'fish_dex')
@@ -41,6 +41,7 @@ class FishEntry(models.Model):
         else:
             user.points += 25    
         user.save()
-
+    def __str__(self):
+        return f"@{self.fish_dex.user.username}'s {self.fish.name} entry in FishDex"
             
 

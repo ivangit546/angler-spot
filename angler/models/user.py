@@ -27,7 +27,10 @@ class User(AbstractUser):
     def add_login_points(self):
         self.points += 10
         self.save()
-
+        
+    @property
+    def get_profile_name(self):
+        return Profile.objects.get(user=self).profile_name
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -37,3 +40,4 @@ class Profile(models.Model):
     def __str__(self):
         return self.profile_name
    
+#TODO Leaderboard model - updates weekly "This weeks biggest catch" - query for largest length and or weight of entry within time frame of said week 

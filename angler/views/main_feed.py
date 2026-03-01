@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views import View
 from angler.models.post import Post
-from angler.forms.post import PostCommentCreateForm
+from angler.forms.post import PostCommentForm
 
 class MainFeedView(View):
 
@@ -9,7 +9,7 @@ class MainFeedView(View):
         if not request.user.is_authenticated:
             return redirect('login')
         posts = Post.objects.order_by('-created_date')
-        comment_form = PostCommentCreateForm()
+        comment_form = PostCommentForm()
         context = {
             'posts': posts,
             'comment_form':comment_form

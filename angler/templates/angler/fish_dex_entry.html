@@ -2,7 +2,7 @@
 {% block content %}
 
 <body>
-    <h2>Your Fish</h2>
+    <h2>Add a new catch!</h2>
     <form method="POST", action="{% url 'fishdex_entry'%}", enctype="multipart/form-data" class="data">
         {% csrf_token %}
         {{ form.as_p}}

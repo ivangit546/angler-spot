@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Title</title>
-
-</head>
+{% extends 'angler/base.html'%}
+{% block content %}
 <body>
-    <h2>Your Fish</h2>
+    {{ user.get_profile_name }} FishDex
+    <h2>Caught Fish</h2>
     {% for fish in user_fishes%}
         * {{ fish.fish.name }}
         <br>
@@ -20,4 +15,4 @@
     {% endfor %}
    
 </body>
-</html>
+{% endblock %}

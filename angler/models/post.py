@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 from angler.models.user import User
 
 class Post(models.Model):
@@ -8,13 +7,14 @@ class Post(models.Model):
     created_date = models.DateTimeField(auto_now=True)
     image = models.ImageField (upload_to='post_img/', blank=True)
     def __str__(self):
-        return f"@{self.user.username}'s post @: {self.created_date}"   
+        return f"@{self.user.username}'s post (post id: {self.id})"
     
     def is_liked(self, user):
         if Like.objects.filter(user=user, post_id=self.id).exists():
             return True
         else:
             return False
+    @property
     def like_count(self):
         likes = Like.objects.filter(post=self).count()
         print(f"post has {likes} likes")
@@ -33,7 +33,13 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"@{self.user.username}'s comment on @{self.post.user.username}'s post (post_id: {self.post.pk} )"
-    
+
+    def is_liked(self, user):
+        if Like.objects.filter(user=user, comment_id=self.id).exists():
+            return True
+        else:
+            return False
+    @property
     def like_count(self):
         likes = Like.objects.filter(comment=self).count()
         print(f"comment has {likes} likes")
@@ -46,8 +52,8 @@ class Like(models.Model):
     
     def __str__(self):
         if self.post:
-            return f"@{self.user.username}'s like to post:{self.post.__str__}"
+            return f"@{self.user.username}'s like to post:{self.post.__str__()}"
         elif self.comment:
-            return f"@{self.user.username}'s like to comment:{self.comment.__str__}"
+            return f"@{self.user.username}'s like to comment:{self.comment.__str__()}"
 
     

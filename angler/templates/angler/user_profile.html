@@ -4,6 +4,7 @@
 <body>
     <h2>{{ user_profile.profile_name }}</h2>
     <h3>@{{user.username}}</h3>
+    <a class="nav-link" href="{% url 'fishdex' user_id=user.id %}">FishDex</a>
     {%if pending_sent_friend_request %}
         <button type="submit" disabled>Pending</button> 
     {%elif pending_recieved_friend_request %}

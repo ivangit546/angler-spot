@@ -7,4 +7,3 @@ class FishDexEntryForm(forms.ModelForm):
     class Meta:
         model = FishEntry
         fields = ('fish','entry_weight', 'entry_length', 'fish_dex_image')
-

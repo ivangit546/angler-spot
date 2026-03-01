@@ -7,7 +7,9 @@
             <ul>
                 {% for post in posts %}
                 <li>
-                    <h2>{{post.title}}</h2>
+                    {{ post.user.get_profile_name }}
+                    <br>
+                    @<a href="{% url 'user_profile' user_id=post.user.id %}">{{ post.user.username}}</a>
                     <p>{{post.text}}</p>
                     {% if post.image %}
                         <img src="{{ post.image.url }}">
@@ -28,14 +30,21 @@
                         {% for comment in post.get_comments %}
                             @{{comment.user.username}}:
                             {{ comment.text }}
-                            <br>
+                            {{ comment.like_count }}
+                        <form method="POST", action="{% url 'comment_like' comment_id=comment.id %}" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="submit" value="Like">
+                                <br>
+                        </form>        
                         {% endfor %}
                     </div>
+                    <div>
                     <form method="post" action="{% url 'comment_create' post_id=post.id %}">
                         {% csrf_token %}
                         {{ comment_form }}
                         <button type="submit">Submit</button>
                     </form>
+                    </div>
                 </details>
                 {% endfor %}
             </ul>

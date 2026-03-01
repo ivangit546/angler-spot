@@ -1,12 +1,12 @@
 from django import forms 
 from angler.models.post import Post, Comment
 
-class PostCreateForm(forms.ModelForm):
+class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('text','image')
 
-class PostCommentCreateForm(forms.ModelForm):
+class PostCommentForm(forms.ModelForm):
     class Meta:
         model = Comment 
         fields = ('text',)            
