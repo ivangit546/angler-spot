@@ -11,9 +11,12 @@
                     <br>
                     @<a href="{% url 'user_profile' user_id=post.user.id %}">{{ post.user.username}}</a>
                     <p>{{post.text}}</p>
+                    <br>
                     {% if post.image %}
                         <img src="{{ post.image.url }}">
                     {% endif %}
+                    <br>
+                    <a href="{% url 'post_detail' post_id=post.id %}">View more</a>
                 </li>
                 <br>
                 <span>
@@ -35,7 +38,8 @@
                             {% csrf_token %}
                             <input type="submit" value="Like">
                                 <br>
-                        </form>        
+                        </form> 
+
                         {% endfor %}
                     </div>
                     <div>

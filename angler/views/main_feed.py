@@ -2,12 +2,11 @@ from django.shortcuts import redirect, render
 from django.views import View
 from angler.models.post import Post
 from angler.forms.post import PostCommentForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class MainFeedView(View):
-
+class MainFeedView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request):
-        if not request.user.is_authenticated:
-            return redirect('login')
         posts = Post.objects.order_by('-created_date')
         comment_form = PostCommentForm()
         context = {

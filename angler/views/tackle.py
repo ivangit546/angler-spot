@@ -18,8 +18,6 @@ class TackleView(LoginRequiredMixin, View):
                      'lures':lures}
         return render(request, 'angler/tackle.html', context)
         
-
-
 class RodAndReelCreateView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get (self, request):

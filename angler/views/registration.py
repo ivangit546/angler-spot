@@ -8,7 +8,7 @@ from angler.models.friends import FriendList
 class RegisterView(View):
     
     def get(self, request):
-        if request.user is not None and request.user.is_authenticated:
+        if request.user.is_authenticated:
             return redirect ('/')
         user_form = UserRegistrationForm()
         profile_form = ProfileForm

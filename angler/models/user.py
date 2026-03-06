@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator
-
+from PIL import Image
 class User(AbstractUser):
     is_private = models.BooleanField(default=False)
     points = models.PositiveIntegerField(default=0) #previous idea have a cap on points validators=[MaxValueValidator(5000)]
@@ -31,6 +31,12 @@ class User(AbstractUser):
     @property
     def get_profile_name(self):
         return Profile.objects.get(user=self).profile_name
+    
+    def get_profile_image(self):
+        return Profile.objects.get(user=self).profile_image
+    
+    # def liked_post(self):
+    #     return Comment
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -40,4 +46,9 @@ class Profile(models.Model):
     def __str__(self):
         return self.profile_name
    
-#TODO Leaderboard model - updates weekly "This weeks biggest catch" - query for largest length and or weight of entry within time frame of said week 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        image = Image.open(self.profile_image.path)
+        if image.height > 300 or image.width > 300:
+            image.thumbnail((300,300))
+            image.save(self.profile_image.path)

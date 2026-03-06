@@ -1,0 +1,133 @@
+.circle-image {
+    width: 150px;      
+    height: 150px;    
+    border-radius: 50%; 
+    object-fit: cover;  
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    position: relative;
+}
+
+.text-group {
+    display: flex; 
+    flex-direction: column;
+}
+
+.positioned-div {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    margin-left: 200px;
+}
+
+.content-text {
+    order: 1; 
+    margin-bottom: 10px; 
+}
+
+.image-wrapper {
+    order: 2;
+    max-width: 100%; 
+}
+
+.image-wrapper img {
+    max-width: 100%;
+    height: auto; 
+}
+
+.like-form {
+    order: 3;
+}
+
+a {
+    text-decoration: none;
+    color: green;
+}
+
+.container2 {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    position: relative;
+}
+
+.item {
+    display: block;
+    width: 100%;
+}
+
+.column {
+    flex-direction: column;
+    align-items: center;
+    padding-left: 100px;
+}
+
+.label {
+    align-self: flex-start;
+}
+
+.circle-image2 {
+    width: 75px;      
+    height: 75px;    
+    border-radius: 50%; 
+    object-fit: cover;  
+}
+
+img {
+    background: transparent;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+.my-button {
+    align-self: flex-start;
+}
+.like-form {
+    order: 3;
+    align-self: flex-end;  
+     margin-top: 10px;
+}
+.like-form button {
+    background: none;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.like-form button:hover {
+    border-color: green;
+}
+.comment-like-form button {
+    background: none;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.comment-like-form button:hover {
+    border-color: green;
+}
+.like-wrapper {
+    order: 3;
+    align-self: flex-end;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
