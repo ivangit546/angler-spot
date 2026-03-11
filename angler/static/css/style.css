@@ -27,7 +27,8 @@
     display: flex;
     flex-direction: column; 
     align-items: flex-start; 
-    margin-left: 200px;
+    margin-left: 0;
+    width: 80%;
 }
 
 .content-text {
@@ -45,10 +46,6 @@
     height: auto; 
 }
 
-.like-form {
-    order: 3;
-}
-
 a {
     text-decoration: none;
     color: green;
@@ -62,7 +59,9 @@ a {
 }
 
 .item {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: 100%;
 }
 
@@ -95,11 +94,12 @@ button {
 .my-button {
     align-self: flex-start;
 }
+
 .like-form {
-    order: 3;
-    align-self: flex-end;  
-     margin-top: 10px;
+    background: none;
+    border: none;
 }
+
 .like-form button {
     background: none;
     border: 2px solid #ccc;
@@ -111,6 +111,7 @@ button {
 .like-form button:hover {
     border-color: green;
 }
+
 .comment-like-form button {
     background: none;
     border: 2px solid #ccc;
@@ -122,6 +123,7 @@ button {
 .comment-like-form button:hover {
     border-color: green;
 }
+
 .like-wrapper {
     order: 3;
     align-self: flex-end;
@@ -130,4 +132,161 @@ button {
     flex-direction: row;
     align-items: center;
     gap: 5px;
+}
+
+.comment-box-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.comment-input {
+    flex: 1;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    resize: none;
+    outline: none;
+    font-family: inherit;
+}
+
+.comment-like-form {
+    order: 4;
+    width: 100%;
+    align-self: flex-start;
+}
+
+.comment-submit-btn {
+    background: none;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.comment-submit-btn:hover {
+    border-color: green;
+}
+
+.comments-section {
+    order: 5;
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-self: flex-start;
+}
+
+.comment-action-form button {
+    background: none;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.comment-action-form button:hover {
+    border-color: green;
+}
+
+
+.circle-image-sm {
+    width: 100px;      
+    height: 100px;    
+    border-radius: 50%; 
+    object-fit: cover;  
+}
+
+.text-group span {
+    font-size: 1.1rem;
+}
+
+.text-group strong {
+    font-size: 1.1rem;
+}
+
+.positioned-div-sm {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    margin-left: 0;
+    width: 80%;
+}
+
+.image-wrapper-sm {
+    order: 2;
+    max-width: 100%;
+}
+
+.image-wrapper-sm img {
+    max-width: 100%;
+    height: auto;
+}
+
+.image-wrapper-sm {
+    order: 2;
+    max-width: 100%;
+}
+
+.image-wrapper-sm img {
+    max-width: 100%;
+    height: auto;
+}
+
+.content-text-sm {
+    order: 1;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    align-self: flex-start;
+}
+
+
+
+.divider {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+.replies-section {
+    order: 5;
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 30px;
+    align-self: flex-start;
+}
+
+.reply-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.container-center {
+    justify-content: center;
+    width: 100%;
+}
+.post-content-sm {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 auto;
+}
+.reply-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.item .my-button {
+    align-self: center;
 }

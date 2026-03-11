@@ -8,7 +8,7 @@ from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView
 from angler.views.friends import FriendsListView
 from angler.views.user_profile import UserProfileView
 from angler.views.friends import SendFriendRequestView, ManageFriendRequestView, RemoveFriendView
-from angler.views.post import CreatePostView, CreateCommentView, LikePostView, DeletePostView, DeleteCommentView, LikeCommentView, PostDetailView, CommentReplyView, UnLikeCommentView
+from angler.views.post import CreatePostView, CreateCommentView, LikePostView, DeletePostView, DeleteCommentView, LikeCommentView, PostDetailView, CreateReplyView
 urlpatterns = [
    
     #Authentication
@@ -22,13 +22,13 @@ urlpatterns = [
 
     #Post & Comments
     path('post_create', CreatePostView.as_view(), name='post_create'),
-    path('post_delete', DeletePostView.as_view(), name='post_delete'),
+    path('post_delete/<int:post_id>', DeletePostView.as_view(), name='post_delete'),
     path('post_detail/<int:post_id>', PostDetailView.as_view(), name='post_detail'),
     path('post_like/<int:post_id>', LikePostView.as_view(), name='post_like'),
     path('comment_create/<int:post_id>', CreateCommentView.as_view(), name='comment_create'),
-    path('comment_delete/<int:post_id>', DeleteCommentView.as_view(), name='comment_delete'),
+    path('comment_delete/<int:comment_id>', DeleteCommentView.as_view(), name='comment_delete'),
     path('comment_like/<int:comment_id>', LikeCommentView.as_view(), name='comment_like'),
-    path('reply_create/<int:comment_id>', CommentReplyView.as_view(), name='reply_create'),
+    path('reply_create/<int:comment_id>', CreateReplyView.as_view(), name='reply_create'),
  
     #Friends & Friend Request
     path('friendslist/<int:user_id>/', FriendsListView.as_view(), name='friendslist'), 

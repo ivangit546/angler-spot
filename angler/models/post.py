@@ -17,15 +17,19 @@ class Post(models.Model):
     @property
     def like_count(self):
         likes = Like.objects.filter(post=self).count()
-        print(f"post has {likes} likes")
         return likes
+    
+    @property
+    def comment_count(self):
+        comments = Comment.objects.filter(post=self).count()
+        return comments    
         
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
-    parent = models.ForeignKey('self',on_delete=models.SET_NULL, null=True, blank=True, related_name='replies')
+    parent = models.ForeignKey('self',on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
     is_reply = models.BooleanField(default=False)
 
     def __str__(self):
@@ -39,9 +43,13 @@ class Comment(models.Model):
     @property
     def like_count(self):
         likes = Like.objects.filter(comment=self).count()
-        print(f"comment has {likes} likes")
+
         return likes
-        
+    @property
+    def reply_count(self):
+        reply_count = Comment.objects.filter(parent=self).count()
+
+        return reply_count    
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
