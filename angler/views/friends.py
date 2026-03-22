@@ -2,29 +2,23 @@ from angler.models.user import User
 from angler.models.friends import FriendList, FriendRequest
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-class FriendsListView(View):
+class FriendsListView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request, user_id):
-        request_user = request.user
+        friend_requests = FriendRequest.objects.filter(request_reciever=request.user,request_status=0 )
         user = User.objects.get(id=user_id)
-        is_user = False
-        is_private = False
-
-        if user == request_user:
-            is_user = True
-        else:
-            is_private = user.is_private
 
         friends = FriendList.objects.get(user=user).friends.all()
         context = {
             'friends':friends,
-            'is_user':is_user,
-            'is_private':is_private
+            'friend_requests':friend_requests
         }
         return render(request, 'angler/friend.html', context)
 
-class SendFriendRequestView(View):
+class SendFriendRequestView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def post(self, request, user_id):
         user_sender = request.user
         user_reciever = get_object_or_404(User, id=user_id)
@@ -33,7 +27,8 @@ class SendFriendRequestView(View):
             FriendRequest.objects.create(request_sender=user_sender, request_reciever=user_reciever)
         return redirect('user_profile', user_id=user_reciever.id)    
     
-class ManageFriendRequestView(View):
+class ManageFriendRequestView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def post(self, request, user_id):
         user_sender = get_object_or_404(User, id=user_id)
         user_reciever = request.user
@@ -46,7 +41,8 @@ class ManageFriendRequestView(View):
             friend_request.delete_request()
         return redirect('friendslist',user_id=user_reciever.id) 
 
-class RemoveFriendView(View):
+class RemoveFriendView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def post(self, request, user_id):
         user_to_remove = get_object_or_404(User, id=user_id)
         users_friendlist = get_object_or_404(FriendList, user=request.user)

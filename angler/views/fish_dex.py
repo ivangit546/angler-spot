@@ -8,19 +8,15 @@ from angler.forms.fish_dex import FishDexEntryForm
 class FishDexView(View):
 
     def get (self, request, user_id):
-        is_users_account = False
         user = get_object_or_404(User, id=user_id)
-        if user.id == user_id: 
-            is_users_account = True
         # user_fish_dex = FishDex.objects.get(user=user) might keep for clarification
-        user_fishes = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
-        locked_fishes = Fish.objects.exclude(id__in=user_fishes.values_list('fish_id'))
+        user_fish = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
+        locked_fish = Fish.objects.exclude(id__in=user_fish.values_list('fish_id'))
         context = { 'user':user,
-                    'user_fishes':user_fishes,
-                    'locked_fishes': locked_fishes,
-                    'is_users_account':is_users_account}
+                    'user_fish':user_fish,
+                    'locked_fish': locked_fish,}
       
-        return render(request, 'angler/fish_dex.html', context)
+        return render(request, 'angler/fishdex/fish_dex.html', context)
     
 
 class FishDexEntryView(View):
@@ -31,7 +27,7 @@ class FishDexEntryView(View):
             id__in=FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=request.user.id)).all()
             .values_list('fish_id')) # only want user to see locked fish in options of fish to enter in their fishdex
         
-        return render(request, 'angler/fish_dex_entry.html',{'form':form})
+        return render(request, 'angler/fishdex/create.html',{'form':form})
 
     def post(self, request):
         user = request.user
@@ -47,6 +43,3 @@ class FishDexEntryView(View):
             fish_dex.save()
             return redirect('fishdex', user_id=user.id)
         
-# class FishDexEntryEdit(View):
-#     def post(self, request):
-#         pass

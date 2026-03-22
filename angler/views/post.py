@@ -2,7 +2,6 @@ from angler.models.post import Post, Comment, Like
 from angler.forms.post import PostForm, PostCommentForm
 from django.views import View
 from django.shortcuts import redirect, get_object_or_404, render
-from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class CreatePostView(LoginRequiredMixin, View):

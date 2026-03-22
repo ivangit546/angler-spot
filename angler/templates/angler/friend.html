@@ -1,16 +1,41 @@
 {% extends 'angler/base.html'%}
 {% block content %}
+<h2>Friends</h2>
 
-<body>
-    {% if friends %}
-            <ul>
-                {% for friend in friends %}
-                <li>
-                    <h2>{{friend.username}}</h2>
-                </li>
-                {% endfor %}
-            </ul>
-        {% endif %}    
-            {{ is_friend }}
-</body>
+    {% for friend in friends %}
+        <div class="container">
+            {% if friend.get_profile_image %}
+                <img src="{{ friend.get_profile_image.url }}" class="circle-image-sm">
+            {% endif %}
+            <div class="text-group">
+                <span>{{friend.get_profile_name}}</span>
+                <strong><a href="{% url 'user_profile' user_id=friend.id %}">@{{friend.username}}</a></strong>
+            </div>
+        </div>
+        <hr class="divider">
+    {% endfor %}
+            </ul> 
+<h2>Friend Request</h2>
+
+    {% for request in friend_requests %}
+        <div class="container">
+            {% if request.request_sender.get_profile_image %}
+                <img src="{{ request.request_sender.get_profile_image.url }}" class="circle-image-sm">
+            {% endif %}
+            <div class="text-group">
+                <span>{{request.request_sender.get_profile_name}}</span>
+                <strong><a href="{% url 'user_profile' user_id=request.request_sender.id %}">@{{request.request_sender.username}}</a></strong>
+            </div>
+            <form action="{% url 'manage_friend_request' user_id=request.request_sender.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="action" value="accept" style="border: 2px solid green; background: transparent; color: green; border-radius: 6px; padding: 6px 12px;">accept</button>
+            </form>
+            <form action="{% url 'manage_friend_request' user_id=request.request_sender.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="action" value="reject"style="border: 2px solid red; background: transparent; color: red; border-radius: 6px; padding: 6px 12px;">reject</button>
+            </form>
+            
+        </div>
+        <hr class="divider">
+    {% endfor %}
 {% endblock %}

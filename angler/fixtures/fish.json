@@ -1,0 +1,467 @@
+[ 
+    { "model":"angler.fish",
+        "pk":1,
+        "fields":{
+        "name":"Locked",
+        "fish_group":"Locked",
+        "weight":"0.00",
+        "length":"0.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+    { "model":"angler.fish",
+        "pk":2,
+        "fields":{
+        "name":"Largemouth Bass",
+        "fish_group":"Bass",
+        "weight":"2.75",
+        "length":"15",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.Fish",
+        "pk":3,
+        "fields":{
+        "name":"Smallmouth Bass",
+        "fish_group":"Bass",
+        "weight":"2.00",
+        "length":"13",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":4,
+        "fields":{
+        "name":"White Bass",
+        "fish_group":"Bass",
+        "weight":"1.00",
+        "length":"12",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":5,
+        "fields":{
+        "name":"Rock Bass",
+        "fish_group":"Bass",
+        "weight":"0.50",
+        "length":"8",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+    { "model":"angler.fish",
+        "pk":6,
+        "fields":{
+        "name":"Northern Pike",
+        "fish_group":"Pike",
+        "weight":"3.50",
+        "length":"20",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":7,
+        "fields":{
+        "name":"Grass Pickeral",
+        "fish_group":"Pike",
+        "weight":"3.50",
+        "length":"0.50",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":8,
+        "fields":{
+        "name":"Musky",
+        "fish_group":"Pike",
+        "weight":"20.00",
+        "length":"38",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":9,
+        "fields":{
+        "name":"Tiger Musky",
+        "fish_group":"Pike",
+        "weight":"20.00",
+        "length":"19",
+        "shiny":"True",
+        "fish_avatar":""
+        }
+    },
+
+    { "model":"angler.fish",
+        "pk":10,
+        "fields":{
+        "name":"Walleye",
+        "fish_group":"Walleye",
+        "weight":"3.00",
+        "length":"19",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":11,
+        "fields":{
+        "name":"Sauger",
+        "fish_group":"Walleye",
+        "weight":"1.00",
+        "length":"12.5",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":12,
+        "fields":{
+        "name":"Saugeye",
+        "fish_group":"Walleye",
+        "weight":"1.50",
+        "length":"15",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+    { "model":"angler.fish",
+        "pk":13,
+        "fields":{
+        "name":"Freshwater Drum",
+        "fish_group":"Drum",
+        "weight":"5.00",
+        "length":"17",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+    { "model":"angler.fish",
+        "pk":14,
+        "fields":{
+        "name":"Yellow Bullhead",
+        "fish_group":"Catfish",
+        "weight":"0.75",
+        "length":"10.25",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":15,
+        "fields":{
+        "name":"Black Bullhead",
+        "fish_group":"Catfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":16,
+        "fields":{
+        "name":"Brown Bullhead",
+        "fish_group":"Catfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":17,
+        "fields":{
+        "name":"Channel Catfish",
+        "fish_group":"Catfish",
+        "weight":"1.50",
+        "length":"13.80",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":18,
+        "fields":{
+        "name":"Flathead Catfish",
+        "fish_group":"Catfish",
+        "weight":"20.00",
+        "length":"30.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":19,
+        "fields":{
+        "name":"Blue Catfish",
+        "fish_group":"Catfish",
+        "weight":"30.00",
+        "length":"24.50",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":20,
+        "fields":{
+        "name":"Brook Trout",
+        "fish_group":"Trout",
+        "weight":"17.70",
+        "length":"13.16",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+
+    { "model":"angler.fish",
+        "pk":21,
+        "fields":{
+        "name":"Steelhead",
+        "fish_group":"Trout",
+        "weight":"11.50",
+        "length":"27.50",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":22,
+        "fields":{
+        "name":"Lake Trout",
+        "fish_group":"Trout",
+        "weight":"27.50",
+        "length":"30.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":23,
+        "fields":{
+        "name":"Palomino trout",
+        "fish_group":"Trout",
+        "weight":"3.00",
+        "length":"10.00",
+        "shiny":"True",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":24,
+        "fields":{
+        "name":"Tiger Trout",
+        "fish_group":"Trout",
+        "weight":"1.50",
+        "length":"13.00",
+        "shiny":"True",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":25,
+        "fields":{
+        "name":"Rainbow Trout",
+        "fish_group":"Trout",
+        "weight":"3.00",
+        "length":"15.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":26,
+        "fields":{
+        "name":"Brown Trout",
+        "fish_group":"Trout",
+        "weight":"6.25",
+        "length":"19.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+
+    { "model":"angler.fish",
+        "pk":27,
+        "fields":{
+        "name":"Coho Salmon",
+        "fish_group":"Salmon",
+        "weight":"9.00",
+        "length":"24.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":28,
+        "fields":{
+        "name":"Chinook Salmon",
+        "fish_group":"Salmon",
+        "weight":"30.00",
+        "length":"36.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+    { "model":"angler.fish", 
+        "pk":23,
+        "fields":{
+        "name":"Perch",
+        "fish_group":"Panfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":29,
+        "fields":{
+        "name":"White Crappie",
+        "fish_group":"Panfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":30,
+        "fields":{
+        "name":"Black Crappie",
+        "fish_group":"Panfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":31,
+        "fields":{
+        "name":"Bluegill",
+        "fish_group":"Panfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":32,
+        "fields":{
+        "name":"Orangespotted Sunfish",
+        "fish_group":"Panfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":33,
+        "fields":{
+        "name":"Warmouth",
+        "fish_group":"Panfish",
+        "weight":"1.50",
+        "length":"10.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }, 
+    { "model":"angler.fish",
+        "pk":34,
+        "fields":{
+        "name":"Green Sunfish",
+        "fish_group":"Panfish",
+        "weight":"0.28",
+        "length":"4.50",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+    
+    { "model":"angler.fish",
+        "pk":35,
+        "fields":{
+        "name":"Common Carp",
+        "fish_group":"Carp",
+        "weight":"17.65",
+        "length":"23.50",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":36,
+        "fields":{
+        "name":"Grass Carp",
+        "fish_group":"Carp",
+        "weight":"27.50",
+        "length":"31.50",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+
+    { "model":"angler.fish",
+        "pk":37,
+        "fields":{
+        "name":"Lake Sturgeon",
+        "fish_group":"Sturgeon",
+        "weight":"55.00",
+        "length":"60.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":38,
+        "fields":{
+        "name":"Shovelnose Sturgeon",
+        "fish_group":"Sturgeon",
+        "weight":"3.50",
+        "length":"23.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+
+
+    { "model":"angler.fish",
+        "pk":39,
+        "fields":{
+        "name":"Longnose Gar",
+        "fish_group":"Gar",
+        "weight":"5.00",
+        "length":"38.00",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    },
+    { "model":"angler.fish",
+        "pk":40,
+        "fields":{
+        "name":"Shortnose Gar",
+        "fish_group":"Gar",
+        "weight":"38.00",
+        "length":"4.0",
+        "shiny":"False",
+        "fish_avatar":""
+        }
+    }
+]
