@@ -9,14 +9,23 @@ class FishDexView(View):
 
     def get (self, request, user_id):
         user = get_object_or_404(User, id=user_id)
-        # user_fish_dex = FishDex.objects.get(user=user) might keep for clarification
         user_fish = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
         locked_fish = Fish.objects.exclude(id__in=user_fish.values_list('fish_id'))
         context = { 'user':user,
                     'user_fish':user_fish,
-                    'locked_fish': locked_fish,}
+                    'locked_fish':locked_fish}
       
         return render(request, 'angler/fishdex/fish_dex.html', context)
+    
+class FishDexDetailView(View):
+
+    def get (self, request, fishdex_id, fish_entry_id):
+        fishdex = get_object_or_404(FishDex, id=fishdex_id)
+        fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex=fishdex)
+        context = { 'fish_entry':fish_entry
+                   }
+      
+        return render(request, 'angler/fishdex/detail.html', context)    
     
 
 class FishDexEntryView(View):

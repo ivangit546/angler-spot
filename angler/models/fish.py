@@ -2,6 +2,11 @@ from django.db import models
 from angler.models.user import User
 from django.core.validators import MaxValueValidator
 from angler.models.user import User
+from django.utils.text import slugify
+
+def content_file_name(instance, filename):
+    fish_group = slugify(instance.fish_group)
+    return f'fish/{fish_group}/{filename}'
 
 class Fish(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -9,11 +14,13 @@ class Fish(models.Model):
     weight = models.DecimalField(max_digits=5, decimal_places=1) # i.e 1230.9 
     length = models.DecimalField(max_digits=5, decimal_places=2) # standard unnit will be inches (form will accept feet and or inches then convert to inches) i.e 234.43
     shiny = models.BooleanField(default=False) 
-    fish_avatar = models.ImageField(upload_to='fish_avatar/', blank=True) #will be stock image for type of fish
+    fish_avatar = models.ImageField(upload_to=content_file_name) #will be stock image for type of fish
     
 
     def __str__(self):
         return self.name
+    def fish_count(self):
+        return Fish.objects.count
     
 class FishDex(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -43,5 +50,6 @@ class FishEntry(models.Model):
         user.save()
     def __str__(self):
         return f"@{self.fish_dex.user.username}'s {self.fish.name} entry in FishDex"
-            
+    def get_fish_avatar(self):
+        return self.fish.fish_avatar        
 

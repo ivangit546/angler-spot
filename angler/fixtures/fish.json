@@ -7,7 +7,7 @@
         "weight":"0.00",
         "length":"0.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/locked-fish.png"
         }
     },
 
@@ -19,7 +19,7 @@
         "weight":"2.75",
         "length":"15",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/bass/large-mouth.png"
         }
     },
     { "model":"angler.Fish",
@@ -30,7 +30,7 @@
         "weight":"2.00",
         "length":"13",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/bass/small-mouth.png"
         }
     },
     { "model":"angler.fish",
@@ -41,7 +41,7 @@
         "weight":"1.00",
         "length":"12",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/bass/white.png"
         }
     },
     { "model":"angler.fish",
@@ -52,7 +52,7 @@
         "weight":"0.50",
         "length":"8",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/bass/rock.png"
         }
     },
 
@@ -64,7 +64,7 @@
         "weight":"3.50",
         "length":"20",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/pike/nothern.png"
         }
     },
     { "model":"angler.fish",
@@ -75,7 +75,7 @@
         "weight":"3.50",
         "length":"0.50",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/pike/grass-pickeral.png"
         }
     },
     { "model":"angler.fish",
@@ -86,7 +86,7 @@
         "weight":"20.00",
         "length":"38",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/pike/musky.png"
         }
     },
     { "model":"angler.fish",
@@ -97,7 +97,7 @@
         "weight":"20.00",
         "length":"19",
         "shiny":"True",
-        "fish_avatar":""
+        "fish_avatar":"fish/pike/tiger-musky.png"
         }
     },
 
@@ -109,7 +109,7 @@
         "weight":"3.00",
         "length":"19",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/walleye/walleye.png"
         }
     },
     { "model":"angler.fish",
@@ -120,7 +120,7 @@
         "weight":"1.00",
         "length":"12.5",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/pike/sauger.png"
         }
     },
     { "model":"angler.fish",
@@ -131,7 +131,7 @@
         "weight":"1.50",
         "length":"15",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/pike/saugeye.png"
         }
     },
 
@@ -143,7 +143,7 @@
         "weight":"5.00",
         "length":"17",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/drum/freshwater.png"
         }
     },
 
@@ -155,7 +155,7 @@
         "weight":"0.75",
         "length":"10.25",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/catfish/yellow-bull-head.png"
         }
     },
     { "model":"angler.fish",
@@ -166,7 +166,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/catfish/black-bull-head.png"
         }
     },
     { "model":"angler.fish",
@@ -177,7 +177,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/catfish/brown-bull-head.png"
         }
     }, 
     { "model":"angler.fish",
@@ -188,7 +188,7 @@
         "weight":"1.50",
         "length":"13.80",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/catfish/channel.png"
         }
     }, 
     { "model":"angler.fish",
@@ -199,7 +199,7 @@
         "weight":"20.00",
         "length":"30.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/catfish/flat-head.png"
         }
     }, 
     { "model":"angler.fish",
@@ -210,9 +210,10 @@
         "weight":"30.00",
         "length":"24.50",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/catfish/blue.png"
         }
     }, 
+
     { "model":"angler.fish",
         "pk":20,
         "fields":{
@@ -221,10 +222,9 @@
         "weight":"17.70",
         "length":"13.16",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/trout/brook.png"
         }
     }, 
-
     { "model":"angler.fish",
         "pk":21,
         "fields":{
@@ -233,7 +233,7 @@
         "weight":"11.50",
         "length":"27.50",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/trout/steelhead.png"
         }
     }, 
     { "model":"angler.fish",
@@ -244,7 +244,7 @@
         "weight":"27.50",
         "length":"30.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/trout/lake.png"
         }
     }, 
     { "model":"angler.fish",
@@ -255,7 +255,7 @@
         "weight":"3.00",
         "length":"10.00",
         "shiny":"True",
-        "fish_avatar":""
+        "fish_avatar":"fish/trout/palomino.png"
         }
     }, 
     { "model":"angler.fish",
@@ -266,7 +266,7 @@
         "weight":"1.50",
         "length":"13.00",
         "shiny":"True",
-        "fish_avatar":""
+        "fish_avatar":"fish/trout/tiger.png"
         }
     }, 
     { "model":"angler.fish",
@@ -277,7 +277,7 @@
         "weight":"3.00",
         "length":"15.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/trout/rainbow.png"
         }
     }, 
     { "model":"angler.fish",
@@ -288,7 +288,7 @@
         "weight":"6.25",
         "length":"19.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/trout/brown.png"
         }
     }, 
 
@@ -300,7 +300,7 @@
         "weight":"9.00",
         "length":"24.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/salmon/coho.png"
         }
     },
     { "model":"angler.fish",
@@ -311,7 +311,7 @@
         "weight":"30.00",
         "length":"36.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/salmon/chinook.png"
         }
     },
 
@@ -323,7 +323,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/panfish/perch.png"
         }
     }, 
     { "model":"angler.fish",
@@ -334,7 +334,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/panfish/white-crappie.png"
         }
     }, 
     { "model":"angler.fish",
@@ -345,7 +345,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/panfish/black-crappie.png"
         }
     }, 
     { "model":"angler.fish",
@@ -356,7 +356,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/panfish/blue-gill.png"
         }
     },
     { "model":"angler.fish",
@@ -367,7 +367,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/panfish/orange-spotted-sunfish.png"
         }
     }, 
     { "model":"angler.fish",
@@ -378,7 +378,7 @@
         "weight":"1.50",
         "length":"10.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/panfish/war-mouth.png"
         }
     }, 
     { "model":"angler.fish",
@@ -389,7 +389,7 @@
         "weight":"0.28",
         "length":"4.50",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/panfish/green-sun-fish.png"
         }
     },
 
@@ -402,7 +402,7 @@
         "weight":"17.65",
         "length":"23.50",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/carp/common.png"
         }
     },
     { "model":"angler.fish",
@@ -413,7 +413,7 @@
         "weight":"27.50",
         "length":"31.50",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/carp/grass.png"
         }
     },
 
@@ -426,7 +426,7 @@
         "weight":"55.00",
         "length":"60.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/sturgeon/lake.png"
         }
     },
     { "model":"angler.fish",
@@ -437,7 +437,7 @@
         "weight":"3.50",
         "length":"23.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/sturgeon/shovel-nose.png"
         }
     },
 
@@ -450,7 +450,7 @@
         "weight":"5.00",
         "length":"38.00",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/gar/long-nose.png"
         }
     },
     { "model":"angler.fish",
@@ -461,7 +461,7 @@
         "weight":"38.00",
         "length":"4.0",
         "shiny":"False",
-        "fish_avatar":""
+        "fish_avatar":"fish/gar/short-nose.png"
         }
     }
 ]

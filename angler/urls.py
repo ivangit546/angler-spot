@@ -3,7 +3,7 @@ from angler.views.registration import RegisterView
 from angler.views.login import LoginView
 from angler.views.main_feed import MainFeedView
 from angler.views.logout import LogoutView
-from angler.views.fish_dex import FishDexView, FishDexEntryView
+from angler.views.fish_dex import FishDexView, FishDexEntryView, FishDexDetailView
 from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView
 from angler.views.friends import FriendsListView
 from angler.views.user_profile import UserProfileView
@@ -39,7 +39,8 @@ urlpatterns = [
     #FishDex
     path('fishdex/<int:user_id>/', FishDexView.as_view(), name='fishdex'),
     path('fishdex_entry/', FishDexEntryView.as_view(), name='fishdex_entry'),
-
+    path('fishdex_detail/<int:fishdex_id>/<int:fish_entry_id>/', FishDexDetailView.as_view(), name='fishdex_detail'),
+    
     #Tackle
     path('rod&reel_create/',RodAndReelCreateView.as_view(), name='rod_reel_create'),
     path('lure_create/',LureCreateView.as_view(), name='lure_create'),

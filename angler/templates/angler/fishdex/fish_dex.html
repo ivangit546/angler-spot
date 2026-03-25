@@ -1,18 +1,54 @@
 {% extends 'angler/base.html'%}
+{% load static %}
 {% block content %}
-<body>
-    {{ user.get_profile_name }} FishDex
-    <h2>Caught Fish</h2>
-    {% for fish in user_fishes%}
-        * {{ fish.fish.name }}
-        <br>
-    {% endfor %}
-
-    <h2>Locked Fish</h2>
-    {% for fish in locked_fishes%}
-        * {{ fish.name }}
-        <br>
-    {% endfor %}
-   
+<body class="app-page">
+    <div class="practice-box2">
+        <div class="obj-grid">
+            {% for fish in user_fish %}
+            <a href="{% url 'fishdex_detail' fishdex_id=fish.fish_dex.id fish_entry_id=fish.id %}" class="obj-card">
+                <div class="card-header">
+                <img class="obj-img" src="{{ fish.get_fish_avatar.url }}" alt="{{ obj.name }}" />
+                <div class="card-header-text">
+                    <span class="obj-name">{{ fish.fish.name }}</span>
+                    <span class="obj-id">#{{ fish.id }}</span>
+                </div>
+                </div>
+                <div class="divider"></div>
+                <div class="card-fields">
+                <div class="field-row">
+                    <span class="field-label">Weight</span>
+                    <span class="field-value">{{ fish.entry_weight }}</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Length B</span>
+                    <span class="field-value">{{ fish.entry_length }}</span>
+                </div>
+                </div>
+            </a>
+            {% endfor %}
+            {% for fish in locked_fish %}
+            <a aria-disabled="true" class="obj-card">
+                <div class="card-header">
+                <img class="obj-img" src="{{MEDIA_URL}}fish/locked-fish.png" alt="{{ obj.name }}" />
+                <div class="card-header-text">
+                    <span class="obj-name">locked</span>
+                    <span class="obj-id">??</span>
+                </div>
+                </div>
+                <div class="divider"></div>
+                <div class="card-fields">
+                <div class="field-row">
+                    <span class="field-label">Weight</span>
+                    <span class="field-value">???</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">Length</span>
+                    <span class="field-value">???</span>
+                </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 {% endblock %}
