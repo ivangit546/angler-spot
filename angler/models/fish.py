@@ -19,8 +19,9 @@ class Fish(models.Model):
 
     def __str__(self):
         return self.name
-    def fish_count(self):
-        return Fish.objects.count
+    
+    def count(self):
+        return Fish.objects.count()
     
 class FishDex(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -51,5 +52,34 @@ class FishEntry(models.Model):
     def __str__(self):
         return f"@{self.fish_dex.user.username}'s {self.fish.name} entry in FishDex"
     def get_fish_avatar(self):
-        return self.fish.fish_avatar        
+        return self.fish.fish_avatar
+    def is_shiny(self):
+        return self.fish.shiny
+    @property
+    def get_fish_color(self):
+        match self.fish.fish_group:
+            case 'Bass':
+                return '#0EAD3F'
+            case 'Carp':
+                return '#5aed9f'
+            case 'Catfish':
+                return '#0ead83'
+            case 'Drum':
+                return '#ded309'
+            case 'Gar':
+                return '#89f266'
+            case 'Panfish':
+                return '#f5a631'
+            case 'Pike':
+                return '#31b4f5'
+            case 'Salmon':
+                return '#5314f5'
+            case 'Sturgeon':
+                return '#f01a81'
+            case 'Trout':
+                return '#9f55ed'
+            case 'Walleye':
+                return '#bf0b38'
+            case _:
+                raise ValueError(f'{self.fish.fish_group} : is invalid')     
 

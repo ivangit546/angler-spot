@@ -9,20 +9,24 @@ class FishDexView(View):
 
     def get (self, request, user_id):
         user = get_object_or_404(User, id=user_id)
-        user_fish = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
-        locked_fish = Fish.objects.exclude(id__in=user_fish.values_list('fish_id'))
+        fish_entries = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
+        locked_fish = Fish.objects.exclude(id__in=fish_entries.values_list('fish_id'))
+        all_fish = Fish.objects.all()
+        print('total fish: ',all_fish.count())
         context = { 'user':user,
-                    'user_fish':user_fish,
-                    'locked_fish':locked_fish}
+                    'fish_entries':fish_entries,
+                    'locked_fish':locked_fish,
+                    'all_fish':all_fish}
       
         return render(request, 'angler/fishdex/fish_dex.html', context)
     
 class FishDexDetailView(View):
 
     def get (self, request, fishdex_id, fish_entry_id):
-        fishdex = get_object_or_404(FishDex, id=fishdex_id)
-        fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex=fishdex)
-        context = { 'fish_entry':fish_entry
+        fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex_id=fishdex_id)
+        
+        context = { 'fish_entry':fish_entry,
+                   'fish_color':fish_entry.get_fish_color
                    }
       
         return render(request, 'angler/fishdex/detail.html', context)    

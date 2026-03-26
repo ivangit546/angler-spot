@@ -1,54 +1,62 @@
 {% extends 'angler/base.html'%}
-{% load static %}
 {% block content %}
 <body class="app-page">
+    <div class="title-row">
+        <h2 class="section-title">{{user.get_profile_name}}'s Fishdex</h2>
+        <a href="{% url 'fishdex_entry' %}" class="title-btn">Add</a>
+    </div>    
     <div class="practice-box2">
         <div class="obj-grid">
-            {% for fish in user_fish %}
-            <a href="{% url 'fishdex_detail' fishdex_id=fish.fish_dex.id fish_entry_id=fish.id %}" class="obj-card">
-                <div class="card-header">
-                <img class="obj-img" src="{{ fish.get_fish_avatar.url }}" alt="{{ obj.name }}" />
-                <div class="card-header-text">
-                    <span class="obj-name">{{ fish.fish.name }}</span>
-                    <span class="obj-id">#{{ fish.id }}</span>
-                </div>
-                </div>
-                <div class="divider"></div>
-                <div class="card-fields">
-                <div class="field-row">
-                    <span class="field-label">Weight</span>
-                    <span class="field-value">{{ fish.entry_weight }}</span>
-                </div>
-                <div class="field-row">
-                    <span class="field-label">Length B</span>
-                    <span class="field-value">{{ fish.entry_length }}</span>
-                </div>
-                </div>
-            </a>
-            {% endfor %}
-            {% for fish in locked_fish %}
-            <a aria-disabled="true" class="obj-card">
-                <div class="card-header">
-                <img class="obj-img" src="{{MEDIA_URL}}fish/locked-fish.png" alt="{{ obj.name }}" />
-                <div class="card-header-text">
-                    <span class="obj-name">locked</span>
-                    <span class="obj-id">??</span>
-                </div>
-                </div>
-                <div class="divider"></div>
-                <div class="card-fields">
-                <div class="field-row">
-                    <span class="field-label">Weight</span>
-                    <span class="field-value">???</span>
-                </div>
-                <div class="field-row">
-                    <span class="field-label">Length</span>
-                    <span class="field-value">???</span>
-                </div>
-                </div>
-            </a>
-            {% endfor %}
+            {% for fish in all_fish %}
+                {% for entry in fish_entries %}
+                    {% if entry.fish.name == fish.name %}
+                        <a href="{% url 'fishdex_detail' fishdex_id=entry.fish_dex.id fish_entry_id=entry.id %}" class="obj-card">
+                            <div class="card-header">
+                            <img class="obj-img" src="{{ entry.get_fish_avatar.url }}" alt="{{ obj.name }}" />
+                            <div class="card-header-text">
+                                <span class="obj-name">{{ entry.fish.name }}</span>
+                                <span class="obj-id">#{{ fish.id }}</span>
+                            </div>
+                            </div>
+                            <!-- <div class="divider"></div> -->
+                            <div class="card-fields">
+                            <div class="field-row">
+                                <span class="field-label">Weight</span>
+                                <span class="field-value">{{ entry.entry_weight }}lbs</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Length</span>
+                                <span class="field-value">{{ entry.entry_length }}in.</span>
+                            </div>
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+                    {% if fish in locked_fish %}
+                        <a aria-disabled="true" class="obj-card">
+                            <div class="card-header">
+                            <img class="obj-img" src="{{MEDIA_URL}}fish/locked-fish.png" alt="{{ obj.name }}" />
+                            <div class="card-header-text">
+                                <span class="obj-name">locked</span>
+                                <span class="obj-id">???</span>
+                            </div>
+                            </div>
+                            <!-- <div class="divider"></div> -->
+                            <div class="card-fields">
+                            <div class="field-row">
+                                <span class="field-label">Weight</span>
+                                <span class="field-value">???</span>
+                            </div>
+                            <div class="field-row">
+                                <span class="field-label">Length</span>
+                                <span class="field-value">???</span>
+                            </div>
+                            </div>
+                        </a>
+                    {% endif %}    
+        {% endfor %}
         </div>
     </div>
 </body>
 {% endblock %}
+

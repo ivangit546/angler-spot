@@ -41,6 +41,7 @@ urlpatterns = [
     path('fishdex_entry/', FishDexEntryView.as_view(), name='fishdex_entry'),
     path('fishdex_detail/<int:fishdex_id>/<int:fish_entry_id>/', FishDexDetailView.as_view(), name='fishdex_detail'),
     
+    
     #Tackle
     path('rod&reel_create/',RodAndReelCreateView.as_view(), name='rod_reel_create'),
     path('lure_create/',LureCreateView.as_view(), name='lure_create'),

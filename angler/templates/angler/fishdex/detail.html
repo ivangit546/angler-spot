@@ -1,5 +1,49 @@
-{{fish_entry.fish.name}}
-<br>
-@{{fish_entry.fish_dex.user.username}}
-<br>
-weight: {{fish_entry.entry_weight}} lbs
+{% extends 'angler/base.html'%}
+{% load static %}
+{% block content %}
+<h2 class="section-title-detail">{{ fish_entry.fish_dex.user.get_profile_name }}'s Fishdex</h2>
+<div class="practice-box2" style="background-color: {{ fish_color }}; opacity: 0.8;">
+    <div class="detail-container">
+        <div class="detail-header">
+            <img class="detail-img" src="{{ fish_entry.fish.fish_avatar.url }}" />
+            <div class="detail-header-text">
+                <span class="detail-name">{{ fish_entry.fish.name }}
+                    {% if fish_entry.is_shiny %}
+                    <img src="{% static 'icons/shiny.png' %}" class="id-icon">
+                    {% endif %}
+                </span>
+                <span class="detail-id">#{{ fish_entry.fish.id }}/{{fish_entry.fish.count}}</span>
+            </div>
+        </div>
+        <!-- <div class="divider"></div> -->
+         <br>
+         <div class="detail-fields-wrapper">
+            <div class="detail-fields">
+                <div class="field-row">
+                    <span class="field-label">weight</span> <!--A-->
+                    <span class="field-value">{{ fish_entry.entry_weight }}lbs</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">avg. weight</span> <!--C-->
+                    <span class="field-value">{{ fish_entry.fish.weight }}lbs</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">size</span> <!--B-->
+                    <span class="field-value">{{ fish_entry.entry_length }}in.</span>
+                </div>
+                <div class="field-row">
+                    <span class="field-label">avg. size</span><!--D-->
+                    <span class="field-value">{{ fish_entry.fish.length }}in.</span>
+                </div>
+                <div class="field-row field-full">
+                    <span class="field-label">Date Caught</span>
+                    <span class="field-value">{{ fish_entry.caught_at }}</span>
+                </div>
+            </div>
+        </div>    
+    </div>
+</div>
+{% endblock %}
+ <!--If fish passes set size make it a shiny, will use an icon of star or some sort to display that
+    need caught_at added
+ -->
