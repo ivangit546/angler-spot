@@ -1,7 +1,8 @@
 Welcome to Angler Spot! Angler spot was started out of a bringing a physical passion and hobby into a digital space.
 With Angler Spot users are able to have am immersive and enjoyable way to enhance their fishing experience. Want to log new catches? 
 Make and share post about your day out in the water? Interact and meet new anglers with the same passion? Well Angler Spot is the Web Application for you!
-As of March 30, 2026 Angler Spot allows you to enter new catches, create and interact with other users' post and more/
+As of March 30, 2026 Angler Spot allows you to enter new catches, create and interact with other users' post and more.
+
 Upcoming Plans and Updates:
 * Add geolocation to fish entries, allowing users to mark and save location of their entries.
 * Direct messaging between users.
