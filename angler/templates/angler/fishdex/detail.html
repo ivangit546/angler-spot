@@ -5,15 +5,26 @@
 <div class="practice-box2" style="background-color: {{ fish_color }}; opacity: 0.8;">
     <div class="detail-container">
         <div class="detail-header">
-            <img class="detail-img" src="{{ fish_entry.fish.fish_avatar.url }}" />
-            <div class="detail-header-text">
-                <span class="detail-name">{{ fish_entry.fish.name }}
-                    {% if fish_entry.is_shiny %}
-                    <img src="{% static 'icons/shiny.png' %}" class="id-icon">
-                    {% endif %}
-                </span>
-                <span class="detail-id">#{{ fish_entry.fish.id }}/{{fish_entry.fish.count}}</span>
+            <div class="detail-img-wrapper">
+                <img class="detail-img" src="{{ fish_entry.fish.fish_avatar.url }}" />
+                
+                <div class="detail-img-actions">
+                    <a href="">
+                        <img src="{% static 'icons/rod.png' %}" alt="action 1" class="detail-action-icon" />
+                    </a>
+                    <a href="">
+                        <img src="{% static 'icons/lure.png' %}" alt="action 2" class="detail-action-icon" />
+                    </a>
+                </div>
             </div>
+            <div class="detail-header-text">
+                    <span class="detail-name">{{ fish_entry.fish.name }}
+                        {% if fish_entry.is_shiny %}
+                        <img src="{% static 'icons/shiny.png' %}" class="id-icon">
+                        {% endif %}
+                    </span>
+                    <span class="detail-id">#{{ fish_entry.fish.id }}/{{fish_entry.fish.count}}</span>
+                </div>    
         </div>
         <!-- <div class="divider"></div> -->
          <br>

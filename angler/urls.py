@@ -1,14 +1,15 @@
 from django.urls import path
 from angler.views.registration import RegisterView
 from angler.views.login import LoginView
-from angler.views.main_feed import MainFeedView
+from angler.views.main_feed import MainFeedView, AboutUsView
 from angler.views.logout import LogoutView
 from angler.views.fish_dex import FishDexView, FishDexEntryView, FishDexDetailView
-from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView
+from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView, TackleDetailView
 from angler.views.friends import FriendsListView
 from angler.views.user_profile import UserProfileView
 from angler.views.friends import SendFriendRequestView, ManageFriendRequestView, RemoveFriendView
 from angler.views.post import CreatePostView, CreateCommentView, LikePostView, DeletePostView, DeleteCommentView, LikeCommentView, PostDetailView, CreateReplyView
+from angler.views.search import SearchView
 urlpatterns = [
    
     #Authentication
@@ -47,5 +48,12 @@ urlpatterns = [
     path('lure_create/',LureCreateView.as_view(), name='lure_create'),
     path('user_profile/<int:user_id>/', UserProfileView.as_view(), name='user_profile'),
     path('tackle/<int:user_id>', TackleView.as_view(), name='tackle'),
+    path('tackle_detail/<str:tackle_type>/<int:tackle_id>/', TackleDetailView.as_view(), name='tackle_detail'),
+
+    #About Us
+    path('about_us/', AboutUsView.as_view(), name='about'),
+
+    #Search
+    path('search/', SearchView.as_view(), name='search'),
       
 ]

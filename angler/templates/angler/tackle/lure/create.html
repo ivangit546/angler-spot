@@ -1,10 +1,13 @@
-{% extends 'angler/base.html'%}
-{% block content %}
+{% extends 'angler/base.html' %}
+{% load static %}
+{% block content%}
+
 <div class="title-row-rod">
-    <h2 class="section-title">Add a new catch!</h2>
+    <h2 class="section-title">Lure-Bait Setup</h2>
 </div>
-<div class="practice-box3">
-    <form method="POST" action="{% url 'fishdex_entry'%}">
+
+<div class="lure-box3">
+    <form method="POST" action="{% url 'lure_create'%}">
         {% csrf_token %}
         {% for field in form %}
         <div class="form-field">

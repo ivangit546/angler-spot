@@ -1,0 +1,59 @@
+{% extends 'angler/base.html' %}
+{% block content %}
+
+{% if posts %}
+<center>
+        <h2>Your Searched for "{{ searched }}"</h2>
+</center>
+    <div class="feed-container">
+        {% for post in posts %}
+        <a href="{% url 'post_detail' post_id=post.id %}" class="post-link">
+            <div class="post-card">
+
+                <div class="post-header">
+                    <img class="post-avatar" src="{{ post.user.get_profile_image.url }}" alt="{{ post.user.username }}" />
+                    <div class="post-header-right">
+                        <div class="post-name-row">
+                            <span class="post-profilename">{{ post.user.get_profile_name }}</span>
+                            <span class="post-username">@{{ post.user.username }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-body">
+                        <p class="post-text">{{ post.text }}</p>
+                    </div>
+                    {% if post.image %}
+                    <div class="post-media">
+                        <img class="post-image" src="{{ post.image.url }}" alt="post image" />
+                    </div>
+                    {% endif %}
+                    <span class="post-timestamp">{{ post.created_date }}</span>
+                    <div class="post-divider"></div>
+
+                    <div class="post-footer">
+                        <div class="post-stat">
+                            {% if post.id in liked_post_ids %}
+                                <img src="{{ MEDIA_URL }}like_img/liked.png" alt="likes" class="stat-icon"/>
+                            {% else %}
+                                <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="likes" class="stat-icon"/>
+                            {% endif %}    
+                            <span class="stat-count">{{ post.like_count }}</span>
+                        </div>
+                        <div class="post-stat">
+                            <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="comments" class="stat-icon" />
+                            <span class="stat-count">{{ post.comment_count }}</span>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+{% else %}
+<center>
+        <h2>No Search Found For "{{ searched }}"</h2>
+</center>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'angler/base.html'%}
+{% load static %}
+{% block content %}
+<div class="about-wrapper">
+  <section class="about-main">
+    <div class="about-main__image-frame">
+      <img src="{% static 'about_me/ivan-fishing.jpg' %}" alt="About Us" class="about-main__image">
+    </div>
+    <div class="about-main__intro">
+      <span class="about-main__eyebrow">About the Project</span>
+      <h1 class="about-main__title">Angler Spot</h1>
+      <p class="about-main__lead">
+      </p>
+    </div>
+  </section>
+  <section class="about-outline">
+    <div class="outline-block">
+      <h2 class="outline-block__heading">About Me</h2>
+      <p class="outline-block__body">
+        B.S. in Computer Science, University of Wisconsin-Milwaukee, 2025.
+        Experience in Django + Python, Java, C.
+        Wisconsin based developer, avid angler and recent graduate.
+        Fall 2024 Computer Science Senior Design Best Project Winner 'Foraging Tracker' 
+        <a href="https://uwm.edu/engineering/home/senior-design-projects/fall-2024-senior-design-projects/" style="color: blue;">[See Here].</a>
+      </p>
+    </div>
+    <div class="outline-block">
+      <h2 class="outline-block__heading">How It Works</h2>
+      <p class="outline-block__body">
+        I built this project to apply and demonstrate what I studied in my Computer Science degree to a real world application.
+        Angler Spot is a web app built with Django Framework to create a social media platform with strong built in authentication and dedicated ORM that enabled
+        me to focus on core features with real world usability.    
+      </p>
+    </div>
+    <div class="outline-block">
+      <h2 class="outline-block__heading">Who It's For</h2>
+      <p class="outline-block__body">
+        Target audience are Anglers around the world, whether new or experienced Angler Spot allows users to log catches, create post, and share any and all things fishing with others just as passionate about the hobby.
+      </p>
+    </div>
+  </section>
+  <section class="about-links">
+    <h3 class="about-links__heading">Explore</h3>
+    <ul class="about-links__list">
+        <li>
+            <a href="{% static 'about_me/resume.pdf' %}" class="about-link" target="_blank" rel="noopener">
+                <span class="about-link__label">Resume</span>
+            </a>
+        </li>
+        <li>
+            <a href="https://github.com/ivangit546" class="about-link" target="_blank" rel="noopener">
+            <span class="about-link__label">GitHub</span>
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'home_feed' %}" class="about-link">
+            <span class="about-link__label">Home</span>
+            </a>
+        </li>
+    </ul>
+  </section>
+</div>
+{% endblock %}

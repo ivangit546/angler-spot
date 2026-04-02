@@ -16,13 +16,27 @@ class TackleView(LoginRequiredMixin, View):
         context ={'user':user,
                    'rod_and_reels':rod_and_reels,
                      'lures':lures}
-        return render(request, 'angler/tackle.html', context)
+        return render(request, 'angler/tackle/tackle.html', context)
+
+class TackleDetailView(LoginRequiredMixin, View):
+    login_url = '/login'
+    def get(self, request, tackle_type, tackle_id):
+        if tackle_type == 'lure':
+            tackle_obj = get_object_or_404(Lure, id=tackle_id)
+        elif tackle_type == 'rod':
+            tackle_obj = get_object_or_404(RodAndReel, id=tackle_id) 
+        else:
+            raise ValueError('Invalid tackle type')
+        context = {'tackle_obj': tackle_obj, 'tackle_type':tackle_type}
+        
+        print(f"{tackle_type}.png")
+        return render(request, 'angler/tackle/detail.html',context)
         
 class RodAndReelCreateView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get (self, request):
         form = RodAndReelForm()
-        return render(request, 'angler/rod_and_reel/create.html', {'form':form})
+        return render(request, 'angler/tackle/rod_and_reel/create.html', {'form':form})
     
     def post(self, request):
         user = request.user
@@ -37,7 +51,7 @@ class LureCreateView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self,request):
         form = LureForm()
-        return render(request, 'angler/lure/create.html', {'form':form})
+        return render(request, 'angler/tackle/lure/create.html', {'form':form})
 
     def post(self, request):
         user = request.user

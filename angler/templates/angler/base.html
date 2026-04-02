@@ -23,7 +23,9 @@
             {% if user.is_authenticated %}
                 <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'home_feed'%}">Home</a>
-                
+                </li>
+                <li class="nav-item">
+                <a class="nav-link active" href="{% url 'post_create'  %}">Post</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'fishdex' user_id=request.user.id %}">FishDex</a>
@@ -33,6 +35,8 @@
                     Dropdown
                 </a>
                 <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'rod_reel_create' %}">Rod & Reel</a></li>
+                    <li><a class="dropdown-item" href="{% url 'lure_create' %}">Lure</a></li>
                     <li><a class="dropdown-item" href="{% url 'tackle' user_id=request.user.id %}">Tackle</a></li>
                     <li><a class="dropdown-item" href="{% url 'friendslist' user_id=request.user.id %}">Friends</a></li>
                     <li><hr class="dropdown-divider"></li>
@@ -43,13 +47,15 @@
                 </ul>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link active" href="{% url 'post_create'  %}">Post</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'about'%}">About Us</a>
                 </li>
+                
             {% endif %}
         </ul>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-            <button disabled class="btn btn-outline-success" type="submit">Search</button>
+        <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
         </div>
     </div>

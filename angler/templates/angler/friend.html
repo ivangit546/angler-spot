@@ -1,41 +1,47 @@
 {% extends 'angler/base.html'%}
+{% load static %}
 {% block content %}
-<h2>Friends</h2>
-
+<div class="title-row">
+    <h2 class="section-title">Friends</h2>
+</div>
+<div class="results-grid">
     {% for friend in friends %}
-        <div class="container">
-            {% if friend.get_profile_image %}
+        <a href="{% url 'user_profile' user_id=friend.id %}" class="result-card">
+            <div class="result-card-header">
                 <img src="{{ friend.get_profile_image.url }}" class="circle-image-sm">
-            {% endif %}
-            <div class="text-group">
-                <span>{{friend.get_profile_name}}</span>
-                <strong><a href="{% url 'user_profile' user_id=friend.id %}">@{{friend.username}}</a></strong>
+                <div class="result-header-text">
+                    <span class="result-name">{{friend.get_profile_name}}</span>
+                    <span class="result-name">@{{friend.username}}</span>
+                </div>
             </div>
-        </div>
-        <hr class="divider">
+        </a>
     {% endfor %}
-            </ul> 
-<h2>Friend Request</h2>
-
+</div>    
+<br>
+<div class="title-row">
+    <h2 class="section-title">Friend Requests</h2>
+</div>
+<div class="results-grid">
     {% for request in friend_requests %}
-        <div class="container">
-            {% if request.request_sender.get_profile_image %}
+        <a href="{% url 'user_profile' user_id=request.request_sender.id %}" class="result-card">
+            <div class="result-card-header">
                 <img src="{{ request.request_sender.get_profile_image.url }}" class="circle-image-sm">
-            {% endif %}
-            <div class="text-group">
-                <span>{{request.request_sender.get_profile_name}}</span>
-                <strong><a href="{% url 'user_profile' user_id=request.request_sender.id %}">@{{request.request_sender.username}}</a></strong>
+                <div class="result-header-text">
+                    <span class="result-name">{{ request.request_sender.get_profile_name }}</span>
+                    <span class="result-username">@{{ request.request_sender.username }}</span>
+                </div>
             </div>
-            <form action="{% url 'manage_friend_request' user_id=request.request_sender.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" name="action" value="accept" style="border: 2px solid green; background: transparent; color: green; border-radius: 6px; padding: 6px 12px;">accept</button>
-            </form>
-            <form action="{% url 'manage_friend_request' user_id=request.request_sender.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit" name="action" value="reject"style="border: 2px solid red; background: transparent; color: red; border-radius: 6px; padding: 6px 12px;">reject</button>
-            </form>
-            
-        </div>
-        <hr class="divider">
-    {% endfor %}
+            <div class="result-card-actions">
+                <form action="{% url 'manage_friend_request' user_id=request.request_sender.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="accept" class="result-accept-btn">accept</button>
+                </form>
+                <form action="{% url 'manage_friend_request' user_id=request.request_sender.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="reject" class="result-reject-btn">reject</button>
+                </form>
+            </div>
+        </a>
+        {% endfor %}
+</div>
 {% endblock %}

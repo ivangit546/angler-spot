@@ -8,7 +8,7 @@ class CreatePostView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request):
         post_form = PostForm()
-        return render(request, 'angler/post.html', {'post_form':post_form})
+        return render(request, 'angler/post/create.html', {'post_form':post_form})
     def post(self, request):
         user = request.user
         post_form = PostForm(data=request.POST, files=request.FILES)

@@ -1,0 +1,83 @@
+{% extends 'angler/base.html'%}
+{% load static %}
+{% block content %}
+ <h2 class="section-title-detail">{{ tackle_obj.user.get_profile_name }}'s Tackle</h2>
+ <div class="practice-box2" >
+    <div class="detail-container">
+        <div class="detail-header"> 
+            <img class="detail-img" src="{% static 'icons/'|add:tackle_type|add:'.png' %}" />
+
+            <div class="detail-header-text">
+                <span class="detail-name">{{ tackle_obj.name }}
+                </span>
+            </div>
+        </div>
+         <br>
+         <div class="detail-fields-wrapper">
+             <div class="detail-fields">
+                {% if tackle_type == 'rod'%}
+                    <div class="field-row">
+                        <span class="field-label">Reel</span> 
+                        <span class="field-value">{{ tackle_obj.reel_type }}</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Rod Action</span> 
+                        <span class="field-value">{{ tackle_obj.rod_action }}</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Rod Length</span> 
+                        <span class="field-value">{{ tackle_obj.rod_length }}ft.</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Main Line</span>
+                        <span class="field-value">{{ tackle_obj.line }}</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Line lb</span>
+                        <span class="field-value">{{ tackle_obj.line_pound }}lbs.</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Line Length</span>
+                        <span class="field-value">{{ tackle_obj.line_length }}yds.</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Leader Line</span>
+                        <span class="field-value">{{ tackle_obj.leader }}</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Leader lb</span>
+                        <span class="field-value">{{ tackle_obj.leader_line_pound }}lbs.</span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">Leader Length</span>
+                        <span class="field-value">{{ tackle_obj.leader_length }}ft.</span>
+                    </div>
+                {% else %}
+                    <div class="field-row field-full">
+                        <span class="field-label">Type</span> 
+                        <span class="field-value">{{ tackle_obj.lure_type }}</span>
+                    </div>
+                    {% if tackle_obj.live_bait %}
+                        <div class="field-row field-full">
+                            <span class="field-label"></span> 
+                            <span class="field-value">Live Bait</span>   
+                        </div>
+                    {% endif %}
+                    {% if tackle_obj.trailer %}
+                    <div class="field-row field-full">
+                        <span class="field-label">Trailer</span>
+                        <span class="field-value">{{ tackle_obj.trailer }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="field-row field-row field-full">
+                        <span class="field-label">Description</span> 
+                        <span class="field-value">{{ tackle_obj.description }}</span>
+                    </div>
+                {% endif %}    
+            </div> 
+        </div>    
+    </div>
+</div>
+
+
+{% endblock %}

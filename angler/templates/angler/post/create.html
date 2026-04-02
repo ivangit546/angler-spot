@@ -1,0 +1,26 @@
+{% extends 'angler/base.html' %}
+{% load static %}
+{% block content%}
+
+<div class="title-row post-title-row">
+    <h2 class="section-title">Create a Post</h2>
+</div>
+
+<div class="practice-box3">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-field">
+            <label class="form-label">{{ post_form.text.label }}</label>
+            {{ post_form.text }}
+        </div>
+
+        <div class="form-field">
+            <label class="form-label">{{ post_form.image.label }}</label>
+            {{ post_form.image }}
+        </div>
+
+        <button type="submit" class="form-btn">Post</button>
+    </form>
+</div>
+{% endblock %}

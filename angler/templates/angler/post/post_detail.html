@@ -44,18 +44,16 @@
           </form>
         {% endif %}
         {% if post.user == request.user %}
-        <form class="like-form" method="POST" action="{% url 'post_delete' post_id=post.id %}">
-          {% csrf_token %}
-          <button class="my-button" type="submit" value="button_object" title="Delete Post">
-            <img src="{{ MEDIA_URL }}delete/delete.png" alt="button_object" style="width: 30px; height: 30px;">
-          </button>
-        </form>
+          <form class="like-form" method="POST" action="{% url 'post_delete' post_id=post.id %}">
+            {% csrf_token %}
+            <button class="my-button" type="submit" value="button_object" title="Delete Post">
+              <img src="{{ MEDIA_URL }}delete/delete.png" alt="button_object" style="width: 30px; height: 30px;">
+            </button>
+          </form>
         {% endif %}
       </div>
     </div>
   </div>
-
-  <!-- <hr class="divider"> -->
 
   <div class="container container-center">
     <div class="positioned-div">
@@ -70,44 +68,56 @@
 
       <div class="comments-section">
         {% for comment in top_comments %}
-          <div class="item">
+          <div class="comment-card">
+
             {% if comment.user.get_profile_image %}
-              <img src="{{ comment.user.get_profile_image.url }}" class="circle-image2">
-            {% endif %}
-            <strong><a href="{% url 'user_profile' user_id=comment.user.id %}">@{{ comment.user.username }}</a></strong>: {{ comment.text }}
-
-            <form class="comment-action-form" method="GET" action="{% url 'reply_create' comment_id=comment.id %}" style="display: inline;">
-              <button class="my-button" type="submit" value="comment">
-                <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="Comment" style="width: 30px; height: 30px;">
-              </button>
-            </form>
-            <span style="font-size: 1.0rem;">{{ comment.reply_count }}</span>
-
-            {% if comment.id in liked_comment_ids %}
-              <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=comment.id %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" value="like">
-                  <img src="{{ MEDIA_URL }}like_img/liked.png" alt="Like" style="width: 30px; height: 30px;">
-                </button>
-              </form>
-            {% else %}
-              <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=comment.id %}" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" value="unlike">
-                  <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="Like" style="width: 30px; height: 30px;">
-                </button>
-              </form>
+              <img src="{{ comment.user.get_profile_image.url }}" class="comment-avatar" />
             {% endif %}
 
-            {{ comment.like_count }}
-            {% if request.user == comment.user %}
-              <form class="like-form" method="POST" action="{% url 'comment_delete' comment_id=comment.id %}">
-                {% csrf_token %}
-                <button class="my-button" type="submit" value="button_object" title="Delete Comment">
-                  <img src="{{ MEDIA_URL }}delete/delete.png" alt="button_object" style="width: 30px; height: 30px;">
-                </button>
-              </form>
-            {% endif %}  
+            <div class="comment-content">
+              <div class="comment-header">
+                <span class="comment-profilename">{{ comment.user.get_profile_name }}</span>
+                <strong><a href="{% url 'user_profile' user_id=comment.user.id %}" class="comment-username">@{{ comment.user.username }}</a></strong>
+              </div>
+
+              <p class="comment-text">{{ comment.text }}</p>
+
+              <div class="comment-actions">
+                <form class="comment-action-form" method="GET" action="{% url 'reply_create' comment_id=comment.id %}">
+                  <button class="my-button" type="submit" value="comment">
+                    <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="Comment" style="width: 22px; height: 22px;">
+                  </button>
+                </form>
+                <span class="action-count">{{ comment.reply_count }}</span>
+
+                {% if comment.id in liked_comment_ids %}
+                  <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=comment.id %}">
+                    {% csrf_token %}
+                    <button type="submit" value="like">
+                      <img src="{{ MEDIA_URL }}like_img/liked.png" alt="Like" style="width: 22px; height: 22px;">
+                    </button>
+                  </form>
+                {% else %}
+                  <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=comment.id %}">
+                    {% csrf_token %}
+                    <button type="submit" value="unlike">
+                      <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="Like" style="width: 22px; height: 22px;">
+                    </button>
+                  </form>
+                {% endif %}
+                <span class="action-count">{{ comment.like_count }}</span>
+
+                {% if request.user == comment.user %}
+                  <form class="like-form" method="POST" action="{% url 'comment_delete' comment_id=comment.id %}">
+                    {% csrf_token %}
+                    <button class="my-button" type="submit" value="button_object" title="Delete Comment">
+                      <img src="{{ MEDIA_URL }}delete/delete.png" alt="button_object" style="width: 22px; height: 22px;">
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+
           </div>
         {% endfor %}
       </div>
