@@ -23,14 +23,19 @@ class TackleDetailView(LoginRequiredMixin, View):
     def get(self, request, tackle_type, tackle_id):
         if tackle_type == 'lure':
             tackle_obj = get_object_or_404(Lure, id=tackle_id)
+            fish_entries = FishEntry.objects.filter(lure=tackle_obj)
         elif tackle_type == 'rod':
             tackle_obj = get_object_or_404(RodAndReel, id=tackle_id) 
+            fish_entries = FishEntry.objects.filter(tackle=tackle_obj)
         else:
             raise ValueError('Invalid tackle type')
-        context = {'tackle_obj': tackle_obj, 'tackle_type':tackle_type}
+        context = {'tackle_obj': tackle_obj,
+                    'tackle_type':tackle_type,
+                    'fish_entries':fish_entries}
         
         print(f"{tackle_type}.png")
         return render(request, 'angler/tackle/detail.html',context)
+    
         
 class RodAndReelCreateView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -61,4 +66,33 @@ class LureCreateView(LoginRequiredMixin, View):
             lure.user = user
             lure.save()
         return redirect('tackle', user.id)
+    
+class TackleEntryAdd(LoginRequiredMixin, View):
+    login_url ='/login/'
+    def get(self, request, tackle_type, fish_entry_id,):
+        user = request.user
+        fish_entry = get_object_or_404(FishEntry, id=fish_entry_id)
+        if tackle_type == 'lure':
+            tackle_objs = Lure.objects.filter(user=user)
+        else:
+            tackle_objs = RodAndReel.objects.filter(user=user)  
+        context ={'user':user,
+                   'tackle_objs':tackle_objs,
+                     'fish_entry':fish_entry,
+                     'tackle_type':tackle_type}
+        return render(request, 'angler/tackle/add.html', context)
+    
+    def post(self, request, tackle_type, tackle_id, fish_entry_id):
+        user = request.user
+        fishdex = get_object_or_404(FishDex, user=user)
+        fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex=fishdex)
+        if tackle_type == 'lure':
+            lure = get_object_or_404(Lure, id=tackle_id, user=user)
+            fish_entry.lure = lure
+        else:
+            rod_reel = get_object_or_404(RodAndReel, id=tackle_id, user=user)
+            fish_entry.tackle = rod_reel
+        fish_entry.save()
+        return redirect ('fishdex_detail',fishdex.id, fish_entry_id )
+
 

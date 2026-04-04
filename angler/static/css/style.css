@@ -1362,3 +1362,17 @@ input[type="checkbox"] {
 .detail-action-icon:hover {
     transform: scale(1.1);
 }
+.result-card {
+  position: relative;
+}
+
+.result-card button[type="submit"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  background: none;
+}

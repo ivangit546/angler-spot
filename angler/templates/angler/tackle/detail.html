@@ -5,12 +5,19 @@
  <div class="practice-box2" >
     <div class="detail-container">
         <div class="detail-header"> 
-            <img class="detail-img" src="{% static 'icons/'|add:tackle_type|add:'.png' %}" />
-
+            <div class="detail-img-wrapper">
+                <img class="detail-img" src="{% static 'icons/'|add:tackle_type|add:'.png' %}"/>
+                <div class="detail-img-actions">
+                    {% for entry in fish_entries %}    
+                        <a href="{% url 'fishdex_detail' entry.fish_dex.id entry.id %}">
+                            <img src="{{ entry.fish.fish_avatar.url }}" alt="action 1" class="detail-action-icon" /> 
+                        </a>
+                    {% endfor %}    
+                </div>        
+            </div>    
             <div class="detail-header-text">
-                <span class="detail-name">{{ tackle_obj.name }}
-                </span>
-            </div>
+                <span class="detail-name">{{ tackle_obj.name }}</span>
+            </div>     
         </div>
          <br>
          <div class="detail-fields-wrapper">

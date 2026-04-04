@@ -1,0 +1,92 @@
+{% extends 'angler/base.html'%}
+{% load static %}
+{% block content %}
+<div class="title-row">
+    {% if tackle_type == 'rod' %}
+        <h2 class="section-title">Set Rod & Reel for {{fish_entry.fish.name}} </h2>
+    {% else %}
+        <h2 class="section-title">Set Lure for {{fish_entry.fish.name}} </h2>
+    {% endif %}
+</div>
+
+<div class="results-grid">
+    {% if tackle_type == 'rod' %}
+        {% for rod_and_reel in tackle_objs %}
+            <form method="POST" action="{% url 'add_tackle_entry' tackle_type='rod' tackle_id=rod_and_reel.id fish_entry_id=fish_entry.id %}" class="result-card">
+                {% csrf_token %}
+                <button type="submit"></button> 
+                
+                <div class="result-card-header">
+                    <img class="result-img" src="{% static 'icons/rod.png' %}" />
+                    <div class="result-header-text">
+                        <span class="result-name">{{ rod_and_reel.name }}</span>
+                    </div>
+                </div>
+                <div class="result-divider"></div>
+                <div class="result-fields">
+                    <div class="result-field-row">
+                        <span class="result-field-label">Rod action</span>
+                        <span class="result-field-value">{{ rod_and_reel.rod_action }}</span>
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Rod Length</span>
+                        <span class="result-field-value">{{ rod_and_reel.rod_length }} ft.</span>
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Main Line Type</span>
+                        <span class="result-field-value">{{ rod_and_reel.line }}</span>
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Main Line Length</span>
+                        <span class="result-field-value">{{ rod_and_reel.line_length }} yd.</span>
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Leader Type</span>
+                        <span class="result-field-value">{{ rod_and_reel.leader }}</span>
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Leader Length</span>
+                        <span class="result-field-value">{{ rod_and_reel.leader_length }} ft.</span>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+    {% else %}    
+        {% for lure in tackle_objs %}
+            <form method="POST" action="{% url 'add_tackle_entry' tackle_type='lure' tackle_id=lure.id fish_entry_id=fish_entry.id %}" class="result-card">
+                {% csrf_token %}
+                <button type="submit"></button> 
+                <div class="result-card-header">
+                    <img class="result-img" src="{% static 'icons/lure.png' %}"/>
+                    <div class="result-header-text">
+                        <span class="result-name">{{ lure.name }}</span>
+                    </div>
+                </div>
+                <div class="result-divider"></div>
+                <div class="result-fields">
+                    <div class="result-field-row">
+                        <span class="result-field-label">Live Bait</span>
+                        {% if lure.live_bait %}
+                            <span class="result-field-value">Yes</span>
+                        {% else %}
+                            <span class="result-field-value">No</span>
+                        {% endif %}
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Desc.</span>
+                        <span class="result-field-value">{{lure.description}}</span>
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Lure Type</span>
+                        <span class="result-field-value">{{lure.lure_type}} </span>
+                    </div>
+                    <div class="result-field-row">
+                        <span class="result-field-label">Trailer</span>
+                        <span class="result-field-value">{{lure.trailer}}</span>
+                    </div>
+                </div>
+            </form>
+        {% endfor %}
+    {% endif %}        
+</div>
+{% endblock %}

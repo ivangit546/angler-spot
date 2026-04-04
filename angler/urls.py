@@ -4,7 +4,7 @@ from angler.views.login import LoginView
 from angler.views.main_feed import MainFeedView, AboutUsView
 from angler.views.logout import LogoutView
 from angler.views.fish_dex import FishDexView, FishDexEntryView, FishDexDetailView
-from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView, TackleDetailView
+from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView, TackleDetailView, TackleEntryAdd
 from angler.views.friends import FriendsListView
 from angler.views.user_profile import UserProfileView
 from angler.views.friends import SendFriendRequestView, ManageFriendRequestView, RemoveFriendView
@@ -49,6 +49,8 @@ urlpatterns = [
     path('user_profile/<int:user_id>/', UserProfileView.as_view(), name='user_profile'),
     path('tackle/<int:user_id>', TackleView.as_view(), name='tackle'),
     path('tackle_detail/<str:tackle_type>/<int:tackle_id>/', TackleDetailView.as_view(), name='tackle_detail'),
+    path('tackle_entry_choice/<str:tackle_type>/<int:fish_entry_id>/', TackleEntryAdd.as_view(), name='tackle_entry_choice'),
+    path('add_tackle_entry/<str:tackle_type>/<int:tackle_id>/<int:fish_entry_id>/', TackleEntryAdd.as_view(), name='add_tackle_entry'),
 
     #About Us
     path('about_us/', AboutUsView.as_view(), name='about'),

@@ -22,13 +22,14 @@ class FishDexView(View):
     
 class FishDexDetailView(View):
 
-    def get (self, request, fishdex_id, fish_entry_id):
-        fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex_id=fishdex_id)
-        
-        context = { 'fish_entry':fish_entry,
+    def get (self, request, fishdex_id, fish_entry_id): 
+        fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex_id=fishdex_id) 
+        user = fish_entry.fish_dex.user 
+        print(f"fish_entryid:{fish_entry.id}")    
+        context = { 'user':user,
+                   'fish_entry':fish_entry,
                    'fish_color':fish_entry.get_fish_color
-                   }
-      
+                   }    
         return render(request, 'angler/fishdex/detail.html', context)    
     
 

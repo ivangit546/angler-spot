@@ -9,12 +9,25 @@
                 <img class="detail-img" src="{{ fish_entry.fish.fish_avatar.url }}" />
                 
                 <div class="detail-img-actions">
-                    <a href="">
+                {% if fish_entry.tackle %}
+                    <a href="{% url 'tackle_detail' tackle_type='rod' tackle_id=fish_entry.tackle.id%}">
+                        <img src="{% static 'icons/rod.png' %}" alt="action 1" class="detail-action-icon" /> 
+                    </a>       
+                {% elif not fish_entry.tackle and request.user == user %}
+                     <a href="{% url 'tackle_entry_choice' tackle_type='rod' fish_entry_id=fish_entry.id %}">       
                         <img src="{% static 'icons/rod.png' %}" alt="action 1" class="detail-action-icon" />
-                    </a>
-                    <a href="">
+                    </a>    
+                {% endif %}     
+                      
+                {% if fish_entry.lure %}    
+                    <a href="{% url 'tackle_detail' tackle_type='lure' tackle_id=fish_entry.lure.id%}">
                         <img src="{% static 'icons/lure.png' %}" alt="action 2" class="detail-action-icon" />
-                    </a>
+                    </a>    
+                {% elif not fish_entry.lure and request.user == user %}
+                    <a href="{% url 'tackle_entry_choice' tackle_type='lure' fish_entry_id=fish_entry.id %}">         
+                        <img src="{% static 'icons/lure.png' %}" alt="action 2" class="detail-action-icon" />
+                    </a>        
+                {% endif %}    
                 </div>
             </div>
             <div class="detail-header-text">
