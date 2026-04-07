@@ -27,7 +27,13 @@
                     <a href="{% url 'tackle_entry_choice' tackle_type='lure' fish_entry_id=fish_entry.id %}">         
                         <img src="{% static 'icons/lure.png' %}" alt="action 2" class="detail-action-icon" />
                     </a>        
-                {% endif %}    
+                {% endif %}
+
+                {% if fish_entry.latitude and fish_entry.longitude %}   
+                    <a href="https://www.google.com/maps/search/?api=1&query={{fish_entry.latitude}}%2C{{fish_entry.longitude}}" target="_blank" rel="noopener noreferrer">        
+                        <img src="{% static 'icons/map.png' %}" alt="action 2" class="detail-action-icon" />
+                    </a>  
+                {% endif %}
                 </div>
             </div>
             <div class="detail-header-text">
@@ -37,26 +43,31 @@
                         {% endif %}
                     </span>
                     <span class="detail-id">#{{ fish_entry.fish.id }}/{{fish_entry.fish.count}}</span>
-                </div>    
+            </div>
+            {% if fish_entry.latitude and fish_entry.longitude %}
+
+            {% else %}   
+                <button id="getLocationButton" class="detail-header-btn">Save Location</button>
+            {% endif %}    
         </div>
         <!-- <div class="divider"></div> -->
          <br>
          <div class="detail-fields-wrapper">
             <div class="detail-fields">
                 <div class="field-row">
-                    <span class="field-label">weight</span> <!--A-->
+                    <span class="field-label">weight</span> 
                     <span class="field-value">{{ fish_entry.entry_weight }}lbs</span>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">avg. weight</span> <!--C-->
+                    <span class="field-label">avg. weight</span> 
                     <span class="field-value">{{ fish_entry.fish.weight }}lbs</span>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">size</span> <!--B-->
+                    <span class="field-label">size</span> 
                     <span class="field-value">{{ fish_entry.entry_length }}in.</span>
                 </div>
                 <div class="field-row">
-                    <span class="field-label">avg. size</span><!--D-->
+                    <span class="field-label">avg. size</span>
                     <span class="field-value">{{ fish_entry.fish.length }}in.</span>
                 </div>
                 <div class="field-row field-full">
@@ -67,6 +78,46 @@
         </div>    
     </div>
 </div>
+
+<script>
+
+    const sendUserCoordinates = (coords) => {
+        const id = '{{ fish_entry.id }}'
+        fetch('/fishdex_location/${id}/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                latitude: coords.latitude,
+                longitude: coords.longitude
+            })
+        }).then(() => location.reload())
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){
+        const getLocationButton = document.getElementById('getLocationButton'); 
+        getLocationButton.addEventListener('click', function() {
+            if ('geolocation' in navigator){
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+
+                        sendUserCoordinates(position.coords)                       
+                    },
+                    function(error) {
+                        console.error(error)
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
+                    }
+                )
+            }
+        });                        
+    });
+</script>
 {% endblock %}
  <!--If fish passes set size make it a shiny, will use an icon of star or some sort to display that
     need caught_at added

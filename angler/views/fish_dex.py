@@ -4,9 +4,13 @@ from django.shortcuts import get_object_or_404
 from angler.models.fish import Fish, FishDex, FishEntry
 from angler.models.user import User
 from angler.forms.fish_dex import FishDexEntryForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+import json
+from django.http import JsonResponse
 
-class FishDexView(View):
 
+class FishDexView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get (self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         fish_entries = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
@@ -20,8 +24,8 @@ class FishDexView(View):
       
         return render(request, 'angler/fishdex/fish_dex.html', context)
     
-class FishDexDetailView(View):
-
+class FishDexDetailView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get (self, request, fishdex_id, fish_entry_id): 
         fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex_id=fishdex_id) 
         user = fish_entry.fish_dex.user 
@@ -33,8 +37,8 @@ class FishDexDetailView(View):
         return render(request, 'angler/fishdex/detail.html', context)    
     
 
-class FishDexEntryView(View):
-
+class FishDexEntryView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request):
         form = FishDexEntryForm()
         form.fields['fish'].queryset = Fish.objects.exclude(
@@ -46,8 +50,6 @@ class FishDexEntryView(View):
     def post(self, request):
         user = request.user
         fish_dex = FishDex.objects.get(user=user)
-        fish_dex_id = fish_dex.id
-        print("id number: " + str(fish_dex_id))
         fish_entry_form = FishDexEntryForm(data=request.POST, files=request.FILES)
         if fish_entry_form.is_valid():
             fish_entry = fish_entry_form.save(commit=False)
@@ -56,4 +58,37 @@ class FishDexEntryView(View):
             fish_dex.unlocked +=1 
             fish_dex.save()
             return redirect('fishdex', user_id=user.id)
-        
+            
+class FishEntryLocation(LoginRequiredMixin, View):
+    login_url = '/login/'    
+    def post(self, request, fish_entry_id):
+        try:
+            data = json.loads(request.body)
+            latitude = data.get('latitude')
+            longitude = data.get('longitude')
+            if not all([latitude, longitude]):
+                return JsonResponse({
+                'status': 'error',
+                'message': 'Incomplete location data'
+            }, status=400)
+            
+            FishEntry.objects.filter(pk=fish_entry_id).update(
+                latitude=latitude,
+                longitude=longitude
+            )
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Location saved'
+            })
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Invalid JSON'
+            }, status=400)
+        except Exception as e:
+            print('ERROR:', e)
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+

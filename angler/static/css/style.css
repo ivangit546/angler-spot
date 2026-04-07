@@ -1376,3 +1376,17 @@ input[type="checkbox"] {
   border: none;
   background: none;
 }
+.detail-header-btn {
+    background-color: #015f09;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background-color 0.15s;
+    margin-top: 8px;
+}
+
+.detail-header-btn:hover {
+    background-color: #014607;
+}
