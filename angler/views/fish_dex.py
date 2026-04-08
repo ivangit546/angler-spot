@@ -1,6 +1,5 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
-from django.shortcuts import get_object_or_404
 from angler.models.fish import Fish, FishDex, FishEntry
 from angler.models.user import User
 from angler.forms.fish_dex import FishDexEntryForm

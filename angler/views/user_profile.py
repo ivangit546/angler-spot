@@ -5,7 +5,6 @@ from angler.models.user import User, Profile
 from angler.models.post import Post
 from angler.models.friends import FriendList, FriendRequest
 from django.shortcuts import get_object_or_404, get_list_or_404
-from django.db.models import Q
 
 class UserProfileView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -28,5 +27,5 @@ class UserProfileView(LoginRequiredMixin, View):
             'pending_sent_friend_request':pending_sent_friend_request,
             'pending_recieved_friend_request':pending_recieved_friend_request
         }
-        return render(request, 'angler/user_profile.html', context)
+        return render(request, 'angler/user/user_profile.html', context)
         

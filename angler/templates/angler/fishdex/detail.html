@@ -44,10 +44,8 @@
                     </span>
                     <span class="detail-id">#{{ fish_entry.fish.id }}/{{fish_entry.fish.count}}</span>
             </div>
-            {% if fish_entry.latitude and fish_entry.longitude %}
-
-            {% else %}   
-                <button id="getLocationButton" class="detail-header-btn">Save Location</button>
+            {% if not fish_entry.latitude and not fish_entry.longitude and user == request.user %}
+                <button id="getLocationButton" class="detail-header-btn">Save Location</button>      
             {% endif %}    
         </div>
         <!-- <div class="divider"></div> -->

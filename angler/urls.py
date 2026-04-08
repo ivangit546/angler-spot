@@ -10,13 +10,19 @@ from angler.views.user_profile import UserProfileView
 from angler.views.friends import SendFriendRequestView, ManageFriendRequestView, RemoveFriendView
 from angler.views.post import CreatePostView, CreateCommentView, LikePostView, DeletePostView, DeleteCommentView, LikeCommentView, PostDetailView, CreateReplyView
 from angler.views.search import SearchView
+from angler.views.edit import SettingsView, DeleteAccountView, EditAccountView
 urlpatterns = [
    
     #Authentication
-    path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     
+    #User
+    path('register/', RegisterView.as_view(), name='register'),
+    path('settings/', SettingsView.as_view(), name='settings'),
+    path('delete_account/', DeleteAccountView.as_view(), name='account_delete'),
+    path('edit_account/<str:action>', EditAccountView.as_view(), name='edit_account'),
+
     #Home page
     path('', MainFeedView.as_view(), name='home_feed'),
 

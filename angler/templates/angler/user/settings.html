@@ -1,0 +1,48 @@
+{% extends 'angler/base.html'%}
+{% block content %}
+
+<div class="title-row-rod">
+    <h2 class="section-title">Settings</h2>
+</div>
+
+<div class="lure-box3">
+        <div class="form-field">
+           <a href="{% url 'edit_account' action='Username' %}" class="settings-button-link">Change Username</a>
+        </div>
+        <br>
+        <div class="form-field">
+            <a href="{% url 'edit_account' action='Email' %}" class="settings-button-link">Change Email</a>
+        </div>
+        <br>
+        <div class="form-field">
+            <a href="{% url 'edit_account' action='Password' %}" class="settings-button-link">Change Password</a>
+        </div>
+        <br>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-field">
+                <label class="form-label"> Set Account to Private</label>
+                <input type="checkbox" 
+                    name="is_private" 
+                    onchange="this.form.submit()" 
+                    {% if form.is_private.value %}checked{% endif %}>
+                    
+            </div>
+        </form>
+ 
+    <br>
+    <br>
+        <div class="form-field">
+            <label class="form-label">Want to Delete Account?</label>
+            <form id="deleteAccForm" action="{% url 'account_delete' %}" method="POST" onsubmit="return confirmation();">
+                {% csrf_token %}
+                <button type="submit" class="deleteform-field-button">Delete Account</button>
+            </form>
+        </div>    
+</div>
+<script type="text/javascript">
+        function confirmation(){
+                return confirm("Confirm account deletion");
+        }
+    </script>
+{% endblock %}

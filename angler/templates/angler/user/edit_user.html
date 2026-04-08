@@ -2,20 +2,26 @@
 {% block content%}
 
 <div class="title-row-rod">
-    <h2 class="section-title">Rod & Reel Setup</h2>
+    <h2 class="section-title">Change {{action}}</h2>
 </div>
 
 <div class="rodreal-box3">
-    <form method="POST" action="{% url 'rod_reel_create'%}">
+    <form method="POST" action="{% url 'edit_account' action=action %}">
         {% csrf_token %}
         {% for field in form %}
         <div class="form-field">
             <label class="form-label">{{ field.label }}</label>
             {{ field }}
         </div>
+        {% if field.errors %}
+                <div class="text-danger small">
+                    {{ field.errors|striptags }}
+                </div>
+            {% endif %}
         {% endfor %}
         <button type="submit" class="form-btn">Submit</button>
     </form>
+    
 </div>
 
 {% endblock %}

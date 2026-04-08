@@ -760,13 +760,50 @@ body {
     margin: 0 auto;
     
 }
+.form-field button{
+    color: white;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 80%; 
+    margin: 0 auto;
+    
+}
+.form-field button:hover{
+    background-color:  rgb(194, 6, 6);
+    cursor: pointer;
+}
 input[type="checkbox"] {
     width: 30px;
     height: 30px;
     background-color: #0133059d;
     accent-color: green;
 }
-
+.deleteacc-button-link {
+  background-color: rgb(214, 3, 3);
+  border-radius: 8px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+.deleteacc-button-link:hover{
+    background-color: rgb(161, 5, 5);
+}
+.settings-button-link{
+background-color: #0133059d;
+  border-radius: 8px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+.settings-button-link:hover{
+    background-color: #0124049d;
+}
 
 .form-field input,
 .form-field select,
