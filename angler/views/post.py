@@ -115,5 +115,5 @@ class PostDetailView(LoginRequiredMixin, View):
             'liked_comment_ids':liked_top_comment_ids
 
         }
-        return render(request, 'angler/post/post_detail.html', context)    
+        return render(request, 'angler/post/detail.html', context)    
 

@@ -16,7 +16,7 @@ class TackleView(LoginRequiredMixin, View):
         context ={'user':user,
                    'rod_and_reels':rod_and_reels,
                      'lures':lures}
-        return render(request, 'angler/tackle/tackle.html', context)
+        return render(request, 'angler/tackle/tacklebox.html', context)
 
 class TackleDetailView(LoginRequiredMixin, View):
     login_url = '/login'

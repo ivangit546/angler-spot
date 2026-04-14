@@ -1437,7 +1437,6 @@ background-color: #0133059d;
 }
 
 .profile-sidebar {
-    width: 25%;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -1600,4 +1599,24 @@ background-color: #0133059d;
     font-size: 16px; 
     color: #ffffff !important;
     -webkit-text-stroke: 1px #0000002f;
+}
+.result-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.profile-sidebar-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 25%;
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+.profile-sidebar-grid {
+    width: 100%;
+    margin: 16px 0 0 0;
+    grid-template-columns: 1fr;
 }

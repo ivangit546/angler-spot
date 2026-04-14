@@ -29,20 +29,20 @@ class DeleteAccountView(LoginRequiredMixin, View):
     
 class EditAccountView(LoginRequiredMixin, View):
     login_url = '/login/'
-    username_form = modelform_factory(User, fields=('username',))
-    email_form = modelform_factory(User, fields=('email',))
+    UsernameForm = modelform_factory(User, fields=('username',))
+    EmailForm = modelform_factory(User, fields=('email',))
     def get(self, request, action):
         if action == 'Username':
-             form = self.username_form(instance=request.user)
+             form = self.UsernameForm(instance=request.user)
         elif action == 'Email':
-            form = self.email_form(instance=request.user)
+            form = self.EmailForm(instance=request.user)
         elif action == 'Password':
             form = PasswordChangeForm(user=request.user)  
         else:
             raise ValueError('Invalid Edit Action') 
         context = {'form': form, 'action':action}
            
-        return render(request, 'angler/user/edit_user.html', context)
+        return render(request, 'angler/user/edit.html', context)
     
     def post(self, request, action):
         if action == 'Password':
@@ -55,9 +55,9 @@ class EditAccountView(LoginRequiredMixin, View):
 
             messages.error(request, f'{form.errors}')
         elif action == 'Username':
-            form = self.username_form(data=request.POST, instance=request.user) 
+            form = self.UsernameForm(data=request.POST, instance=request.user) 
         else:
-            form = self.email_form(data=request.POST, instance=request.user)
+            form = self.EmailForm(data=request.POST, instance=request.user)
         
 
         if form.is_valid():

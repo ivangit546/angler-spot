@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from angler.models.user import User, Profile
 from angler.models.post import Post, Like
+from angler.models.fish import FishEntry, FishDex
 from angler.models.friends import FriendList, FriendRequest
 from django.shortcuts import get_object_or_404
 from django.forms import modelform_factory
@@ -20,9 +21,11 @@ class UserProfileView(LoginRequiredMixin, View):
         pending_sent_friend_request = FriendRequest.objects.filter(request_sender=request.user, request_reciever=user, request_status=0).exists()  
         pending_recieved_friend_request = FriendRequest.objects.filter(request_sender=user, request_reciever=request.user, request_status=0).exists()
         edit_form = self.EditProfileForm(instance=user_profile)
+        fishdex = get_object_or_404(FishDex, user=user)
+        fish_entries = FishEntry.objects.filter(fish_dex=fishdex)[:5]
         context = {
-            'user':user,
             'user_profile':user_profile,
+            'fish_entries':fish_entries,
             'posts':posts,
             'liked_post_ids':liked_post_ids,
             'is_friend':is_friend,
@@ -30,7 +33,7 @@ class UserProfileView(LoginRequiredMixin, View):
             'pending_sent_friend_request':pending_sent_friend_request,
             'pending_recieved_friend_request':pending_recieved_friend_request
         }
-        return render(request, 'angler/user/user_profile.html', context)
+        return render(request, 'angler/user/profile.html', context)
     def post (self, request, user_id):
         profile = get_object_or_404(Profile, user=request.user)
         edit_form = self.EditProfileForm(request.POST, request.FILES, instance=profile)
