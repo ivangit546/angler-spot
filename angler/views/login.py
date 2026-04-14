@@ -2,23 +2,22 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 
 
 
 class LoginView(View):    
     def get(self, request):
-        if request.user is not None and request.user.is_authenticated:
+        if request.user.is_authenticated:
             return redirect ('/')
-        return render(request, 'angler/login.html')  
+        form = AuthenticationForm(request)
+        return render(request, 'angler/login.html', {'form':form})  
 
     def post(self, request): #TODO add email as option for authentication -> implement custom backend
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
             return redirect('/')
-
         else:
             messages.error(request, ("Enter a valid username and password"))
             return redirect('login')

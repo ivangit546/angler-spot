@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">AnglerSpot</a>
+        <a class="navbar-brand" href="{% url 'home_feed'%}">AnglerSpot</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,10 +22,10 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'home_feed'%}">Home</a>
+                <a class="nav-link active" href="{% url 'post_create'  %}">Post</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link active" href="{% url 'post_create'  %}">Post</a>
+                <a class="nav-link" href="{% url 'user_profile' user_id=request.user.id %}">Profile</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="{% url 'fishdex' user_id=request.user.id %}">FishDex</a>

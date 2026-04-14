@@ -34,12 +34,13 @@ class ManageFriendRequestView(LoginRequiredMixin, View):
         user_reciever = request.user
         action = request.POST.get('action')
         friend_request = get_object_or_404(FriendRequest, request_reciever=user_reciever, request_sender=user_sender, request_status=0)
-
         if action == 'accept':
             friend_request.accept_request()
         elif action == 'reject':
             friend_request.delete_request()
-        return redirect('friendslist',user_id=user_reciever.id) 
+        if 'user_profile' in request.META.get('HTTP_REFERER'):
+            return redirect('user_profile', user_id=user_sender.id)
+        return redirect('friendslist', user_id=request.user.id) 
 
 class RemoveFriendView(LoginRequiredMixin, View):
     login_url = '/login/'

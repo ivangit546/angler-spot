@@ -11,7 +11,7 @@ class RegisterView(View):
         if request.user.is_authenticated:
             return redirect ('/')
         user_form = UserRegistrationForm()
-        profile_form = ProfileForm
+        profile_form = ProfileForm()
         return render(request, 'angler/register.html', {'user_form':user_form, 'profile_form':profile_form})
     
     def post(self, request):

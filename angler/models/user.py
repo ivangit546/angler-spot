@@ -34,7 +34,6 @@ class User(AbstractUser):
     
     def get_profile_image(self):
         return Profile.objects.get(user=self).profile_image
-    
     # def liked_post(self):
     #     return Comment
 

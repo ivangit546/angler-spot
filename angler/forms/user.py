@@ -13,12 +13,6 @@ class UserRegistrationForm(forms.ModelForm):
         model = User
         fields = ('username', 'email','password','confirm_password',)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs.update({
-                'class': 'form-control'
-            })
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
@@ -36,9 +30,3 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_image', 'profile_name',]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['profile_name'].widget.attrs.update({
-            'class': 'form-control'
-        })

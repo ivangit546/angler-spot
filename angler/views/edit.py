@@ -1,4 +1,4 @@
-from angler.models.user import User, Profile
+from angler.models.user import User
 from django.forms import modelform_factory
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,7 +6,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.shortcuts import  redirect, render
 from django.views import View
-
 
 class SettingsView(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -65,5 +64,6 @@ class EditAccountView(LoginRequiredMixin, View):
             form.save()
             messages.success(request, f'Successful {action} Change')
 
-        return redirect('settings')    
-        
+        return redirect('settings')
+
+    

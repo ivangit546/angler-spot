@@ -14,7 +14,7 @@
         {% for rod_and_reel in tackle_objs %}
             <form method="POST" action="{% url 'add_tackle_entry' tackle_type='rod' tackle_id=rod_and_reel.id fish_entry_id=fish_entry.id %}" class="result-card">
                 {% csrf_token %}
-                <button type="submit"></button> 
+                <button type="submit" class="card-overlay-btn"></button>
                 
                 <div class="result-card-header">
                     <img class="result-img" src="{% static 'icons/rod.png' %}" />
@@ -55,7 +55,7 @@
         {% for lure in tackle_objs %}
             <form method="POST" action="{% url 'add_tackle_entry' tackle_type='lure' tackle_id=lure.id fish_entry_id=fish_entry.id %}" class="result-card">
                 {% csrf_token %}
-                <button type="submit"></button> 
+                <button type="submit" class="card-overlay-btn"></button>
                 <div class="result-card-header">
                     <img class="result-img" src="{% static 'icons/lure.png' %}"/>
                     <div class="result-header-text">

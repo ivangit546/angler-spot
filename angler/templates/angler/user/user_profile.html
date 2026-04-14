@@ -1,44 +1,137 @@
 {% extends 'angler/base.html'%}
 {% block content %}
+<div class="profile-page">
 
-<body>
-    <h2>{{ user_profile.profile_name }}</h2>
-    <h3>@{{user.username}}</h3>
-    <a class="nav-link" href="{% url 'fishdex' user_id=user.id %}">FishDex</a>
-    {%if pending_sent_friend_request %}
-        <button type="submit" disabled>Pending</button> 
-    {%elif pending_recieved_friend_request %}
-        <form method="post" action="{% url 'manage_friend_request' user_id=user.id %}"> 
+    <div class="profile-sidebar">
+
+        <form method="POST" action="{% url 'user_profile' user_id=user.id %}" enctype="multipart/form-data" id="edit-form">
             {% csrf_token %}
-            <button type="submit" name="action" value="accept">Accept</button>
-            <button type="submit" name="action" value="reject">Reject</button> 
-        </form>    
-    {% elif not is_users_acc and not is_friend %}
-        <form method="post" action="{% url 'send_friend_request' user_id=user.id %}"> 
-            {% csrf_token %}
-            <button type="submit">Add</button> 
         </form>
-    {% endif %}
-    {% if is_friend %}
-    <form method="post" action="{% url 'remove_friend' user_id=user.id %}"> 
-            {% csrf_token %}
-            <button type="submit">Unfriend</button>
-        </form>
-    {% endif %}
-    <br>
-    {% if posts %}
-            <ul>
-                {% for post in posts %}
-                <li>
-                    <h2>{{post.title}}</h2>
-                    <p>{{post.text}}</p>
-                    {% if post.post_image %}
-                        <img src="{{post.post_image.url}}">
+
+        <img src="{{ user.get_profile_image.url }}" class="profile-avatar show-viewing" />
+        {% if request.user == user %}
+        <label class="profile-avatar-edit show-editing d-none">
+            <img src="{{ user.get_profile_image.url }}" class="profile-avatar" id="avatar-preview" />
+            <input type="file" name="profile_image" accept="image/*" style="display:none;" onchange="previewAvatar(this)" form="edit-form" />
+        </label>
+        {% endif %}
+
+        <div class="profile-info show-viewing">
+            <span class="profile-name">{{ user.get_profile_name }}</span>
+            <span class="profile-username">@{{ user.username }}</span>
+        </div>
+        {% if request.user == user %}
+        <div class="profile-info show-editing d-none">
+            <input type="text" name="profile_name" class="profile-edit-input" form="edit-form" value="{{ user.get_profile_name }}" />
+            <span class="profile-username">@{{ user.username }}</span>
+        </div>
+        {% endif %}
+
+        <p class="profile-bio show-viewing">{{ user_profile.bio }}</p>
+        {% if request.user == user %}
+        <textarea name="bio" class="profile-edit-input profile-bio-edit show-editing d-none" form="edit-form">{{ user_profile.bio }}</textarea>
+        {% endif %}
+
+        <div class="profile-actions">
+            {% if request.user == user %}
+                <button class="profile-btn profile-edit-btn show-viewing" onclick="toggleEdit(true)">Edit Profile</button>
+                <button class="profile-btn profile-follow-btn show-editing d-none" onclick="document.getElementById('edit-form').submit()">Save</button>
+                <button class="profile-btn profile-block-btn show-editing d-none" onclick="toggleEdit(false)">Cancel</button>
+            {% else %}
+                {%if pending_sent_friend_request %}
+                    <button type="submit" class="profile-btn profile-follow-btn" disabled>Pending</button>
+                {% elif pending_recieved_friend_request %}
+                    <form method="POST" action="{% url 'manage_friend_request' user_id=user.id %}">
+                        {% csrf_token %}
+                        <button type="submit" name="action" value="accept" class="profile-btn profile-follow-btn">Accept</button>
+                        <br>
+                        <button type="submit" name="action" value="reject" class="profile-btn profile-follow-btn">Reject</button>    
+                        </button>
+                    </form>
+                {% elif not is_friend %}  
+                    <form method="post" action="{% url 'send_friend_request' user_id=user.id %}"> 
+                        {% csrf_token %}
+                        <button type="submit" class="profile-btn profile-follow-btn">Add</button> 
+                    </form>
+                {% endif %}    
+                {% if is_friend %}
+                <form method="post" action="{% url 'remove_friend' user_id=user.id %}"> 
+                        {% csrf_token %}
+                        <button type="submit" class="profile-btn profile-follow-btn">Unfriend</button>
+                    </form>
+                {% endif %}    
+                 <a href="" class="profile-btn profile-message-btn">Message</a> 
+                 <form method="POST" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="profile-btn profile-block-btn">
+                        {% if is_blocked %}Unblock{% else %}Block{% endif %}
+                    </button>
+                </form> 
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <div class="profile-feed">
+        <div class="feed-container">
+            {% for post in posts %}
+            <a href="{% url 'post_detail' post_id=post.id %}" class="post-link">
+                <div class="post-card">
+                    <div class="post-header">
+                        <img class="post-avatar" src="{{ post.user.get_profile_image.url }}" alt="{{ post.user.username }}" />
+                        <div class="post-header-right">
+                            <div class="post-name-row">
+                                <span class="post-profilename">{{ post.user.get_profile_name }}</span>
+                                <span class="post-username">@{{ post.user.username }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-body">
+                        <p class="post-text">{{ post.text }}</p>
+                    </div>
+                    {% if post.image %}
+                    <div class="post-media">
+                        <img class="post-image" src="{{ post.image.url }}" alt="post image" />
+                    </div>
                     {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-        {% endif %}  
+                    <span class="post-timestamp">{{ post.created_date }}</span>
+                    <div class="post-divider"></div>
+                    <div class="post-footer">
+                        <div class="post-stat">
+                            {% if post.id in liked_post_ids %}
+                            <img src="{{ MEDIA_URL }}like_img/liked.png" alt="likes" class="stat-icon"/>
+                        {% else %}
+                            <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="likes" class="stat-icon"/>
+                        {% endif %}    
+                            <span class="stat-count">{{ post.like_count }}</span>
+                        </div>
+                        <div class="post-stat">
+                            <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="comments" class="stat-icon" />
+                            <span class="stat-count">{{ post.comment_count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 
-</body>
+</div>
+
+<script>
+function toggleEdit(editing) {
+    document.querySelectorAll('.show-viewing').forEach(el => el.classList.toggle('d-none', editing));
+    document.querySelectorAll('.show-editing').forEach(el => el.classList.toggle('d-none', !editing));
+}
+
+function previewAvatar(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => document.getElementById('avatar-preview').src = e.target.result;
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
 {% endblock %}
