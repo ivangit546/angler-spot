@@ -15,24 +15,35 @@ class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         user_profile = get_object_or_404(Profile, user=user)
-        posts = Post.objects.filter(user=user).order_by('-created_date')
-        liked_post_ids = set(Like.objects.filter(user=request.user).values_list('post_id', flat=True))
         is_friend = FriendList.is_friend(user, request.user)
         pending_sent_friend_request = FriendRequest.objects.filter(request_sender=request.user, request_reciever=user, request_status=0).exists()  
         pending_recieved_friend_request = FriendRequest.objects.filter(request_sender=user, request_reciever=request.user, request_status=0).exists()
         edit_form = self.EditProfileForm(instance=user_profile)
-        fishdex = get_object_or_404(FishDex, user=user)
-        fish_entries = FishEntry.objects.filter(fish_dex=fishdex)[:5]
+        private = False
+
         context = {
             'user_profile':user_profile,
-            'fish_entries':fish_entries,
-            'posts':posts,
-            'liked_post_ids':liked_post_ids,
             'is_friend':is_friend,
-            'edit_form':edit_form,
             'pending_sent_friend_request':pending_sent_friend_request,
-            'pending_recieved_friend_request':pending_recieved_friend_request
-        }
+            'pending_recieved_friend_request':pending_recieved_friend_request,
+            'private':private
+            }
+        if request.user != user and ( user.is_private and not is_friend):
+            context['private'] = True
+        else:    
+            posts = Post.objects.filter(user=user).order_by('-created_date')
+            liked_post_ids = set(Like.objects.filter(user=request.user).values_list('post_id', flat=True))
+            
+            fishdex = get_object_or_404(FishDex, user=user)
+            fish_entries = FishEntry.objects.filter(fish_dex=fishdex)[:5]
+            objs = {
+                'fish_entries':fish_entries,
+                'posts':posts,
+                'liked_post_ids':liked_post_ids,
+                'edit_form':edit_form,
+
+            }
+            context.update(objs)
         return render(request, 'angler/user/profile.html', context)
     def post (self, request, user_id):
         profile = get_object_or_404(Profile, user=request.user)

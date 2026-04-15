@@ -25,8 +25,6 @@ class FriendList(models.Model):
            self.save()
        if FriendRequest.objects.filter(request_sender=self.user, request_reciever=friend).exists():
            FriendRequest.objects.get(request_sender=self.user, request_reciever=friend).delete_request()
-
-
             
     def is_friend(user1, user2):
         user_friend_list = FriendList.objects.get(user=user1)
@@ -34,9 +32,16 @@ class FriendList(models.Model):
         for friend in friends:
             if friend == user2:
                 return True 
+    def private(user1, user2):
+        if user1 != user2 and not FriendList.is_friend(user1, user2):
+            if user2.is_private:
+                return True
+        return False         
         
     def __str__(self):
-        return f"{self.user}'s friendlist"
+        return f"{self.user}'s friendlist"   
+            
+            
 class FriendRequest(models.Model):
     STATUS_CHOICES = ((0,'Pending'),
                       (1, 'Accepted')

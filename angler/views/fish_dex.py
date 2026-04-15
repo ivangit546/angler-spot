@@ -2,20 +2,22 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 from angler.models.fish import Fish, FishDex, FishEntry
 from angler.models.user import User
+from angler.models.friends import FriendList
 from angler.forms.fish_dex import FishDexEntryForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 
 
 class FishDexView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get (self, request, user_id):
         user = get_object_or_404(User, id=user_id)
+        if FriendList.private(request.user, user):
+            raise Http404("Page not found")
         fish_entries = FishEntry.objects.filter(fish_dex=FishDex.objects.get(user_id=user_id))
         locked_fish = Fish.objects.exclude(id__in=fish_entries.values_list('fish_id'))
         all_fish = Fish.objects.all()
-        print('total fish: ',all_fish.count())
         context = { 'user':user,
                     'fish_entries':fish_entries,
                     'locked_fish':locked_fish,
@@ -28,7 +30,8 @@ class FishDexDetailView(LoginRequiredMixin, View):
     def get (self, request, fishdex_id, fish_entry_id): 
         fish_entry = get_object_or_404(FishEntry, id=fish_entry_id, fish_dex_id=fishdex_id) 
         user = fish_entry.fish_dex.user 
-        print(f"fish_entryid:{fish_entry.id}")    
+        if FriendList.private(request.user, user):
+            raise Http404("Page not found")
         context = { 'user':user,
                    'fish_entry':fish_entry,
                    'fish_color':fish_entry.get_fish_color

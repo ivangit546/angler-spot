@@ -71,7 +71,7 @@
                 {% endif %}
             </div>
         </div>   
-
+        {% if  not private %}
         <div class="results-grid profile-sidebar-grid">
                 <div class="result-card">
                     <a href="{% url 'fishdex' user_id=user_profile.user.id %}" class="result-name">FishDex</a>
@@ -87,8 +87,9 @@
                     <img src="{% static 'icons/tacklebox.png' %}" alt="action" class="detail-action-icon" />
                 </a>
         </div>
+        {% endif %}
     </div>
-
+{% if not private %}
     <div class="profile-feed">
         <div class="feed-container">
             {% for post in posts %}
@@ -132,7 +133,10 @@
             {% endfor %}
         </div>
     </div>
+{% else %}
+<h2>@{{ user_profile.user.username }}'s account is private</h2>
 
+{% endif %}
 </div>
 
 

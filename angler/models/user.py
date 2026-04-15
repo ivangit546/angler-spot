@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MaxValueValidator
 from PIL import Image
 class User(AbstractUser):
     is_private = models.BooleanField(default=False)
@@ -33,9 +32,7 @@ class User(AbstractUser):
         return Profile.objects.get(user=self).profile_name
     
     def get_profile_image(self):
-        return Profile.objects.get(user=self).profile_image
-    # def liked_post(self):
-    #     return Comment
+        return Profile.objects.get(user=self).profile_image    
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

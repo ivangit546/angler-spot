@@ -1,16 +1,20 @@
 from django.shortcuts import redirect, render
 from django.views import View
 from django.shortcuts import get_object_or_404
-from angler.models.fish import Fish, FishDex, FishEntry
+from angler.models.fish import FishDex, FishEntry
 from angler.models.user import User
+from angler.models.friends import FriendList
 from angler.models.tackle import RodAndReel, Lure
 from angler.forms.tackle import RodAndReelForm, LureForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
 
 class TackleView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, user_id):
         user = User.objects.get(id=user_id)
+        if FriendList.private(request.user, user):
+            raise Http404("Page not found")
         rod_and_reels = RodAndReel.objects.filter(user=user)
         lures = Lure.objects.filter(user=user)
         context ={'user':user,
@@ -29,6 +33,8 @@ class TackleDetailView(LoginRequiredMixin, View):
             fish_entries = FishEntry.objects.filter(tackle=tackle_obj)
         else:
             raise ValueError('Invalid tackle type')
+        if FriendList.private(request.user, get_object_or_404(User,id=tackle_obj.user.id)):
+            raise Http404("Page not found")        
         context = {'tackle_obj': tackle_obj,
                     'tackle_type':tackle_type,
                     'fish_entries':fish_entries}
