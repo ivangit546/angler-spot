@@ -101,4 +101,12 @@ class TackleEntryAdd(LoginRequiredMixin, View):
         fish_entry.save()
         return redirect ('fishdex_detail',fishdex.id, fish_entry_id )
 
-
+class DeleteTackleView(LoginRequiredMixin, View):
+    login_url = '/login/'
+    def post(self, request, tackle_type, tackle_id):
+        if tackle_type == 'lure':
+            tackle_obj = get_object_or_404(Lure, id=tackle_id)
+        else:
+            tackle_obj = get_object_or_404(RodAndReel, id=tackle_id)    
+        tackle_obj.delete()    
+        return redirect('tackle', user_id=request.user.id)

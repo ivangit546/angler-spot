@@ -73,8 +73,8 @@ class FishEntryLocation(LoginRequiredMixin, View):
                 'status': 'error',
                 'message': 'Incomplete location data'
             }, status=400)
-            
-            FishEntry.objects.filter(pk=fish_entry_id).update(
+            fish_dex = get_object_or_404(FishDex, user=request.user)
+            FishEntry.objects.filter(pk=fish_entry_id, fish_dex=fish_dex).update(
                 latitude=latitude,
                 longitude=longitude
             )
@@ -93,4 +93,15 @@ class FishEntryLocation(LoginRequiredMixin, View):
                 'status': 'error',
                 'message': str(e)
             }, status=500)
+
+class FishDexEntryDelete(LoginRequiredMixin, View):
+    login_url = '/login/'
+    def post(self, request, entry_id):
+        fish_dex = get_object_or_404(FishDex, user=request.user)
+        entry = get_object_or_404(FishEntry, id=entry_id, fish_dex=fish_dex)
+        entry.delete()
+        if fish_dex.unlocked > 0:
+            fish_dex -= 1
+            fish_dex.save()
+        return redirect('fishdex', user_id=request.user.id)
 
