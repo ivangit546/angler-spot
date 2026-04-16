@@ -56,6 +56,8 @@ class FishDexEntryView(LoginRequiredMixin, View):
         if fish_entry_form.is_valid():
             fish_entry = fish_entry_form.save(commit=False)
             fish_entry.fish_dex = fish_dex
+            if request.FILES.get('fish_dex_image'):
+                fish_entry.thumbnail = request.FILES.get('fish_dex_image')
             fish_entry.save()
             fish_dex.unlocked +=1 
             fish_dex.save()
@@ -99,9 +101,11 @@ class FishDexEntryDelete(LoginRequiredMixin, View):
     def post(self, request, entry_id):
         fish_dex = get_object_or_404(FishDex, user=request.user)
         entry = get_object_or_404(FishEntry, id=entry_id, fish_dex=fish_dex)
+        if request.user != fish_dex.user:
+            raise Http404('Cannot delete another user''s entry')
         entry.delete()
         if fish_dex.unlocked > 0:
-            fish_dex -= 1
+            fish_dex.unlocked -= 1
             fish_dex.save()
         return redirect('fishdex', user_id=request.user.id)
 

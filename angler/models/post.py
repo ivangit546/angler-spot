@@ -1,11 +1,11 @@
 from django.db import models
 from angler.models.user import User
-from django.db.models import Count
+from django_resized import ResizedImageField
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
-    image = models.ImageField (upload_to='post_img/', blank=True)
+    image = ResizedImageField (size=[1600, 900], upload_to='post_img/', blank=True)
     def __str__(self):
         return f"@{self.user.username}'s post (post id: {self.id})"
     

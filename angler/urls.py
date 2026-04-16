@@ -3,8 +3,8 @@ from angler.views.registration import RegisterView
 from angler.views.login import LoginView
 from angler.views.main_feed import MainFeedView, AboutUsView
 from angler.views.logout import LogoutView
-from angler.views.fish_dex import FishDexView, FishDexEntryView, FishDexDetailView, FishEntryLocation
-from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView, TackleDetailView, TackleEntryAdd
+from angler.views.fish_dex import FishDexView, FishDexEntryView, FishDexDetailView, FishEntryLocation, FishDexEntryDelete
+from angler.views.tackle import RodAndReelCreateView, TackleView, LureCreateView, TackleDetailView, TackleEntryAdd, DeleteTackleView
 from angler.views.friends import FriendsListView
 from angler.views.user_profile import UserProfileView
 from angler.views.friends import SendFriendRequestView, ManageFriendRequestView, RemoveFriendView
@@ -48,6 +48,7 @@ urlpatterns = [
     path('fishdex_entry/', FishDexEntryView.as_view(), name='fishdex_entry'),
     path('fishdex_detail/<int:fishdex_id>/<int:fish_entry_id>/', FishDexDetailView.as_view(), name='fishdex_detail'),
     path('fishdex_location/<int:fish_entry_id>/', FishEntryLocation.as_view(), name='fishdex_location'),
+    path('fishdex_entry_delete/<int:entry_id>/', FishDexEntryDelete.as_view(), name='fish_entry_delete'),
     
     #Tackle
     path('rod&reel_create/',RodAndReelCreateView.as_view(), name='rod_reel_create'),
@@ -57,6 +58,7 @@ urlpatterns = [
     path('tackle_detail/<str:tackle_type>/<int:tackle_id>/', TackleDetailView.as_view(), name='tackle_detail'),
     path('tackle_entry_choice/<str:tackle_type>/<int:fish_entry_id>/', TackleEntryAdd.as_view(), name='tackle_entry_choice'),
     path('add_tackle_entry/<str:tackle_type>/<int:tackle_id>/<int:fish_entry_id>/', TackleEntryAdd.as_view(), name='add_tackle_entry'),
+    path('tackle_delete/<str:tackle_type>/<int:tackle_id>/',DeleteTackleView.as_view(), name='delete_tackle'),
 
     #About Us
     path('about_us/', AboutUsView.as_view(), name='about'),

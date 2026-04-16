@@ -38,8 +38,6 @@ class TackleDetailView(LoginRequiredMixin, View):
         context = {'tackle_obj': tackle_obj,
                     'tackle_type':tackle_type,
                     'fish_entries':fish_entries}
-        
-        print(f"{tackle_type}.png")
         return render(request, 'angler/tackle/detail.html',context)
     
         
@@ -107,6 +105,9 @@ class DeleteTackleView(LoginRequiredMixin, View):
         if tackle_type == 'lure':
             tackle_obj = get_object_or_404(Lure, id=tackle_id)
         else:
-            tackle_obj = get_object_or_404(RodAndReel, id=tackle_id)    
+            tackle_obj = get_object_or_404(RodAndReel, id=tackle_id)   
+
+        if request.user != tackle_obj.user:
+            raise Http404('Cannot delete another user''s tackle')    
         tackle_obj.delete()    
         return redirect('tackle', user_id=request.user.id)

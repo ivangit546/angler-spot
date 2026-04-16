@@ -17,6 +17,12 @@
             </div>    
             <div class="detail-header-text">
                 <span class="detail-name">{{ tackle_obj.name }}</span>
+                <form method="POST" action="{% url 'delete_tackle' tackle_type=tackle_type tackle_id=tackle_obj.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn" data-tooltip="Delete tackle">
+                        <img src="{% static 'icons/delete.png' %}" alt="Delete" class="delete-icon" />
+                    </button>
+                </form>
             </div>     
         </div>
          <br>

@@ -34,6 +34,11 @@
                         <img src="{% static 'icons/map.png' %}" alt="action 2" class="detail-action-icon" />
                     </a>  
                 {% endif %}
+                {% if fish_entry.thumbnail %}
+                    <img src="{{ fish_entry.thumbnail.url }}" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#imageModal" class="detail-action-icon modal-trigger"/>
+                {% endif %}
                 </div>
             </div>
             <div class="detail-header-text">
@@ -43,6 +48,12 @@
                         {% endif %}
                     </span>
                     <span class="detail-id">#{{ fish_entry.fish.id }}/{{fish_entry.fish.count}}</span>
+                    <form method="POST" action="{% url 'fish_entry_delete' entry_id=fish_entry.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-btn" data-tooltip="Delete entry">
+                            <img src="{% static 'icons/delete.png' %}" alt="Delete" class="delete-icon" />
+                        </button>
+                    </form>    
             </div>
             {% if not fish_entry.latitude and not fish_entry.longitude and user == request.user %}
                 <button id="getLocationButton" class="detail-header-btn">Save Location</button>      
@@ -77,43 +88,41 @@
     </div>
 </div>
 
+{% if fish_entry.thumbnail %}
+<div class="modal fade" id="imageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="{{ fish_entry.fish_dex_image.url }}" class="img-fluid" alt="popup image" />
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <script>
-
-    const sendUserCoordinates = (coords) => {
-        const id = '{{ fish_entry.id }}'
-        fetch(`/fishdex_location/${id}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify({
-                latitude: coords.latitude,
-                longitude: coords.longitude
-            })
-        }).then(() => location.reload())
-    }
-
     document.addEventListener('DOMContentLoaded', function(){
-        const getLocationButton = document.getElementById('getLocationButton'); 
-        getLocationButton.addEventListener('click', function() {
-            if ('geolocation' in navigator){
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-
-                        sendUserCoordinates(position.coords)                       
-                    },
-                    function(error) {
-                        console.error(error)
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 5000,
-                        maximumAge: 0
-                    }
-                )
-            }
-        });                        
+        const getLocationButton = document.getElementById('getLocationButton');
+        
+        if (getLocationButton) {  // only runs if the button exists
+            getLocationButton.addEventListener('click', function() {
+                if ('geolocation' in navigator){
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            sendUserCoordinates(position.coords)                       
+                        },
+                        function(error) {
+                            console.error(error)
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 5000,
+                            maximumAge: 0
+                        }
+                    )
+                }
+            });
+        }                   
     });
 </script>
 {% endblock %}

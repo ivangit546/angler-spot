@@ -1,10 +1,9 @@
 from django.db import models
 from angler.models.user import User
-from django.core.validators import MaxValueValidator
 from angler.models.user import User
 from django.utils.text import slugify
 from angler.models.tackle import RodAndReel, Lure
-
+from django_resized import ResizedImageField
 def content_file_name(instance, filename):
     fish_group = slugify(instance.fish_group)
     return f'fish/{fish_group}/{filename}'
@@ -37,14 +36,15 @@ class FishEntry(models.Model):
     fish_dex = models.ForeignKey(FishDex, on_delete=models.CASCADE)
     entry_weight = models.DecimalField(max_digits=5, decimal_places=1)
     entry_length = models.DecimalField(max_digits=5, decimal_places=2)
-    fish_dex_image = models.ImageField(upload_to='fishdex_img/', blank=True)
+    fish_dex_image = ResizedImageField(size=[1600, 900], upload_to='fishdex_img/', blank=True)
+    thumbnail = ResizedImageField(size=[150,150], crop=['middle', 'center'], upload_to='thumbnails/', blank=True)
     tackle = models.ForeignKey(RodAndReel, null=True, blank=True, on_delete=models.SET_NULL)
     lure = models.ForeignKey(Lure, null=True, blank=True, on_delete=models.SET_NULL)
     caught_at = models.DateTimeField(auto_now=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     class Meta:
-        unique_together = ('fish', 'fish_dex')
+        unique_together = ('fish', 'fish_dex')  
 
     def add_points(self):
         user = self.fish_dex.user
