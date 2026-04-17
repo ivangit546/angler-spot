@@ -97,6 +97,7 @@ class TackleEntryAdd(LoginRequiredMixin, View):
             rod_reel = get_object_or_404(RodAndReel, id=tackle_id, user=user)
             fish_entry.tackle = rod_reel
         fish_entry.save()
+        fishdex.user.add_points(20)
         return redirect ('fishdex_detail',fishdex.id, fish_entry_id )
 
 class DeleteTackleView(LoginRequiredMixin, View):

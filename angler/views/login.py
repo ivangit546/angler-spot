@@ -1,6 +1,7 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
+from angler.models.user import User
 from django.views import View
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -17,6 +18,8 @@ class LoginView(View):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
+            user = get_object_or_404(User, id=request.user.id)
+            user.add_points(10)
             return redirect('/')
         else:
             messages.error(request, ("Enter a valid username and password"))

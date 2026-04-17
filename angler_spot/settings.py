@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
-
+from celery.schedules import crontab
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'angler',
-    'bootstrap5',
+    'django_bootstrap5',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = 'angler.User'
 
 LOGIN_URL = '/login/'
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_BEAT_SCHEDULE = {
+    'update-leaderboard': {
+        'task': 'angler.tasks.update_leaderboard',
+        'schedule': crontab(hour=0, minute=0, day_of_week=1)
+    },
+}
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table"
+    }
+}

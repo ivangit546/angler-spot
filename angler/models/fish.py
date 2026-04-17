@@ -29,7 +29,16 @@ class FishDex(models.Model):
     fishes = models.ManyToManyField(Fish, blank=True, through='FishEntry', related_name='fish_dexes')
     
     def __str__(self):
-        return self.user.username + "'s fishDex"  
+        return self.user.username + "'s fishDex" 
+     
+    def unlock(self):
+        self.unlocked += 1
+        self.save()
+
+    def lock(self):
+        if self.unlocked - 1 >= 0:
+            self.unlocked -= 1
+            self.save()     
     
 class FishEntry(models.Model):
     fish = models.ForeignKey(Fish, on_delete=models.CASCADE)

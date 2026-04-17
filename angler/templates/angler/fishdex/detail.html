@@ -48,12 +48,14 @@
                         {% endif %}
                     </span>
                     <span class="detail-id">#{{ fish_entry.fish.id }}/{{fish_entry.fish.count}}</span>
-                    <form method="POST" action="{% url 'fish_entry_delete' entry_id=fish_entry.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="delete-btn" data-tooltip="Delete entry">
-                            <img src="{% static 'icons/delete.png' %}" alt="Delete" class="delete-icon" />
-                        </button>
-                    </form>    
+                    {% if request.user == fish_entry.fish_dex.user %}
+                        <form method="POST" action="{% url 'fish_entry_delete' entry_id=fish_entry.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="delete-btn" data-tooltip="Delete entry">
+                                <img src="{% static 'icons/delete.png' %}" alt="Delete" class="delete-icon" />
+                            </button>
+                        </form>
+                    {% endif %}        
             </div>
             {% if not fish_entry.latitude and not fish_entry.longitude and user == request.user %}
                 <button id="getLocationButton" class="detail-header-btn">Save Location</button>      
@@ -101,10 +103,25 @@
 {% endif %}
 
 <script>
+    const sendUserCoordinates = (coords) => {
+        const id = '{{ fish_entry.id }}'
+        fetch(`/fishdex_location/${id}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                latitude: coords.latitude,
+                longitude: coords.longitude
+            })
+        }).then(() => location.reload())
+    }
+
     document.addEventListener('DOMContentLoaded', function(){
         const getLocationButton = document.getElementById('getLocationButton');
         
-        if (getLocationButton) {  // only runs if the button exists
+        if (getLocationButton) {
             getLocationButton.addEventListener('click', function() {
                 if ('geolocation' in navigator){
                     navigator.geolocation.getCurrentPosition(
@@ -126,6 +143,6 @@
     });
 </script>
 {% endblock %}
- <!--If fish passes set size make it a shiny, will use an icon of star or some sort to display that
+ <!--If fish passes a set size make it a shiny, will use an icon of star or some sort to display that
     need caught_at added
  -->

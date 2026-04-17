@@ -59,7 +59,11 @@ class FishDexEntryView(LoginRequiredMixin, View):
             if request.FILES.get('fish_dex_image'):
                 fish_entry.thumbnail = request.FILES.get('fish_dex_image')
             fish_entry.save()
-            fish_dex.unlocked +=1 
+            if fish_entry.fish.shiny:
+                fish_dex.user.add_points(100)
+            else:
+                fish_dex.user.add_points(50)    
+            fish_dex.unlocked +=1
             fish_dex.save()
             return redirect('fishdex', user_id=user.id)
             
@@ -104,8 +108,11 @@ class FishDexEntryDelete(LoginRequiredMixin, View):
         if request.user != fish_dex.user:
             raise Http404('Cannot delete another user''s entry')
         entry.delete()
-        if fish_dex.unlocked > 0:
-            fish_dex.unlocked -= 1
-            fish_dex.save()
+        fish_dex.lock()
+        if entry.fish.shiny:
+            fish_dex.user.remove_points(100)
+        else:
+            fish_dex.user.remove_points(50)    
+ 
         return redirect('fishdex', user_id=request.user.id)
 

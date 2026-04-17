@@ -18,15 +18,21 @@ class User(AbstractUser):
             return 'Diamond'
         else:
             return 'Platinum'
-        
 
     def __str__(self):
         return self.username
     
-    def add_login_points(self):
-        self.points += 10
+    def add_points(self, amount):
+        self.points += amount
         self.save()
-        
+
+    def remove_points(self, amount):
+        if self.points - amount < 0:
+            self.points = 0
+        else:
+            self.points -= amount 
+        self.save() 
+
     @property
     def get_profile_name(self):
         return Profile.objects.get(user=self).profile_name
