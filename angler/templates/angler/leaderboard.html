@@ -1,4 +1,21 @@
 {% extends 'angler/base.html'%}
-{% content block %}
-
+{% block content %}
+<div class="title-row">
+        <h2 class="section-title">This Weeks Top Anglers</h2>
+</div>    
+<div class="practice-box2">
+    <div class="leaderboard">
+        {% for user in users %}
+        <a href="{% url 'user_profile' user_id=user.id %}" class="leaderboard-entry">
+            <span class="leaderboard-rank">#{{ forloop.counter }}</span>
+            <img src="{{ user.get_profile_image.url }}" class="leaderboard-avatar" />
+            <div class="leaderboard-info">
+                <span class="leaderboard-name">{{ user.get_profile_name }}</span>
+                <span class="leaderboard-username">@{{ user.username }}</span>
+            </div>
+            <span class="leaderboard-stat">{{ user.points }} points</span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

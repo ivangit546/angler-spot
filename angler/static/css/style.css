@@ -1675,3 +1675,65 @@ background-color: #0133059d;
 .modal-trigger {
     border-radius: 50%;
 }
+.leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-right: 8px;
+}
+.leaderboard::-webkit-scrollbar {
+    display: none;
+}
+.leaderboard-entry {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid #0133059d;
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s, transform 0.1s;
+}
+.leaderboard-entry:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(4px);
+}
+.leaderboard-rank {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    min-width: 40px;
+}
+.leaderboard-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.leaderboard-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #0133059d;
+    flex-shrink: 0;
+}
+.leaderboard-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+}
+.leaderboard-username {
+    font-size: 13px;
+    color: #ffffffa0;
+}
+.leaderboard-stat {
+    margin-left: auto;
+    font-size: 15px;
+    font-weight: 500;
+    color: #ffffff;
+}   

@@ -11,6 +11,7 @@ from angler.views.friends import SendFriendRequestView, ManageFriendRequestView,
 from angler.views.post import CreatePostView, CreateCommentView, LikePostView, DeletePostView, DeleteCommentView, LikeCommentView, PostDetailView, CreateReplyView
 from angler.views.search import SearchView
 from angler.views.edit import SettingsView, DeleteAccountView, EditAccountView
+from angler.views.leaderboard import LeaderboardView
 urlpatterns = [
    
     #Authentication
@@ -59,6 +60,9 @@ urlpatterns = [
     path('tackle_entry_choice/<str:tackle_type>/<int:fish_entry_id>/', TackleEntryAdd.as_view(), name='tackle_entry_choice'),
     path('add_tackle_entry/<str:tackle_type>/<int:tackle_id>/<int:fish_entry_id>/', TackleEntryAdd.as_view(), name='add_tackle_entry'),
     path('tackle_delete/<str:tackle_type>/<int:tackle_id>/',DeleteTackleView.as_view(), name='delete_tackle'),
+
+    #Leaderboard
+    path('leaderboard/', LeaderboardView.as_view(), name='leaderboard'),
 
     #About Us
     path('about_us/', AboutUsView.as_view(), name='about'),

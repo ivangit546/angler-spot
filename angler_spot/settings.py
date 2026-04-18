@@ -14,6 +14,12 @@ import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
 from celery.schedules import crontab
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+ENVIRONMENT = env('ENVIRONMENT')
+
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
@@ -25,11 +31,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qb#07s@*#^1)f41+ifs7ii#5k7o&^%0005+xtmev9%#26m%zql'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = env('SECRET_KEY')
+
+if ENVIRONMENT == 'development':
+    DEBUG = True
+else:
+    DEBUG = False    
 
 ALLOWED_HOSTS = []
 
@@ -159,3 +167,17 @@ CACHES = {
         "LOCATION": "cache_table"
     }
 }
+
+if ENVIRONMENT == 'production':
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = env('EMAIL_ADDRESS')
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    DEFAULT_FROM_EMAIL = 'App'
+    ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
