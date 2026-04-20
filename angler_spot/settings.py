@@ -16,30 +16,27 @@ from django.contrib.messages import constants as messages
 from celery.schedules import crontab
 import environ
 
-env = environ.Env()
-environ.Env.read_env()
-ENVIRONMENT = env('ENVIRONMENT')
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+ENVIRONMENT = env('ENVIRONMENT', default='production')
 
 SECRET_KEY = env('SECRET_KEY')
 
-if ENVIRONMENT == 'development':
+if ENVIRONMENT == 'production':
     DEBUG = True
 else:
     DEBUG = False    
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
 
 # Application definition
@@ -135,6 +132,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -150,11 +149,8 @@ AUTH_USER_MODEL = 'angler.User'
 LOGIN_URL = '/login/'
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
-
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
-
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-
 CELERY_BEAT_SCHEDULE = {
     'update-leaderboard': {
         'task': 'angler.tasks.update_leaderboard',

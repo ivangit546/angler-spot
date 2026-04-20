@@ -1,5 +1,5 @@
 from django.urls import path
-from angler.views.registration import RegisterView
+from angler.views.registration import RegisterView, AccountActiavtionView
 from angler.views.login import LoginView
 from angler.views.main_feed import MainFeedView, AboutUsView
 from angler.views.logout import LogoutView
@@ -20,6 +20,7 @@ urlpatterns = [
     
     #User
     path('register/', RegisterView.as_view(), name='register'),
+    path('confirm/<str:uidb64>/<str:token>/', AccountActiavtionView.as_view(), name='confirmation'),
     path('settings/', SettingsView.as_view(), name='settings'),
     path('delete_account/', DeleteAccountView.as_view(), name='account_delete'),
     path('edit_account/<str:action>', EditAccountView.as_view(), name='edit_account'),

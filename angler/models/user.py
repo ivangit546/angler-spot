@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from PIL import Image
 class User(AbstractUser):
+    is_confirmed = models.BooleanField(default=False)
     is_private = models.BooleanField(default=False)
     points = models.PositiveIntegerField(default=0) #previous idea have a cap on points validators=[MaxValueValidator(5000)]
     @property
