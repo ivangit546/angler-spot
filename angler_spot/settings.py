@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'angler',
     'django_bootstrap5',
     'django_celery_beat',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

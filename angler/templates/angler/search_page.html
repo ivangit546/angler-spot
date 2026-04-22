@@ -14,14 +14,14 @@
                     <img class="post-avatar" src="{{ post.user.get_profile_image.url }}" alt="{{ post.user.username }}" />
                     <div class="post-header-right">
                         <div class="post-name-row">
-                            <span class="post-profilename">{{ post.user.get_profile_name }}</span>
-                            <span class="post-username">@{{ post.user.username }}</span>
+                            <span class="post-profilename">{{ post.headline_profile_name | safe }}</span>
+                            <span class="post-username">@{{ post.headline_username | safe }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="post-content">
                     <div class="post-body">
-                        <p class="post-text">{{ post.text }}</p>
+                        <p class="post-text">{{ post.headline_text | safe }}</p>
                     </div>
                     {% if post.image %}
                     <div class="post-media">

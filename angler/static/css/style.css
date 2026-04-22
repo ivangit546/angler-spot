@@ -1737,3 +1737,8 @@ background-color: #0133059d;
     font-weight: 500;
     color: #ffffff;
 }   
+mark {
+    background-color: #fff176;
+    padding: 1px 2px;
+    border-radius: 2px;
+}
