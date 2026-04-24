@@ -4,8 +4,9 @@ Make and share post about your day out in the water? Interact and meet new angle
 As of March 30, 2026 Angler Spot allows you to enter new catches, create and interact with other users' post and more.
 
 Upcoming Plans and Updates:
-* Add geolocation to fish entries, allowing users to mark and save location of their entries.
 * Direct messaging between users.
+* Allow users to block other users.
 * Groups: create groups with friends to share post and entries
-* Leaderboard: With points earned (via entries, daily logins and more) users will be able to see who made it to the top 25 on the Leaderboard
-* Private profiles: Users who do not want posts, entries and more shared will have the option to make all their actions on the application only viewable to themselves.
+* Querying optimization. Refactor db querying to reduce n+1 problem cases and overall efficiency. 
+* Django Rest Framework
+

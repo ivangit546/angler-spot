@@ -4,6 +4,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class RodAndReel(models.Model):
+    """
+    Represents a Fishing Rod and Reel Setup users create and can connect to their Fish Entries
+    """
     LINE_CHOICES = (('monofilament', 'Mono'),
                      ('fluorocarbon', 'Flouro'),
                        ('braid', 'Braid'))
@@ -49,6 +52,9 @@ class RodAndReel(models.Model):
     
     
 class Lure(models.Model):
+    """
+    Represents Lure and or Bait objects users can create and connect to their Fish Entries
+    """
     LURE_CHOICES = (('bait', 'Bait'),
                      ('lure', 'Lure'))
     user = models.ForeignKey(User, on_delete=models.CASCADE)

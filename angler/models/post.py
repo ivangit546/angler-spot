@@ -1,7 +1,11 @@
 from django.db import models
 from angler.models.user import User
 from django_resized import ResizedImageField
+
 class Post(models.Model):
+    """
+    User created posts, can be text and or images
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
@@ -25,6 +29,9 @@ class Post(models.Model):
         return comments    
         
 class Comment(models.Model):
+    """
+    Represents comments on posts and or replies on parent comments/replies
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField()
@@ -36,22 +43,34 @@ class Comment(models.Model):
         return f"@{self.user.username}'s comments ({self.text[:30]}) on @{self.post.user.username}'s post (post_id: {self.post.pk} )"
 
     def is_liked(self, user):
+        """
+        Returns true if a comment and or reply has been liked by the user
+        """
         if Like.objects.filter(user=user, comment_id=self.id).exists():
             return True
         else:
             return False
     @property
     def like_count(self):
+        """
+        Returns amount of likes comment and or reply has
+        """
         likes = Like.objects.filter(comment=self).count()
 
         return likes
     @property
     def reply_count(self):
+        """
+        Return amount of child comments (replies) a comment and or reply has
+        """
         reply_count = Comment.objects.filter(parent=self).count()
 
         return reply_count    
 
 class Like(models.Model):
+    """
+    Represents a like to a comment or reply obj
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True, related_name='post_like')
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True, related_name='post_like')

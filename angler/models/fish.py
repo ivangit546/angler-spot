@@ -4,28 +4,38 @@ from angler.models.user import User
 from django.utils.text import slugify
 from angler.models.tackle import RodAndReel, Lure
 from django_resized import ResizedImageField
+
 def content_file_name(instance, filename):
+    """
+    Format path for fish_avatar
+    """
     fish_group = slugify(instance.fish_group)
     return f'fish/{fish_group}/{filename}'
 
 class Fish(models.Model):
+    """
+    Represents a Fish that will act as the base (default name, image and height/weight) from Fish Entries to be made from and then added into FishDex
+    """
     name = models.CharField(max_length=100, unique=True)
-    fish_group = models.CharField(max_length=100, blank=True) #i.e bass is the group and the fish name would be large mouth bass
-    weight = models.DecimalField(max_digits=5, decimal_places=1) # i.e 1230.9 
-    length = models.DecimalField(max_digits=5, decimal_places=2) # standard unnit will be inches (form will accept feet and or inches then convert to inches) i.e 234.43
-    shiny = models.BooleanField(default=False) 
-    fish_avatar = models.ImageField(upload_to=content_file_name) #will be stock image for type of fish
+    fish_group = models.CharField(max_length=100, blank=True) 
+    weight = models.DecimalField(max_digits=5, decimal_places=1) 
+    length = models.DecimalField(max_digits=5, decimal_places=2)
+    shiny = models.BooleanField(default=False)  
+    fish_avatar = models.ImageField(upload_to=content_file_name) 
     
-
     def __str__(self):
         return self.name
     
     def count(self):
         return Fish.objects.count()
     
+   
 class FishDex(models.Model):
+    """
+    Represents a collaction that will house a customizable index of fish objs (entries) a user will be able to add and or remove into
+    """     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    unlocked = models.PositiveIntegerField(default=0) # number of unlocked fish (i.e a tally to display) also can be removed as might be redundant as we can query # of fishes to total number of fish availible
+    unlocked = models.PositiveIntegerField(default=0) 
     fishes = models.ManyToManyField(Fish, blank=True, through='FishEntry', related_name='fish_dexes')
     
     def __str__(self):
@@ -39,8 +49,12 @@ class FishDex(models.Model):
         if self.unlocked - 1 >= 0:
             self.unlocked -= 1
             self.save()     
-    
+
+  
 class FishEntry(models.Model):
+    """
+    A custom fish obj belonging to a sole user with their own data (name, weight, height, image, location...)
+    """      
     fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
     fish_dex = models.ForeignKey(FishDex, on_delete=models.CASCADE)
     entry_weight = models.DecimalField(max_digits=5, decimal_places=1)
@@ -55,21 +69,39 @@ class FishEntry(models.Model):
     class Meta:
         unique_together = ('fish', 'fish_dex')  
 
+
     def add_points(self):
+        """
+        If fish entry is shiny add 50 points to user else add 25 points    
+        """
         user = self.fish_dex.user
         if self.fish.shiny == True:
             user.points += 50
         else:
             user.points += 25    
         user.save()
+
     def __str__(self):
         return f"@{self.fish_dex.user.username}'s {self.fish.name} entry in FishDex"
+
     def get_fish_avatar(self):
+        """
+        Return FishEntry image
+        """
         return self.fish.fish_avatar
+    
     def is_shiny(self):
+        """
+        Return boolean value of is shiny 
+        """
         return self.fish.shiny
+    
+
     @property
     def get_fish_color(self):
+        """
+        Return custom color code based on fish instance's fish_group
+        """    
         match self.fish.fish_group:
             case 'Bass':
                 return '#0EAD3F'

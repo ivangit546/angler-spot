@@ -3,7 +3,7 @@ from django.views import View
 from angler.models.post import Post, Like
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchHeadline
 
-class SearchView(View):  #TODO will switch to postgres to implement fully functional search engine 
+class SearchView(View): 
     def post(self, request):
         searched = request.POST.get('searched')
         if searched:
