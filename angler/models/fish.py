@@ -4,6 +4,9 @@ from angler.models.user import User
 from django.utils.text import slugify
 from angler.models.tackle import RodAndReel, Lure
 from django_resized import ResizedImageField
+from cloudinary_storage.storage import MediaCloudinaryStorage
+
+
 
 def content_file_name(instance, filename):
     """
@@ -21,7 +24,10 @@ class Fish(models.Model):
     weight = models.DecimalField(max_digits=5, decimal_places=1) 
     length = models.DecimalField(max_digits=5, decimal_places=2)
     shiny = models.BooleanField(default=False)  
-    fish_avatar = models.ImageField(upload_to=content_file_name) 
+    fish_avatar = models.ImageField(
+    upload_to='fish/',
+    storage=MediaCloudinaryStorage()
+) 
     
     def __str__(self):
         return self.name
@@ -66,9 +72,9 @@ class FishEntry(models.Model):
     caught_at = models.DateTimeField(auto_now=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    
     class Meta:
         unique_together = ('fish', 'fish_dex')  
-
 
     def add_points(self):
         """

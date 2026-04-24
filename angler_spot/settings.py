@@ -32,9 +32,9 @@ ENVIRONMENT = env('ENVIRONMENT', default='production')
 SECRET_KEY = env('SECRET_KEY')
 
 if ENVIRONMENT == 'production':
-    DEBUG = True
+    DEBUG = False
 else:
-    DEBUG = False    
+    DEBUG = True    
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
@@ -47,15 +47,18 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
     'angler',
     'django_bootstrap5',
     'django_celery_beat',
     'django.contrib.postgres',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -153,8 +156,8 @@ AUTH_USER_MODEL = 'angler.User'
 
 LOGIN_URL = '/login/'
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE = {
     'update-leaderboard': {
@@ -181,4 +184,20 @@ if ENVIRONMENT == 'production':
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'STATICFILES_MANIFEST_ROOT': BASE_DIR / 'staticfiles',
+}
 
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
+    },
+}
+
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'

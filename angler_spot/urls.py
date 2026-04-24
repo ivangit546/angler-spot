@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+import environ
+env = environ.Env()
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(env('ADMIN_URL'), admin.site.urls),
     path('', include('angler.urls')),
 ] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,4 +9,5 @@ Upcoming Plans and Updates:
 * Groups: create groups with friends to share post and entries
 * Querying optimization. Refactor db querying to reduce n+1 problem cases and overall efficiency. 
 * Django Rest Framework
+* Deploy Angler Spot
 
