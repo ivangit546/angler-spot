@@ -15,6 +15,7 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 from celery.schedules import crontab
 import environ
+print("DATABASE_URL:", os.environ.get('DATABASE_URL'))
 
 
 MESSAGE_TAGS = {
