@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from PIL import Image
+import requests
+from io import BytesIO
+
 class User(AbstractUser):
     """
     Customer user class, for added fields 
@@ -78,7 +81,12 @@ class Profile(models.Model):
         Custom save(), if a user sets a profile image upon account creation and or profile edit, the image is resized and then saved
         """
         super().save(*args, **kwargs)
-        image = Image.open(self.profile_image.path)
+        response = requests.get(self.profile_image.url)
+        image = Image.open(BytesIO(response.content))
         if image.height > 300 or image.width > 300:
-            image.thumbnail((300,300))
-            image.save(self.profile_image.path)
+            image.thumbnail((300, 300))
+            output = BytesIO()
+            image.save(output, format=image.format or 'JPEG')
+            output.seek(0)
+            self.profile_image.save(self.profile_image.name, output, save=False)
+            super().save(*args, **kwargs)
