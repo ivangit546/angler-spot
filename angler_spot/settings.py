@@ -209,3 +209,7 @@ STORAGES = {
 }
 
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'angler' / 'static',
+]
