@@ -212,3 +212,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 STATICFILES_DIRS = [
     BASE_DIR / 'angler' / 'static',
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    env.list('CSRF_TRUSTED_ORIGINS')
+]
