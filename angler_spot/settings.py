@@ -15,7 +15,6 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 from celery.schedules import crontab
 import environ
-print("DATABASE_URL:", os.environ.get('DATABASE_URL'))
 
 
 MESSAGE_TAGS = {
@@ -92,7 +91,6 @@ WSGI_APPLICATION = 'angler_spot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-import os
 
 if os.environ.get('DATABASE_URL'):
     DATABASES = {

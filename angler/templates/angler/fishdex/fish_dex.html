@@ -1,4 +1,5 @@
 {% extends 'angler/base.html'%}
+{% load static %}
 {% block content %}
 <body class="app-page">
     <div class="title-row">
@@ -37,7 +38,7 @@
                     {% if fish in locked_fish %}
                         <a aria-disabled="true" class="obj-card">
                             <div class="card-header">
-                            <img class="obj-img" src="{{MEDIA_URL}}fish/locked-fish.png" alt="{{ obj.name }}" />
+                            <img class="obj-img" src="{% static 'locked-fish.png' %}" alt="{{ obj.name }}" />
                             <div class="card-header-text">
                                 <span class="obj-name">locked</span>
                                 <span class="obj-id">???</span>
