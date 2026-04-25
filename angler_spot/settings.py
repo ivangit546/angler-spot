@@ -214,5 +214,5 @@ STATICFILES_DIRS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    env.list('CSRF_TRUSTED_ORIGINS', default=[])
+    'https://angler-spot-production.up.railway.app/',
 ]
