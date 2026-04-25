@@ -25,7 +25,7 @@
         <span style="font-size: 1rem;">{{ post.comment_count }}</span>
         <form class="like-form" method="GET" action="{% url 'post_detail' post_id=post.id %}">
           <button class="my-button" type="submit" value="comment">
-            <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="Comment" style="width: 30px; height: 30px;">
+            <img src="{% static 'icons/comment_icon.png' %}" alt="Comment" style="width: 30px; height: 30px;">
           </button>
         </form>
 
@@ -34,14 +34,14 @@
           <form class="like-form" method="POST" action="{% url 'post_like' post_id=post.id %}">
             {% csrf_token %}
             <button class="my-button" type="submit" value="like">
-              <img src="{{ MEDIA_URL }}like_img/liked.png" alt="Like" style="width: 30px; height: 30px;">
+              <img src="{% static 'icons/liked.png' %}" alt="Like" style="width: 30px; height: 30px;">
             </button>
           </form>
         {% else %}
           <form class="like-form" method="POST" action="{% url 'post_like' post_id=post.id %}">
             {% csrf_token %}
             <button class="my-button" type="submit" value="unlike">
-              <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="Like" style="width: 30px; height: 30px;">
+              <img src="{% static 'icons/not_liked.png' %}" alt="Like" style="width: 30px; height: 30px;">
             </button>
           </form>
         {% endif %}
@@ -49,7 +49,7 @@
           <form class="like-form" method="POST" action="{% url 'post_delete' post_id=post.id %}">
             {% csrf_token %}
             <button class="my-button" type="submit" value="button_object" title="Delete Post">
-              <img src="{{ MEDIA_URL }}delete/delete.png" alt="button_object" style="width: 30px; height: 30px;">
+              <img src="{% static 'icons/delete.png' %}" alt="button_object" style="width: 30px; height: 30px;">
             </button>
           </form>
         {% endif %}
@@ -73,7 +73,7 @@
           <p class="comment-text">{{ parent_comment.text }}</p>
           <div class="comment-actions">
             <button disabled class="my-button" type="submit" value="reply">
-              <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="Reply" style="width: 22px; height: 22px;">
+              <img src="{% static 'icons/comment_icon.png' %}" alt="Reply" style="width: 22px; height: 22px;">
             </button>
             <span class="action-count">{{ parent_comment.reply_count }}</span>
 
@@ -81,14 +81,14 @@
               <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=parent_comment.id %}">
                 {% csrf_token %}
                 <button type="submit" value="like">
-                  <img src="{{ MEDIA_URL }}like_img/liked.png" alt="Like" style="width: 22px; height: 22px;">
+                  <img src="{% static 'icons/liked.png' %}" alt="Like" style="width: 22px; height: 22px;">
                 </button>
               </form>
             {% else %}
               <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=parent_comment.id %}">
                 {% csrf_token %}
                 <button type="submit" value="unlike">
-                  <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="Like" style="width: 22px; height: 22px;">
+                  <img src="{% static 'icons/not_liked.png' %}" alt="Like" style="width: 22px; height: 22px;">
                 </button>
               </form>
             {% endif %}
@@ -98,7 +98,7 @@
               <form class="like-form" method="POST" action="{% url 'comment_delete' comment_id=parent_comment.id %}">
                 {% csrf_token %}
                 <button class="my-button" type="submit" title="Delete reply">
-                  <img src="{{ MEDIA_URL }}delete/delete.png" alt="delete" style="width: 22px; height: 22px;">
+                  <img src="{% static 'icons/delete.png' %}" alt="delete" style="width: 22px; height: 22px;">
                 </button>
               </form>
             {% endif %}
@@ -131,7 +131,7 @@
               <div class="comment-actions">
                 <form class="comment-action-form" method="GET" action="{% url 'reply_create' comment_id=reply.id %}">
                   <button class="my-button" type="submit" value="reply">
-                    <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="Reply" style="width: 22px; height: 22px;">
+                    <img src="{% static 'icons/comment.png' %}" alt="Reply" style="width: 22px; height: 22px;">
                   </button>
                 </form>
                 <span class="action-count">{{ reply.reply_count }}</span>
@@ -140,14 +140,14 @@
                   <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=reply.id %}">
                     {% csrf_token %}
                     <button class="my-button" type="submit" value="like">
-                      <img src="{{ MEDIA_URL }}like_img/liked.png" alt="Like" style="width: 22px; height: 22px;">
+                      <img src="{% static 'icons/liked.png' %}" alt="Like" style="width: 22px; height: 22px;">
                     </button>
                   </form>
                 {% else %}
                   <form class="comment-action-form" method="POST" action="{% url 'comment_like' comment_id=reply.id %}">
                     {% csrf_token %}
                     <button class="my-button" type="submit" value="unlike">
-                      <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="Like" style="width: 22px; height: 22px;">
+                      <img src="{% static 'icons/not_liked.png' %}" alt="Like" style="width: 22px; height: 22px;">
                     </button>
                   </form>
                 {% endif %}
@@ -157,7 +157,7 @@
                   <form class="like-form" method="POST" action="{% url 'comment_delete' comment_id=reply.id %}">
                     {% csrf_token %}
                     <button class="my-button" type="submit" title="Delete reply">
-                      <img src="{{ MEDIA_URL }}delete/delete.png" alt="delete" style="width: 22px; height: 22px;">
+                      <img src="{% static 'icons/delete.png' %}" alt="delete" style="width: 22px; height: 22px;">
                     </button>
                   </form>
                 {% endif %}

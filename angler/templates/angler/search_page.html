@@ -1,4 +1,5 @@
 {% extends 'angler/base.html' %}
+{% load static %}
 {% block content %}
 
 {% if posts %}
@@ -34,14 +35,14 @@
                     <div class="post-footer">
                         <div class="post-stat">
                             {% if post.id in liked_post_ids %}
-                                <img src="{{ MEDIA_URL }}like_img/liked.png" alt="likes" class="stat-icon"/>
+                                <img src="{% static 'icons/liked.png' %}" alt="likes" class="stat-icon"/>
                             {% else %}
-                                <img src="{{ MEDIA_URL }}like_img/not_liked.png" alt="likes" class="stat-icon"/>
+                                <img src="{% static 'icons/not_liked.png' %}" alt="likes" class="stat-icon"/>
                             {% endif %}    
                             <span class="stat-count">{{ post.like_count }}</span>
                         </div>
                         <div class="post-stat">
-                            <img src="{{ MEDIA_URL }}comment/comment_icon.png" alt="comments" class="stat-icon" />
+                            <img src="{% static 'icons/comment_icon.png' %}" alt="comments" class="stat-icon" />
                             <span class="stat-count">{{ post.comment_count }}</span>
                         </div>
                     </div>
