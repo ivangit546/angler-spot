@@ -1,4 +1,5 @@
 from angler.models.post import Post, Comment, Like
+from angler.models.notification import Notification 
 from angler.forms.post import PostForm, PostCommentForm
 from django.views import View
 from django.shortcuts import redirect, get_object_or_404, render
@@ -34,7 +35,11 @@ class LikePostView(LoginRequiredMixin, View):
         if like:
             like.delete() 
         else:
-            Like.objects.create(user=user, post=post)    
+            like = Like.objects.create(user=user, post=post)
+            if user != post.user:
+                notification_msg = f"@{user.username} has liked your post"
+                Notification.objects.create(recipient=post.user, sender=user, message=notification_msg, content_object=like)
+    
         return redirect(request.META.get('HTTP_REFERER', 'default_url_name_or_path'))    
 
 class CreateCommentView(LoginRequiredMixin, View):
@@ -47,6 +52,9 @@ class CreateCommentView(LoginRequiredMixin, View):
             comment.user = request.user
             comment.post = post 
             comment.save()
+            if comment.user != post.user:
+                notification_msg = f"@{request.user.username} commented on your post"
+                Notification.objects.create(recipient=post.user, sender=comment.user, message=notification_msg, content_object=comment)
         return redirect(request.META.get('HTTP_REFERER', 'default_url_name_or_path'))
 
 class DeleteCommentView(LoginRequiredMixin, View):
@@ -65,7 +73,10 @@ class LikeCommentView(LoginRequiredMixin, View):
         if like:
             like.delete() 
         else:
-            Like.objects.create(user=user, comment=comment) 
+            like = Like.objects.create(user=user, comment=comment)
+            if user !=  comment.user:
+                notification_msg = f"@{like.user.username} liked your comment"
+                Notification.objects.create(recipient=comment.user, sender=like.user, message=notification_msg, content_object=like)
         return redirect(request.META.get('HTTP_REFERER', 'default_url_name_or_path'))
  
 
@@ -98,6 +109,9 @@ class CreateReplyView(LoginRequiredMixin, View):
             reply.is_reply = True
             reply.post = post
             reply.save()
+            if reply.user != parent.user:
+                notification_msg = f"@{reply.user.username} replied to your comment"
+                Notification.objects.create(recipient=parent.user, sender=reply.user, message=notification_msg, content_object=reply)
         return redirect(request.META.get('HTTP_REFERER', 'default_url_name_or_path')) 
 
 class PostDetailView(LoginRequiredMixin, View):

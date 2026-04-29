@@ -1,5 +1,6 @@
 from angler.models.user import User
 from angler.models.friends import FriendList, FriendRequest
+from angler.models.notification import Notification
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -22,9 +23,10 @@ class SendFriendRequestView(LoginRequiredMixin, View):
     def post(self, request, user_id):
         user_sender = request.user
         user_reciever = get_object_or_404(User, id=user_id)
-
-        if user_sender != user_reciever and FriendList.objects.filter(friends=user_reciever).exists() == False:
-            FriendRequest.objects.create(request_sender=user_sender, request_reciever=user_reciever)
+        if user_sender != user_reciever and FriendList.objects.filter(user=user_sender, friends=user_reciever).exists() == False:
+            friend_request = FriendRequest.objects.create(request_sender=user_sender, request_reciever=user_reciever)
+            notification_msg = f"@{user_sender.username} has sent you a friend request"
+            Notification.objects.create(recipient=user_reciever, sender=user_sender, message=notification_msg, content_object=friend_request)
         return redirect('user_profile', user_id=user_reciever.id)    
     
 class ManageFriendRequestView(LoginRequiredMixin, View):

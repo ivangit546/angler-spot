@@ -5,6 +5,7 @@ from angler.models.post import Post, Comment, Like
 from angler.models.fish import Fish, FishDex, FishEntry
 from angler.models.tackle import RodAndReel, Lure
 from angler.models.friends import FriendList, FriendRequest
+from angler.models.notification import Notification
 
 admin.site.register(User),
 admin.site.register(Post),
@@ -17,6 +18,7 @@ admin.site.register(FriendList),
 admin.site.register(FriendRequest),
 admin.site.register(Comment),
 admin.site.register(Like),
+admin.site.register(Notification),
 
 
 class FishEntryInline(admin.TabularInline):  
