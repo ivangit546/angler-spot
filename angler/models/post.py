@@ -81,4 +81,14 @@ class Like(models.Model):
         elif self.comment:
             return f"@{self.user.username}'s like to comment:{self.comment.__str__()}"
 
+    def post_or_comment(self):
+        """
+        return if the like obj is a post or comment like
+        """
+        if self.post != None:
+            return 'post'
+        elif self.comment != None:
+            return 'comment'
+        else:
+            return None
     

@@ -63,7 +63,10 @@ class User(AbstractUser):
         """
         Return user's asociated profile image 
         """
-        return Profile.objects.get(user=self).profile_image    
+        return Profile.objects.get(user=self).profile_image  
+
+    def has_notification(self):
+        return self.notifications.filter(is_read=False).exists()
 
 class Profile(models.Model):
     """

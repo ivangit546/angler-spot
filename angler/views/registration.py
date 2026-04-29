@@ -37,7 +37,7 @@ class RegisterView(View):
             friends_list = FriendList.objects.create(user=user)
             friends_list.save()
             mail_subject = 'Activate account'
-            message = render_to_string('angler/registration/activation_email.html', {'user':user,
+            message = render_to_string('angler/emails/account_confirmation.html', {'user':user,
                                                                                 'domain':get_current_site(request),
                                                                                 'uid':urlsafe_base64_encode(force_bytes(user.id)), 
                                                                                 'token':account_activation_token.make_token(user)})
@@ -48,8 +48,6 @@ class RegisterView(View):
             messages.success(request, 'Account confirmation email sent')
             login(request, user)
             return redirect('/')
-        else:
-            print(user_form.errors, profile_form.errors)
         return render(request, 'angler/registration/register.html', {'user_form':user_form, 'profile_form':profile_form})        
 class AccountActiavtionView(View):   
     def get(self, request, uidb64, token):

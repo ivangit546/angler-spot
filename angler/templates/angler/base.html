@@ -49,10 +49,22 @@
                 </ul>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'leaderboard'%}">Leaderboard</a>
-                </li>                
+                    <a class="nav-link active" aria-current="page" href="{% url 'leaderboard' %}">Leaderboard</a>
+                </li>
                 <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'about'%}">About Us</a>
+                <a class="nav-link active position-relative d-inline-block" href="{% url 'notifications' %}">
+                    Notifications
+                        {% if user.has_notification %}
+                        <span class="position-absolute top-5 start-70 translate-middle badge rounded-pill bg-danger">
+                        {{ notification_count }}
+                        <span class="visually-hidden">unread messages</span>
+                        </span>  
+                        {% endif %}
+                </a>
+                </li>
+              
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'about'%}">About Us</a>
                 </li>
                 
             {% endif %}

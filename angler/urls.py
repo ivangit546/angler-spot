@@ -12,6 +12,7 @@ from angler.views.post import CreatePostView, CreateCommentView, LikePostView, D
 from angler.views.search import SearchView
 from angler.views.edit import SettingsView, DeleteAccountView, EditAccountView
 from angler.views.leaderboard import LeaderboardView
+from angler.views.notification import NotificationView, ReadNotificationView
 urlpatterns = [
    
     #Authentication
@@ -24,6 +25,8 @@ urlpatterns = [
     path('settings/', SettingsView.as_view(), name='settings'),
     path('delete_account/', DeleteAccountView.as_view(), name='account_delete'),
     path('edit_account/<str:action>', EditAccountView.as_view(), name='edit_account'),
+    path('user_profile/<int:user_id>/', UserProfileView.as_view(), name='user_profile'),
+
 
     #Home page
     path('', MainFeedView.as_view(), name='home_feed'),
@@ -55,7 +58,6 @@ urlpatterns = [
     #Tackle
     path('rod&reel_create/',RodAndReelCreateView.as_view(), name='rod_reel_create'),
     path('lure_create/',LureCreateView.as_view(), name='lure_create'),
-    path('user_profile/<int:user_id>/', UserProfileView.as_view(), name='user_profile'),
     path('tackle/<int:user_id>', TackleView.as_view(), name='tackle'),
     path('tackle_detail/<str:tackle_type>/<int:tackle_id>/', TackleDetailView.as_view(), name='tackle_detail'),
     path('tackle_entry_choice/<str:tackle_type>/<int:fish_entry_id>/', TackleEntryAdd.as_view(), name='tackle_entry_choice'),
@@ -70,5 +72,11 @@ urlpatterns = [
 
     #Search
     path('search/', SearchView.as_view(), name='search'),
+
+    #Notifications
+    path('notifications/', NotificationView.as_view(), name='notifications'),
+      path('notification/<int:notification_id>', ReadNotificationView.as_view(), name='read_notification'),
+  
+
       
 ]

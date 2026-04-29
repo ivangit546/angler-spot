@@ -1,0 +1,28 @@
+{% extends 'angler/base.html' %}
+{% block content %}
+
+<div class="title-row">
+        <h2 class="section-title">Notifications</h2>
+</div> 
+
+<div class="results-grid">
+    {% for notification in all_notifications %}
+        <form method="POST" action="{% url 'read_notification' notification_id=notification.id %}">
+            {% csrf_token %}
+            <button type="submit" style="all: unset; cursor: pointer; display: block; width: 100%;">
+                <div class="result-card">
+                    <div class="result-card-header">
+                        <img src="{{ notification.sender.get_profile_image.url }}" class="circle-image-sm" />
+                        <div class="result-header-text">
+                            <span class="result-name">{{ notification.sender.get_profile_name }}</span>
+                            <span class="result-username">@{{ notification.sender.username }}</span>
+                        </div>
+                    </div>
+                    <p class="result-name">{{ notification.message }}</p>
+                </div>    
+            </button>
+        </form>
+        
+    {% endfor %}
+</div>
+{% endblock %}
