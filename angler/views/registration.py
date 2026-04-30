@@ -13,6 +13,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from angler.tokens import account_activation_token
 from django.core.mail import EmailMessage
 from angler.tasks import account_confirmed
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 class RegisterView(View):
     
     def get(self, request):
@@ -48,7 +49,8 @@ class RegisterView(View):
             messages.success(request, 'Account confirmation email sent')
             login(request, user)
             return redirect('/')
-        return render(request, 'angler/registration/register.html', {'user_form':user_form, 'profile_form':profile_form})        
+        return render(request, 'angler/registration/register.html', {'user_form':user_form, 'profile_form':profile_form}) 
+           
 class AccountActiavtionView(View):   
     def get(self, request, uidb64, token):
         uid = force_str(urlsafe_base64_decode(uidb64))
@@ -60,3 +62,6 @@ class AccountActiavtionView(View):
         else:
             messages.error(request,'Account confirmation link is invalid')
         return redirect('/')       
+    
+class PasswordResetView():
+    pass    
