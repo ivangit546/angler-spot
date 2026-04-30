@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from angler.views.registration import RegisterView, AccountActiavtionView
 from angler.views.login import LoginView
 from angler.views.main_feed import MainFeedView, AboutUsView
@@ -26,6 +27,21 @@ urlpatterns = [
     path('delete_account/', DeleteAccountView.as_view(), name='account_delete'),
     path('edit_account/<str:action>', EditAccountView.as_view(), name='edit_account'),
     path('user_profile/<int:user_id>/', UserProfileView.as_view(), name='user_profile'),
+    
+    #password reset
+    path('reset_password/', auth_views.PasswordResetView.as_view(
+        template_name='angler/user/password_reset.html',
+          email_template_name='angler/emails/password_reset.html',
+            subject_template_name='angler/emails/password_reset_subject_text.txt'),
+              name='password_reset'),
+    path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(
+        template_name='angler/user/password_reset_sent.html'),
+          name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='angler/user/password_reset_form.html'),
+          name='password_reset_confirm'),
+    path('reset_password_complete/', auth_views.PasswordResetCompleteView.as_view(template_name='angler/user/password_reset_complete.html'),
+          name='password_reset_complete'),
 
 
     #Home page
@@ -75,7 +91,7 @@ urlpatterns = [
 
     #Notifications
     path('notifications/', NotificationView.as_view(), name='notifications'),
-      path('notification/<int:notification_id>', ReadNotificationView.as_view(), name='read_notification'),
+    path('notification/<int:notification_id>', ReadNotificationView.as_view(), name='read_notification'),
   
 
       
