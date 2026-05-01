@@ -27,7 +27,7 @@ class Post(models.Model):
             response = requests.get(self.image.url)
             if response.status_code == 200:
                 image = Image.open(BytesIO(response.content))
-                print(image._getexif().get(274) if image._getexif() else "No EXIF")
+                image.info.pop('exif', None)
                 image = ImageOps.exif_transpose(image)
                 output = BytesIO()
                 image.save(output, format=image.format or 'JPEG')
