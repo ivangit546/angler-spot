@@ -89,6 +89,7 @@ class FishEntry(models.Model):
             response = requests.get(self.fish_dex_image.url)
             if response.status_code == 200:
                 image = Image.open(BytesIO(response.content))
+                image.info.pop('exif', None)
                 image = ImageOps.exif_transpose(image)
                 output = BytesIO()
                 image.save(output, format=image.format or 'JPEG')
@@ -101,10 +102,12 @@ class FishEntry(models.Model):
                     ),
                     save=False
                 )
+                super().save(*args, **kwargs)
         if self.thumbnail:
             response = requests.get(self.thumbnail.url)
             if response.status_code == 200:
                 image = Image.open(BytesIO(response.content))
+                image.info.pop('exif', None)
                 image = ImageOps.exif_transpose(image)
                 output = BytesIO()
                 image.save(output, format=image.format or 'JPEG')
@@ -117,6 +120,7 @@ class FishEntry(models.Model):
                     ),
                     save=False
                 )
+                super().save(*args, **kwargs)
         if self.fish_dex_image or self.thumbnail:
             super().save(*args, **kwargs)                
            
