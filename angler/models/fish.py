@@ -5,9 +5,11 @@ from django.utils.text import slugify
 from angler.models.tackle import RodAndReel, Lure
 from django_resized import ResizedImageField
 from cloudinary_storage.storage import MediaCloudinaryStorage
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from io import BytesIO
 from PIL import Image, ImageOps
 import requests
+import sys
 
 
 def content_file_name(instance, filename):
@@ -82,26 +84,41 @@ class FishEntry(models.Model):
         """
         Fixes fish_dex_image and thumbnail from ios mobile device auto rotation issue
         """
+        super().save(*args, **kwargs)
         if self.fish_dex_image:
             response = requests.get(self.fish_dex_image.url)
-            image = Image.open(BytesIO(response.content))
-            image = ImageOps.exif_transpose(image)
-            output = BytesIO()
-            image.save(output, format=image.format or 'JPEG')
-            output.seek(0)
-            self.fish_dex_image.save(self.fish_dex_image.name, output, save=False)
-            super().save(*args, **kwargs)
-
+            if response.status_code == 200:
+                image = Image.open(BytesIO(response.content))
+                image = ImageOps.exif_transpose(image)
+                output = BytesIO()
+                image.save(output, format=image.format or 'JPEG')
+                output.seek(0)
+                self.fish_dex_image.save(
+                    self.fish_dex_image.name,
+                    InMemoryUploadedFile(
+                        output, None, self.fish_dex_image.name,
+                        'image/jpeg', sys.getsizeof(output), None
+                    ),
+                    save=False
+                )
         if self.thumbnail:
             response = requests.get(self.thumbnail.url)
-            image = Image.open(BytesIO(response.content))
-            image = ImageOps.exif_transpose(image)
-            output = BytesIO()
-            image.save(output, format=image.format or 'JPEG')
-            output.seek(0)
-            self.thumbnail.save(self.thumbnail.name, output, save=False)
-            super().save(*args, **kwargs)
-
+            if response.status_code == 200:
+                image = Image.open(BytesIO(response.content))
+                image = ImageOps.exif_transpose(image)
+                output = BytesIO()
+                image.save(output, format=image.format or 'JPEG')
+                output.seek(0)
+                self.thumbnail.save(
+                    self.thumbnail.name,
+                    InMemoryUploadedFile(
+                        output, None, self.thumbnail.name,
+                        'image/jpeg', sys.getsizeof(output), None
+                    ),
+                    save=False
+                )
+        if self.fish_dex_image or self.thumbnail:
+            super().save(*args, **kwargs)                
            
 
     def add_points(self):

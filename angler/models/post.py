@@ -2,8 +2,10 @@ from django.db import models
 from angler.models.user import User
 from django_resized import ResizedImageField
 import requests
+import sys
 from io import BytesIO
 from PIL import Image, ImageOps
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 class Post(models.Model):
     """
@@ -29,7 +31,14 @@ class Post(models.Model):
                 output = BytesIO()
                 image.save(output, format=image.format or 'JPEG')
                 output.seek(0)
-                self.image.save(self.image.name, output, save=False)
+                self.image.save(
+                    self.image.name,
+                    InMemoryUploadedFile(
+                        output, None, self.image.name,
+                        'image/jpeg', sys.getsizeof(output), None
+                    ),
+                    save=False
+                )
                 super().save(*args, **kwargs)
             
     def is_liked(self, user):
