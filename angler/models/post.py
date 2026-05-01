@@ -22,13 +22,14 @@ class Post(models.Model):
         """
         if self.image:
             response = requests.get(self.image.url)
-            image = Image.open(BytesIO(response.content))
-            image = ImageOps.exif_transpose(image)
-            output = BytesIO()
-            image.save(output, format=image.format or 'JPEG')
-            output.seek(0)
-            self.image.save(self.image.name, output, save=False)
-            super().save(*args, **kwargs)
+            if response.status_code == 200:
+                image = Image.open(BytesIO(response.content))
+                image = ImageOps.exif_transpose(image)
+                output = BytesIO()
+                image.save(output, format=image.format or 'JPEG')
+                output.seek(0)
+                self.image.save(self.image.name, output, save=False)
+                super().save(*args, **kwargs)
     
     def is_liked(self, user):
         if Like.objects.filter(user=user, post_id=self.id).exists():
