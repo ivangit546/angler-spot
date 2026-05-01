@@ -1,6 +1,9 @@
 from django.db import models
 from angler.models.user import User
 from django_resized import ResizedImageField
+import requests
+from io import BytesIO
+from PIL import Image, ImageOps
 
 class Post(models.Model):
     """
@@ -12,6 +15,20 @@ class Post(models.Model):
     image = ResizedImageField (size=[1600, 900], upload_to='post_img/', blank=True)
     def __str__(self):
         return f"@{self.user.username}'s post (post id: {self.id})"
+    
+    def save(self, *args, **kwargs):
+        """
+        Fixes image upload from ios mobile device auto rotation
+        """
+        if self.image:
+            response = requests.get(self.image.url)
+            image = Image.open(BytesIO(response.content))
+            image = ImageOps.exif_transpose(image)
+            output = BytesIO()
+            image.save(output, format=image.format or 'JPEG')
+            output.seek(0)
+            self.image.save(self.image.name, output, save=False)
+            super().save(*args, **kwargs)
     
     def is_liked(self, user):
         if Like.objects.filter(user=user, post_id=self.id).exists():
