@@ -20,6 +20,7 @@ class Post(models.Model):
         """
         Fixes image upload from ios mobile device auto rotation
         """
+        super().save(*args, **kwargs)
         if self.image:
             response = requests.get(self.image.url)
             if response.status_code == 200:
@@ -30,7 +31,7 @@ class Post(models.Model):
                 output.seek(0)
                 self.image.save(self.image.name, output, save=False)
                 super().save(*args, **kwargs)
-    
+            
     def is_liked(self, user):
         if Like.objects.filter(user=user, post_id=self.id).exists():
             return True
