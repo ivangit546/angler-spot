@@ -57,17 +57,12 @@
                     {% endif %}    
                     {% if is_friend %}
                     <form method="post" action="{% url 'remove_friend' user_id=user_profile.user.id %}"> 
-                            {% csrf_token %}
-                            <button type="submit" class="profile-btn profile-follow-btn">Unfriend</button>
-                        </form>
+                        {% csrf_token %}
+                        <button type="submit" class="profile-btn profile-follow-btn">Unfriend</button>
+                    </form>
                     {% endif %}    
                     <a href="" class="profile-btn profile-message-btn">Message</a> 
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <button type="submit" class="profile-btn profile-block-btn">
-                            {% if is_blocked %}Unblock{% else %}Block{% endif %}
-                        </button>
-                    </form> 
+                    <a href="" class="profile-btn profile-message-btn">Block</a>
                 {% endif %}
             </div>
         </div>   
