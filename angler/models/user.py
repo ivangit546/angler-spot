@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from PIL import Image
+from PIL import Image, ImageOps
 import requests
 from io import BytesIO
 
@@ -85,11 +85,14 @@ class Profile(models.Model):
         """
         super().save(*args, **kwargs)
         response = requests.get(self.profile_image.url)
-        image = Image.open(BytesIO(response.content))
-        if image.height > 300 or image.width > 300:
-            image.thumbnail((300, 300))
-            output = BytesIO()
-            image.save(output, format=image.format or 'JPEG')
-            output.seek(0)
-            self.profile_image.save(self.profile_image.name, output, save=False)
-            super().save(*args, **kwargs)
+        if response.status_code == 200:
+            image = Image.open(BytesIO(response.content))
+            image = ImageOps.exif_transpose(image)
+            image.info.pop('exif', None)
+            if image.height > 300 or image.width > 300:
+                image.thumbnail((300, 300))
+                output = BytesIO()
+                image.save(output, format=image.format or 'JPEG')
+                output.seek(0)
+                self.profile_image.save(self.profile_image.name, output, save=False)
+                super().save(*args, **kwargs)
