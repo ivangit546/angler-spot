@@ -51,4 +51,4 @@ class UserProfileView(LoginRequiredMixin, View):
         if edit_form.is_valid():
             edit_form.save()
             messages.success(request, 'Profile Edit Successful')
-        return redirect('user_profile', userid=request.user.id)
+        return redirect('user_profile', user_id=request.user.id)
