@@ -213,7 +213,8 @@ STATICFILES_DIRS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://angler-spot-production.up.railway.app',
+    'https://angler-spot.com', 
+    'https://www.angler-spot.com'
 ]
 
 LOGGING = {
