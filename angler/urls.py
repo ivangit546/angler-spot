@@ -84,7 +84,7 @@ urlpatterns = [
     path('leaderboard/', LeaderboardView.as_view(), name='leaderboard'),
 
     #About Us
-    # path('about_us/', AboutUsView.as_view(), name='about'),
+    path('about_us/', AboutUsView.as_view(), name='about'),
 
     #Search
     path('search/', SearchView.as_view(), name='search'),
