@@ -1,0 +1,499 @@
+{% extends 'angler/base.html' %}
+{% load static %}
+{% load cloudinary %}
+{% cloudinary image_field.name quality="auto" %}
+{% block content %}
+
+<div class="chat-page" data-gc-id="{{ group_chat.id }}">
+    <div class="chat-header">
+        <img src="{{ group_chat.image.url }}" class="chat-avatar" />
+        <span class="chat-name">{{ group_chat.group_name }}</span>
+        <div class="chat-header-actions">
+            <button class="chat-header-btn" data-bs-toggle="modal" data-bs-target="#membersModal">Members</button>
+            {% if request.user == group_chat.owner %}
+                <button class="chat-header-btn" data-bs-toggle="modal" data-bs-target="#addModal">Add</button>
+                <button class="chat-header-btn" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+            {% endif %}
+            <form method="POST" action="{% url 'manage_member' gc_id=group_chat.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="leave" />
+                <button type="submit" class="chat-header-btn chat-leave-btn">Leave</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+        {% for message, reactions in messages_with_reactions %}
+        <div class="chat-message {% if message.author == request.user %}chat-message-mine{% endif %}">
+            {% if message.author != request.user %}
+            <a href="{% url 'user_profile' user_id=message.author.id %}">
+                <img src="{{ message.author.get_profile_image.url }}" class="message-avatar" />
+            </a>
+            {% endif %}
+            <div class="message-bubble-wrapper">
+                {% if message.author != request.user %}
+                <span class="message-sender-name">{{ message.author.get_profile_name }}</span>
+                {% endif %}
+                <div class="message-bubble">
+                    {% if message.parent != None %}
+                    <div class="message-reply">
+                        <img src="{{ message.parent.author.get_profile_image.url }}" class="reply-avatar" />
+                        <div class="reply-content">
+                            <span class="reply-name">{{ message.parent.author.get_profile_name }}</span>
+                            <p class="reply-text">{{ message.parent.text }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if message.image %}
+                    <img src="{{ message.image.url }}" class="message-image" data-bs-toggle="modal" data-bs-target="#imageModal{{ message.id }}" style="cursor: pointer;" />
+                    {% endif %}
+                    <p class="message-text">{{ message.text }}</p>
+                    {% if reactions %}
+                    <div class="message-reactions">
+                        {% for r in reactions %}
+                        <span class="message-reaction-pill">
+                            {% if r.reaction == 'Heart' %}❤️
+                            {% elif r.reaction == 'Thumbs Up' %}👍
+                            {% elif r.reaction == 'Thumbs Down' %}👎
+                            {% elif r.reaction == 'Fire' %}🔥
+                            {% elif r.reaction == 'Crying' %}😭
+                            {% elif r.reaction == 'Laughing' %}😂
+                            {% elif r.reaction == 'Angled Laugh' %}🤣
+                            {% endif %}
+                            {{ r.count }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div class="message-footer">
+                        <span class="message-time">{{ message.created_at }}</span>
+                        <div class="message-actions">
+                            <div class="reaction-wrapper">
+                                <button type="button" class="reaction-btn" onclick="toggleReactions(this)">
+                                    {% if message.reactions.count > 0 %}{{ message.reactions.count }}{% endif %}
+                                    <img src="{% static 'icons/reaction.png' %}" style="width:16px; height:16px; object-fit:contain;" />
+                                </button>
+                                <div class="reaction-picker">
+                                    {% for value, emoji in reaction_choices %}
+                                        <button type="button" onclick="reactToMessage(this, '{{ message.id }}', '{{ value }}')">{{ emoji }}</button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <button type="button" class="reply-icon-btn" onclick="setReply('{{ message.id }}', '{{ message.author.get_profile_name }}', '{{ message.text }}')">
+                                <img src="{% static 'icons/reply.png' %}" style="width:16px; height:16px; object-fit:contain;" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if message.author == request.user %}
+            <a href="{% url 'user_profile' user_id=message.author.id %}">
+                <img src="{{ message.author.get_profile_image.url }}" class="message-avatar" />
+            </a>
+            {% endif %}
+        </div>
+
+        {% if message.image %}
+        <div class="modal fade" id="imageModal{{ message.id }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content" style="background: transparent; border: none;">
+                    <div class="modal-body p-0 text-center">
+                        <button type="button" class="btn-close btn-close-white mb-2" data-bs-dismiss="modal"></button>
+                        <img src="{{ message.image.url }}" style="max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px;" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+    </div>
+
+    <div class="chat-reply-preview" id="chat-reply-preview" style="display:none;">
+        <div class="reply-preview-content">
+            <span class="reply-preview-name" id="reply-preview-name"></span>
+            <p class="reply-preview-text" id="reply-preview-text"></p>
+        </div>
+        <button type="button" class="reply-preview-cancel" onclick="clearReply()">✕</button>
+    </div>
+
+    <div class="chat-input-bar">
+        <form method="POST" action="{% url 'direct_message' gc_id=group_chat.id %}" enctype="multipart/form-data" class="chat-input-form">
+            {% csrf_token %}
+            <input type="hidden" name="reply_to" id="reply-to-input" value="">
+            <label class="chat-image-label">
+                <input type="file" name="image" accept="image/*" style="display:none;" id="chat-image-input" onchange="previewChatImage(this)" />
+                <img src="{% static 'icons/image.png' %}" class="chat-image-icon" />
+            </label>
+            <div class="chat-input-wrapper">
+                <div id="chat-image-preview-wrapper" style="display:none; position:relative; width:fit-content;">
+                    <img id="chat-image-preview" class="chat-image-preview" />
+                    <button type="button" onclick="removeChatImage()" style="position:absolute; top:-6px; right:-6px; background:#000000a0; border:none; border-radius:50%; width:20px; height:20px; color:white; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0;">✕</button>
+                </div>
+                <textarea name="text" class="chat-textarea" placeholder="Message..." rows="1"></textarea>
+            </div>
+            <button type="submit" class="chat-send-btn">Send</button>
+        </form>
+    </div>
+</div>
+
+<!-- Members Modal -->
+<div class="modal fade" id="membersModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content chat-modal-content">
+            <div class="modal-header chat-modal-header">
+                <h5 class="modal-title chat-modal-title">Members</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body chat-modal-body">
+                <a href="{% url 'user_profile' user_id=group_chat.owner.id %}" style="display:flex; align-items:center; gap:12px; flex:1; text-decoration:none;">
+                    <img src="{{ group_chat.owner.get_profile_image.url }}" class="chat-member-avatar" />
+                    <div class="chat-member-info">
+                        <span class="chat-member-name">{{ group_chat.owner.get_profile_name }}</span>
+                        <span class="chat-member-username">@{{ group_chat.owner.username }}</span>
+                        <span class="chat-member-username">group chat owner 👑</span>
+                    </div>
+                </a>
+                {% for user in group_chat.users.all %}
+                <div class="chat-member-entry" id="member-{{ user.id }}">
+                    <a href="{% url 'user_profile' user_id=user.id %}" style="display:flex; align-items:center; gap:12px; flex:1; text-decoration:none;">
+                        <img src="{{ user.get_profile_image.url }}" class="chat-member-avatar" />
+                        <div class="chat-member-info">
+                            <span class="chat-member-name">{{ user.get_profile_name }}</span>
+                            <span class="chat-member-username">@{{ user.username }}</span>
+                        </div>
+                    </a>
+                    {% if request.user == group_chat.owner and user != request.user %}
+                    <button type="button" class="chat-header-btn chat-leave-btn" style="padding: 4px 10px; font-size: 12px;" onclick="removeMember('{{ user.id }}')">Remove</button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if request.user == group_chat.owner %}
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content chat-modal-content">
+            <div class="modal-header chat-modal-header">
+                <h5 class="modal-title chat-modal-title">Add Member</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body chat-modal-body">
+                <p id="add-member-error" style="color: #ff4757; font-size: 13px; margin-bottom: 8px; display:none;"></p>
+                <div class="auth-input-group">
+                    <span class="auth-input-prefix">@</span>
+                    <input type="text" id="add-member-input" placeholder="username" />
+                </div>
+                <button type="button" class="chat-send-btn" style="margin-top: 12px;" onclick="submitAddMember()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content chat-modal-content">
+            <div class="modal-header chat-modal-header">
+                <h5 class="modal-title chat-modal-title">Edit Group</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body chat-modal-body">
+                <form id="edit-group-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-field">
+                        <label class="form-label">Group Name</label>
+                        <input type="text" name="group_name" value="{{ group_chat.group_name }}" />
+                    </div>
+                    <div class="form-field" style="margin-top: 12px;">
+                        <label class="form-label">Group Image</label>
+                        <input type="file" name="image" accept="image/*" />
+                    </div>
+                    <button type="button" class="chat-send-btn" style="margin-top: 16px;" onclick="submitEditForm()">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    function setReply(id, name, text) {
+    document.getElementById('reply-to-input').value = id;
+    document.getElementById('reply-preview-name').textContent = name;
+    document.getElementById('reply-preview-text').textContent = text;
+    document.getElementById('chat-reply-preview').style.display = 'flex';
+    }
+
+    function clearReply() {
+        document.getElementById('reply-to-input').value = '';
+        document.getElementById('chat-reply-preview').style.display = 'none';
+    }
+
+    function toggleReactions(btn) {
+        const picker = btn.nextElementSibling;
+        const isActive = picker.classList.contains('active');
+        document.querySelectorAll('.reaction-picker').forEach(p => p.classList.remove('active'));
+        if (!isActive) picker.classList.add('active');
+    }
+
+    function reactToMessage(button, messageId, reaction) {
+        button.closest('.reaction-picker').classList.remove('active');
+        fetch(`/react/${messageId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `reaction=${reaction}`
+        })
+        .then(res => res.json())
+        .then(data => {});
+    }
+
+    function previewChatImage(input) {
+        const preview = document.getElementById('chat-image-preview');
+        const wrapper = document.getElementById('chat-image-preview-wrapper');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                preview.src = e.target.result;
+                wrapper.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const gcId = document.querySelector('.chat-page').dataset.gcId;
+        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${gcId}/`);
+
+        socket.onopen = function() {
+            console.log('connected');
+        };
+
+        socket.onclose = function(e) {
+            console.log('disconnected', e.code, e.reason);
+        };
+
+        socket.onerror = function(e) {
+            console.log('error', e);
+        };
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if (data.type === 'chat_message') {
+                appendMessage(data);
+            } else if (data.type === 'reaction_update') {
+                updateReactions(data);
+            }
+        };
+
+        function updateReactions(data) {
+            const message = document.querySelector(`[data-message-id="${data.message_id}"]`);
+            if (!message) return;
+            
+            let reactionsDiv = message.querySelector('.message-reactions');
+            if (!reactionsDiv) {
+                reactionsDiv = document.createElement('div');
+                reactionsDiv.classList.add('message-reactions');
+                message.querySelector('.message-bubble').insertBefore(
+                    reactionsDiv,
+                    message.querySelector('.message-footer')
+                );
+            }
+
+            const emojiMap = {
+                'Heart': '❤️',
+                'Thumbs Up': '👍',
+                'Thumbs Down': '👎',
+                'Fire': '🔥',
+                'Crying': '😭',
+                'Laughing': '😂',
+                'Angled Laugh': '🤣'
+            };
+
+            reactionsDiv.innerHTML = data.reactions.map(r => `
+                <span class="message-reaction-pill">
+                    ${emojiMap[r.reaction]} ${r.count}
+                </span>
+            `).join('');
+        }
+
+        function appendMessage(data) {
+            const chatMessages = document.getElementById('chat-messages');
+            const imageHtml = data.image_url ? `
+                <img src="${data.image_url}" class="message-image" style="cursor:pointer;" />
+            ` : '';
+            const ismine = data.author_username === '{{ request.user.username }}';
+            const div = document.createElement('div');
+            div.classList.add('chat-message');
+            div.dataset.messageId = data.message_id;
+            if (ismine) div.classList.add('chat-message-mine');
+
+            const replyHtml = data.parent ? `
+                <div class="message-reply">
+                    <img src="${data.parent.author_image}" class="reply-avatar" />
+                    <div class="reply-content">
+                        <span class="reply-name">${data.parent.author_name}</span>
+                        <p class="reply-text">${data.parent.text}</p>
+                    </div>
+                </div>
+            ` : '';
+
+        div.innerHTML = `
+            ${!ismine ? `
+            <a href="/profile/${data.author_id}/">
+                <img src="${data.author_image}" class="message-avatar" />
+            </a>` : ''}
+            <div class="message-bubble-wrapper">
+                ${!ismine ? `<span class="message-sender-name">${data.author_name}</span>` : ''}
+                <div class="message-bubble">
+                    ${replyHtml}
+                    ${imageHtml}
+                    <p class="message-text">${data.text}</p>
+                    <div class="message-footer">
+                        <span class="message-time">just now</span>
+                        <div class="message-actions">
+                            <div class="reaction-wrapper">
+                                <button type="button" class="reaction-btn" onclick="toggleReactions(this)">
+                                    <img src="/static/icons/reaction.png" style="width:16px; height:16px; object-fit:contain;" />
+                                </button>
+                                <div class="reaction-picker">
+                                    {% for value, emoji in reaction_choices %}
+                                        <button type="button" onclick="reactToMessage(this, '${data.message_id}', '{{ value }}')">{{ emoji }}</button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <button type="button" class="reply-icon-btn" onclick="setReply('${data.message_id}', '${data.author_name}', '${data.text}')">
+                                <img src="/static/icons/reply.png" style="width:16px; height:16px; object-fit:contain;" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ${ismine ? `
+            <a href="/profile/${data.author_id}/">
+                <img src="${data.author_image}" class="message-avatar" />
+            </a>` : ''}
+        `;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        document.querySelector('.chat-input-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const text = document.querySelector('.chat-textarea').value;
+            const imageInput = document.getElementById('chat-image-input');
+
+            if (imageInput.files.length > 0) {
+                const formData = new FormData(this);
+                fetch("{% url 'direct_message' gc_id=group_chat.id %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {});
+                imageInput.value = '';
+                document.getElementById('chat-image-preview-wrapper').style.display = 'none';
+            } else {
+                if (!text.trim()) return;
+                socket.send(JSON.stringify({
+                    'type': 'message',
+                    'text': text,
+                    'reply_to': document.getElementById('reply-to-input').value || null
+                }));
+            }
+            document.querySelector('.chat-textarea').value = '';
+            clearReply();
+        });
+
+        const chatMessages = document.getElementById('chat-messages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.reaction-wrapper')) {
+                document.querySelectorAll('.reaction-picker').forEach(p => p.classList.remove('active'));
+            }
+        });
+
+        function submitEditForm() {
+            const form = document.getElementById('edit-group-form');
+            const formData = new FormData(form);
+            fetch("{% url 'edit_group_chat' gc_id=group_chat.id %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    document.querySelector('.chat-name').textContent = data.group_name;
+                    if (data.image_url) {
+                        document.querySelector('.chat-header .chat-avatar').src = data.image_url;
+                    }
+                    bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+                }
+            });
+        }
+
+        function removeMember(userId) {
+            fetch("{% url 'manage_member' gc_id=group_chat.id %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `action=remove&user_id=${userId}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    document.getElementById(`member-${userId}`).remove();
+                }
+            });
+        }
+
+        function submitAddMember() {
+            const username = document.getElementById('add-member-input').value;
+            const error = document.getElementById('add-member-error');
+            fetch("{% url 'add_member' gc_id=group_chat.id %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `username=${username}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    error.style.display = 'none';
+                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+                } else {
+                    error.textContent = data.message;
+                    error.style.display = 'block';
+                }
+            });
+        }
+
+        function removeChatImage() {
+            document.getElementById('chat-image-input').value = '';
+            document.getElementById('chat-image-preview').src = '';
+            document.getElementById('chat-image-preview-wrapper').style.display = 'none';
+        }
+
+
+
+    });
+</script>
+{% endblock %}

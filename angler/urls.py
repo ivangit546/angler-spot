@@ -14,6 +14,7 @@ from angler.views.search import SearchView
 from angler.views.edit import SettingsView, DeleteAccountView, EditAccountView
 from angler.views.leaderboard import LeaderboardView
 from angler.views.notification import NotificationView, ReadNotificationView
+from angler.views.direct_message import CreateGroupChat, ChatView, ChatListView, ReactMessageView, GroupChatEditView, GroupChatAddView, LeaveGroupChatView
 urlpatterns = [
    
     #Authentication
@@ -93,6 +94,12 @@ urlpatterns = [
     path('notifications/', NotificationView.as_view(), name='notifications'),
     path('notification/<int:notification_id>', ReadNotificationView.as_view(), name='read_notification'),
   
-
-      
+    #Direct Messages
+    path('message/<int:user_id>', CreateGroupChat.as_view(), name='create_group_chat'),
+    path('chats/', ChatListView.as_view(), name='group_chats'),
+    path('direct_message/<int:gc_id>', ChatView.as_view(), name='direct_message'),
+    path('react/<int:message_id>/', ReactMessageView.as_view(), name='react_message'),
+    path('chat/<int:gc_id>/edit/', GroupChatEditView.as_view(), name='edit_group_chat'),
+    path('chat/<int:gc_id>/add/', GroupChatAddView.as_view(), name='add_member'),
+    path('chat/<int:gc_id>/manage-member/', LeaveGroupChatView.as_view(), name='manage_member'),  
 ]

@@ -1,16 +1,12 @@
-from django.db import models
 from angler.models.user import User
-from angler.models.user import User
-from django.utils.text import slugify
 from angler.models.tackle import RodAndReel, Lure
+from angler.mixins import ImageRotateMixin
+from django.db import models
+from django.utils.text import slugify
 from django_resized import ResizedImageField
 from cloudinary_storage.storage import MediaCloudinaryStorage
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from io import BytesIO
-from PIL import Image, ImageOps
-import requests
-import sys
-
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 def content_file_name(instance, filename):
     """
@@ -61,16 +57,18 @@ class FishDex(models.Model):
             self.save()     
 
   
-class FishEntry(models.Model):
+class FishEntry(ImageRotateMixin, models.Model):
     """
     A custom fish obj belonging to a sole user with their own data (name, weight, height, image, location...)
-    """      
+    """
+    image_field = 'fish_dex_image'      
+    
     fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
     fish_dex = models.ForeignKey(FishDex, on_delete=models.CASCADE)
     entry_weight = models.DecimalField(max_digits=5, decimal_places=1)
     entry_length = models.DecimalField(max_digits=5, decimal_places=2)
-    fish_dex_image = ResizedImageField(size=[1600, 900], upload_to='fishdex_img/', blank=True)
-    thumbnail = ResizedImageField(size=[150,150], crop=['middle', 'center'], upload_to='thumbnails/', blank=True)
+    fish_dex_image = models.ImageField(upload_to='fishdex_img/', blank=True)
+    thumbnail = ImageSpecField(source='fish_dex_image', processors=[ResizeToFill(150, 150, upscale=False)], options={'quality':70})
     tackle = models.ForeignKey(RodAndReel, null=True, blank=True, on_delete=models.SET_NULL)
     lure = models.ForeignKey(Lure, null=True, blank=True, on_delete=models.SET_NULL)
     caught_at = models.DateTimeField(auto_now=True)
@@ -78,53 +76,8 @@ class FishEntry(models.Model):
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     
     class Meta:
-        unique_together = ('fish', 'fish_dex')  
-
-    def save(self, *args, **kwargs):
-        """
-        Fixes fish_dex_image and thumbnail from ios mobile device auto rotation issue
-        """
-        super().save(*args, **kwargs)
-        if self.fish_dex_image:
-            response = requests.get(self.fish_dex_image.url)
-            if response.status_code == 200:
-                image = Image.open(BytesIO(response.content))
-                image.info.pop('exif', None)
-                image = ImageOps.exif_transpose(image)
-                output = BytesIO()
-                image.save(output, format=image.format or 'JPEG')
-                output.seek(0)
-                self.fish_dex_image.save(
-                    self.fish_dex_image.name,
-                    InMemoryUploadedFile(
-                        output, None, self.fish_dex_image.name,
-                        'image/jpeg', sys.getsizeof(output), None
-                    ),
-                    save=False
-                )
-                super().save(*args, **kwargs)
-        if self.thumbnail:
-            response = requests.get(self.thumbnail.url)
-            if response.status_code == 200:
-                image = Image.open(BytesIO(response.content))
-                image.info.pop('exif', None)
-                image = ImageOps.exif_transpose(image)
-                output = BytesIO()
-                image.save(output, format=image.format or 'JPEG')
-                output.seek(0)
-                self.thumbnail.save(
-                    self.thumbnail.name,
-                    InMemoryUploadedFile(
-                        output, None, self.thumbnail.name,
-                        'image/jpeg', sys.getsizeof(output), None
-                    ),
-                    save=False
-                )
-                super().save(*args, **kwargs)
-        if self.fish_dex_image or self.thumbnail:
-            super().save(*args, **kwargs)                
+        unique_together = ('fish', 'fish_dex')                
            
-
     def add_points(self):
         """
         If fish entry is shiny add 50 points to user else add 25 points    

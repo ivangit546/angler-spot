@@ -42,6 +42,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,8 +87,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'angler_spot.wsgi.application'
+# WSGI_APPLICATION = 'angler_spot.wsgi.application'
 
+ASGI_APPLICATION = 'angler_spot.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -234,6 +236,15 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
+        },
+    },
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [os.environ.get('CELERY_BROKER_URL')],
         },
     },
 }

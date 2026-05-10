@@ -1,6 +1,7 @@
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from angler.models.user import User
+from angler.models.chat import GroupChat
 from django.core.cache import cache
 
 
@@ -19,3 +20,11 @@ def account_confirmed(user_id):
     if user.is_confirmed == False:
         user.delete()
 
+@shared_task
+def hard_delete(gc_id):
+    try:
+        group_chat = GroupChat.objects.get(id=gc_id)
+    except GroupChat.DoesNotExist:
+        return
+    if group_chat.deleted_at:
+        group_chat.delete()    

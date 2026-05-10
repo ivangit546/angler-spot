@@ -60,8 +60,11 @@
                         {% csrf_token %}
                         <button type="submit" class="profile-btn profile-follow-btn">Unfriend</button>
                     </form>
-                    {% endif %}    
-                    <a href="" class="profile-btn profile-message-btn">Message</a> 
+                    {% endif %}
+                    <form method="post" action="{% url 'create_group_chat' user_id=user_profile.user.id %}">
+                        {% csrf_token %}  
+                        <button type="submit" class="profile-btn profile-message-btn">Message</button> 
+                    </form>  
                     <a href="" class="profile-btn profile-message-btn">Block</a>
                 {% endif %}
             </div>

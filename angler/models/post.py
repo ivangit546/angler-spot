@@ -1,47 +1,24 @@
 from django.db import models
 from angler.models.user import User
-from django_resized import ResizedImageField
-import requests
-import sys
-from io import BytesIO
-from PIL import Image, ImageOps
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from angler.mixins import ImageRotateMixin
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
 
-class Post(models.Model):
+class Post(ImageRotateMixin, models.Model):
     """
     User created posts, can be text and or images
     """
+    image_field = 'image'
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     created_date = models.DateTimeField(auto_now=True)
-    image = ResizedImageField (size=[1600, 900], upload_to='post_img/', blank=True)
+    image = models.ImageField (upload_to='post_img/', blank=True)
+    thumbnail = ImageSpecField(source='image', processors=[ResizeToFit(1200, 675, upscale=False)], format='JPEG', options={'quality':70})
+
     def __str__(self):
         return f"@{self.user.username}'s post (post id: {self.id})"
     
-    def save(self, *args, **kwargs):
-        """
-        Fixes image upload from ios mobile device auto rotation
-        """
-        super().save(*args, **kwargs)
-        if self.image:
-            response = requests.get(self.image.url)
-            if response.status_code == 200:
-                image = Image.open(BytesIO(response.content))
-                image.info.pop('exif', None)
-                image = ImageOps.exif_transpose(image)
-                output = BytesIO()
-                image.save(output, format=image.format or 'JPEG')
-                output.seek(0)
-                self.image.save(
-                    self.image.name,
-                    InMemoryUploadedFile(
-                        output, None, self.image.name,
-                        'image/jpeg', sys.getsizeof(output), None
-                    ),
-                    save=False
-                )
-                super().save(*args, **kwargs)
-            
     def is_liked(self, user):
         if Like.objects.filter(user=user, post_id=self.id).exists():
             return True
