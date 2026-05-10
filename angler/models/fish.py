@@ -3,7 +3,6 @@ from angler.models.tackle import RodAndReel, Lure
 from angler.mixins import ImageRotateMixin
 from django.db import models
 from django.utils.text import slugify
-from django_resized import ResizedImageField
 from cloudinary_storage.storage import MediaCloudinaryStorage
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
@@ -62,7 +61,7 @@ class FishEntry(ImageRotateMixin, models.Model):
     A custom fish obj belonging to a sole user with their own data (name, weight, height, image, location...)
     """
     image_field = 'fish_dex_image'      
-    
+
     fish = models.ForeignKey(Fish, on_delete=models.CASCADE)
     fish_dex = models.ForeignKey(FishDex, on_delete=models.CASCADE)
     entry_weight = models.DecimalField(max_digits=5, decimal_places=1)

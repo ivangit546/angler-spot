@@ -1,18 +1,18 @@
 from django.views import View
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from django.http import HttpRequest, HttpResponse, StreamingHttpResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from angler.models.user import User
 from angler.models.chat import GroupChat, DirectMessage, Reaction
-from angler.models.user import Profile
-from angler.models.notification import Notification
 from django.db.models import Q
 from angler.forms.direct_meesage import DirectMessageCreateForm
 from django.http import JsonResponse
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.forms import modelform_factory
-from django.contrib import messages
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+from django.contrib.contenttypes.models import ContentType
 
 class CreateGroupChat(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -47,7 +47,6 @@ class ChatListView(LoginRequiredMixin, View):
 class ChatView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, gc_id):
-        # group_chat = get_object_or_404(GroupChat, Q(users=request.user)| Q(owner=request.user), id=gc_id, deleted_at=None)
         group_chat = GroupChat.objects.filter(
             Q(users=request.user) | Q(owner=request.user),
             id=gc_id,
@@ -96,7 +95,6 @@ class ChatView(LoginRequiredMixin, View):
             if reply_id:
                 chat_message.parent = parent_message
             chat_message.save()
-            # return redirect('direct_message', gc_id=group_chat.id)
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
                 f'chat_{gc_id}',
@@ -158,10 +156,6 @@ class GroupChatEditView(LoginRequiredMixin, View):
                 'image_url': gc.image.url if gc.image else None
             })
         return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
-        
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from django.contrib.contenttypes.models import ContentType
 
 class ReactMessageView(View):
     def post(self, request, message_id):

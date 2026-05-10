@@ -16,7 +16,6 @@ class GroupChat(ImageRotateMixin, models.Model):
 
     group_name = models.CharField(max_length=128, default='Direct Message')
     image = models.ImageField( upload_to='gc_img/', blank=True, max_length=500)
-    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(300, 300, upscale=False)], format='JPEG', options={'quality':70})
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='gc_owner')
     users = models.ManyToManyField(User, blank=True, related_name='gc_users')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -123,7 +122,6 @@ class DirectMessage(ImageRotateMixin, models.Model):
     text = models.CharField(max_length=300)
     parent = models.ForeignKey('self',on_delete=models.CASCADE, null=True, blank=True, related_name='msg_parent')
     image = models.ImageField(blank=True, upload_to='chat_img/')
-    thumbnail = ImageSpecField(source='image', processors=[ResizeToFill(300, 300, upscale=False)], format='JPEG', options={'quality':70})
     created_at = models.DateTimeField(auto_now_add=True)
     reaction = GenericRelation(Reaction)
 
