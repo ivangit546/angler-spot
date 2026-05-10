@@ -8,6 +8,8 @@ cbor2==6.0.1
 celery==5.6.3
 certifi==2026.4.22
 cffi==2.0.0
+channels==4.3.2
+channels_redis==4.3.0
 charset-normalizer==3.4.7
 click==8.3.2
 click-didyoumean==0.3.1
