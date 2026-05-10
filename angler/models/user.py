@@ -1,8 +1,8 @@
+from angler.mixins import ImageRotateMixin
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from PIL import Image, ImageOps
-import requests
-from io import BytesIO
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 class User(AbstractUser):
     """
@@ -68,31 +68,16 @@ class User(AbstractUser):
     def has_notification(self):
         return self.notifications.filter(is_read=False).exists()
 
-class Profile(models.Model):
+class Profile(ImageRotateMixin, models.Model):
     """
     Every user has a profile that houses profile related content i.e profile name, image, bio
     """
+    image_field = 'profile_image'
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_image = models.ImageField(default='default_profile_img.jpg', upload_to='profile_img/', null=False, blank=True)
+    profile_image = models.ImageField(default='default_profile_img.jpg', upload_to='profile_img/', blank=True)
+    thumbnail = ImageSpecField(source='profile_image', processors=[ResizeToFill(300, 300, upscale=False)], format='JPEG', options={'quality': 70})
     profile_name = models.CharField(max_length=16, blank=True)
     bio = models.TextField(max_length=500, blank=True)
     def __str__(self):
         return self.profile_name
-   
-    def save(self, *args, **kwargs):
-        """
-        Custom save(), if a user sets a profile image upon account creation and or profile edit, the image is resized and then saved
-        """
-        super().save(*args, **kwargs)
-        response = requests.get(self.profile_image.url)
-        if response.status_code == 200:
-            image = Image.open(BytesIO(response.content))
-            image = ImageOps.exif_transpose(image)
-            image.info.pop('exif', None)
-            if image.height > 300 or image.width > 300:
-                image.thumbnail((300, 300))
-                output = BytesIO()
-                image.save(output, format=image.format or 'JPEG')
-                output.seek(0)
-                self.profile_image.save(self.profile_image.name, output, save=False)
-                super().save(*args, **kwargs)

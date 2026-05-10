@@ -6,6 +6,7 @@ from angler.models.fish import Fish, FishDex, FishEntry
 from angler.models.tackle import RodAndReel, Lure
 from angler.models.friends import FriendList, FriendRequest
 from angler.models.notification import Notification
+from angler.models.chat import GroupChat, DirectMessage, Reaction
 
 admin.site.register(User),
 admin.site.register(Post),
@@ -19,6 +20,9 @@ admin.site.register(FriendRequest),
 admin.site.register(Comment),
 admin.site.register(Like),
 admin.site.register(Notification),
+admin.site.register(GroupChat),
+admin.site.register(DirectMessage),
+admin.site.register(Reaction),
 
 
 class FishEntryInline(admin.TabularInline):  

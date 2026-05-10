@@ -27,5 +27,6 @@ class ReadNotificationView(LoginRequiredMixin, View):
         notification.save()
         return redirect(notification.get_notification_url())
 
+
            
         

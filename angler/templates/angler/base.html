@@ -52,6 +52,9 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'leaderboard' %}">Leaderboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'group_chats' %}">Messages</a>
+                </li>
+                <li class="nav-item">
                 <a class="nav-link active position-relative d-inline-block" href="{% url 'notifications' %}">
                     Notifications
                         {% if user.has_notification %}

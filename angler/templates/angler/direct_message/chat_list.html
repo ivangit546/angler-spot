@@ -1,0 +1,21 @@
+{% extends 'angler/base.html'%}
+{% block content %}
+    <div class="title-row">
+        <h2 class="section-title">Messages</h2>
+    </div>
+
+    <div class="chat-list">
+        {% for group in group_chats %}
+        <a href="{% url 'direct_message' gc_id=group.id %}" class="chat-entry">
+            <img src="{{ group.image.url }}" class="chat-avatar" />
+            <div class="chat-info">
+                <div class="chat-info-top">
+                    <span class="chat-name">{{ group.group_name }}</span>
+                    <span class="chat-timestamp">{{ group.get_latest_message.created_at|timesince }} ago</span>
+                </div>
+                <span class="chat-preview">{{ group.get_latest_message }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+{% endblock %}
