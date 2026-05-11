@@ -25,11 +25,21 @@ class GroupChat(ImageRotateMixin, models.Model):
         return self.group_name
     
     def add_user(self, user_to_add):
+        """
+        If group chat users is below 20 add and save user to the group chat.
+        """
         if self.users.count() < 20:
             self.users.add(user_to_add)
         else:
             raise ValueError('Group chat users cant exceed 20')    
     
+    def set_default_name(self):
+        """
+        Set initial group chat name to owner profile name
+        """
+        self.group_name = self.owner.get_profile_name()
+        self.save()
+
     def new_owner(self):
         """
         When current group chat owner leaves the group chat or delets their account

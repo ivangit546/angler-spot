@@ -28,6 +28,7 @@ class CreateGroupChat(LoginRequiredMixin, View):
         else:    
             group_chat = GroupChat.objects.create(owner=request.user)
             group_chat.set_default_image()
+            group_chat.set_default_name()
             group_chat.users.add(user_to_message)
         context = {
             'group_chat':group_chat
