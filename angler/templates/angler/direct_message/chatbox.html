@@ -24,7 +24,7 @@
 
     <div class="chat-messages" id="chat-messages">
         {% for message, reactions in messages_with_reactions %}
-        <div class="chat-message {% if message.author == request.user %}chat-message-mine{% endif %}">
+        <div class="chat-message {% if message.author == request.user %}chat-message-mine{% endif %}" data-message-id="{{ message.id }}">
             {% if message.author != request.user %}
             <a href="{% url 'user_profile' user_id=message.author.id %}">
                 <img src="{{ message.author.get_profile_image.url }}" class="message-avatar" />
