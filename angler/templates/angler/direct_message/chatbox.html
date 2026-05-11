@@ -268,9 +268,78 @@
         }
     }
 
+    function submitEditForm() {
+        const form = document.getElementById('edit-group-form');
+        const formData = new FormData(form);
+        fetch("{% url 'edit_group_chat' gc_id=group_chat.id %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                document.querySelector('.chat-name').textContent = data.group_name;
+                if (data.image_url) {
+                    document.querySelector('.chat-header .chat-avatar').src = data.image_url;
+                }
+                bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+            }
+        });
+    }
+
+    function removeMember(userId) {
+        fetch("{% url 'manage_member' gc_id=group_chat.id %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `action=remove&user_id=${userId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                document.getElementById(`member-${userId}`).remove();
+            }
+        });
+    }
+
+    function submitAddMember() {
+        const username = document.getElementById('add-member-input').value;
+        const error = document.getElementById('add-member-error');
+        fetch("{% url 'add_member' gc_id=group_chat.id %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `username=${username}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                error.style.display = 'none';
+                bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
+            } else {
+                error.textContent = data.message;
+                error.style.display = 'block';
+            }
+        });
+    }
+
+    function removeChatImage() {
+        document.getElementById('chat-image-input').value = '';
+        document.getElementById('chat-image-preview').src = '';
+        document.getElementById('chat-image-preview-wrapper').style.display = 'none';
+    }
+
+
     document.addEventListener('DOMContentLoaded', function() {
         const gcId = document.querySelector('.chat-page').dataset.gcId;
-        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${gcId}/`);
+        const socket = new WebSocket(`wss://${window.location.host}/ws/chat/${gcId}/`);
 
         socket.onopen = function() {
             console.log('connected');
@@ -423,76 +492,6 @@
                 document.querySelectorAll('.reaction-picker').forEach(p => p.classList.remove('active'));
             }
         });
-
-        function submitEditForm() {
-            const form = document.getElementById('edit-group-form');
-            const formData = new FormData(form);
-            fetch("{% url 'edit_group_chat' gc_id=group_chat.id %}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'ok') {
-                    document.querySelector('.chat-name').textContent = data.group_name;
-                    if (data.image_url) {
-                        document.querySelector('.chat-header .chat-avatar').src = data.image_url;
-                    }
-                    bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
-                }
-            });
-        }
-
-        function removeMember(userId) {
-            fetch("{% url 'manage_member' gc_id=group_chat.id %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: `action=remove&user_id=${userId}`
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'ok') {
-                    document.getElementById(`member-${userId}`).remove();
-                }
-            });
-        }
-
-        function submitAddMember() {
-            const username = document.getElementById('add-member-input').value;
-            const error = document.getElementById('add-member-error');
-            fetch("{% url 'add_member' gc_id=group_chat.id %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: `username=${username}`
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'ok') {
-                    error.style.display = 'none';
-                    bootstrap.Modal.getInstance(document.getElementById('addModal')).hide();
-                } else {
-                    error.textContent = data.message;
-                    error.style.display = 'block';
-                }
-            });
-        }
-
-        function removeChatImage() {
-            document.getElementById('chat-image-input').value = '';
-            document.getElementById('chat-image-preview').src = '';
-            document.getElementById('chat-image-preview-wrapper').style.display = 'none';
-        }
-
-
 
     });
 </script>
