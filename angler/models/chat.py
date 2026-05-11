@@ -33,12 +33,6 @@ class GroupChat(ImageRotateMixin, models.Model):
         else:
             raise ValueError('Group chat users cant exceed 20')    
     
-    def set_default_name(self):
-        """
-        Set initial group chat name to owner profile name
-        """
-        self.group_name = self.owner.get_profile_name()
-        self.save()
 
     def new_owner(self):
         """
