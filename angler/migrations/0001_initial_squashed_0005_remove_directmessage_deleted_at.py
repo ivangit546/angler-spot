@@ -13,7 +13,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [('angler', '0001_initial'), ('angler', '0002_remove_directmessage_reaction_and_more'), ('angler', '0003_alter_groupchat_options'), ('angler', '0004_alter_groupchat_image'), ('angler', '0005_remove_directmessage_deleted_at')]
 
     dependencies = [
         ('auth', '0012_alter_user_first_name_max_length'),
