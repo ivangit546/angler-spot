@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class MainFeedView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request):
-        posts = Post.objects.filter(Q(user=request.user) | Q (user__friendlist__friends=request.user) | Q(user__is_private=False)).order_by('-created_date') #only query friends and or non privated users' posts 
+        posts = Post.objects.filter(Q(user=request.user) | Q (user__friendlist__friends=request.user) | Q(user__is_private=False)).order_by('-created_date').distinct() #only query friends and or non privated users' posts 
         comment_form = PostCommentForm()
         liked_post_ids = set(Like.objects.filter(user=request.user).values_list('post_id', flat=True))
 
