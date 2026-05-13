@@ -4,6 +4,7 @@ from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from angler.models.user import User
 from angler.models.chat import GroupChat, DirectMessage, Reaction
+from angler.models.notification import Notification
 from django.db.models import Q
 from angler.forms.direct_meesage import DirectMessageCreateForm
 from django.http import JsonResponse
@@ -13,6 +14,7 @@ from django.forms import modelform_factory
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.contrib.contenttypes.models import ContentType
+
 
 class CreateGroupChat(LoginRequiredMixin, View):
     login_url = '/login/'
@@ -31,6 +33,8 @@ class CreateGroupChat(LoginRequiredMixin, View):
             group_chat.group_name = group_chat.owner.get_profile_name
             group_chat.save()
             group_chat.users.add(user_to_message)
+            notification_msg = f"@{group_chat.owner.username} has started a chat with you"
+            Notification.objects.create(recipient=user_to_message, sender=group_chat.owner, message=notification_msg, content_object=group_chat)
         context = {
             'group_chat':group_chat
         }
@@ -40,7 +44,8 @@ class CreateGroupChat(LoginRequiredMixin, View):
 class ChatListView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request):
-        group_chats = GroupChat.objects.filter(Q(owner=request.user)| Q(users=request.user), deleted_at=None).distinct()
+        group_chats = GroupChat.objects.filter(Q(owner=request.user)| Q(users=request.user), deleted_at=None).distinct().prefetch_related(Prefetch('notifications'))
+
         context = {
             'group_chats':group_chats
         }
@@ -65,6 +70,8 @@ class ChatView(LoginRequiredMixin, View):
             messages_with_reactions.append((message, reactions))
 
         EditGroupChatForm = modelform_factory(GroupChat, fields=['group_name', 'image',])
+
+        Notification.objects.filter(recipient=request.user, is_read=False, content_object=group_chat).update(is_read=True)
 
         context = {
             'group_chat':group_chat,
@@ -112,6 +119,12 @@ class ChatView(LoginRequiredMixin, View):
                     'parent': None,
                 }
             )
+            message_recipients = group_chat.users.exclude(id=chat_message.author.id)
+            if group_chat.owner != chat_message.author:
+                message_recipients = (message_recipients | group_chat.owner)
+                notification_msg = f"@{group_chat.owner.username} has sent you a message"
+                for user in message_recipients:        
+                    Notification.objects.create(recipient=user, sender=chat_message.author, message=notification_msg, content_object=group_chat)
             return JsonResponse({'status': 'ok'})    
         return JsonResponse({'status': 'error'}, status=400)
 
