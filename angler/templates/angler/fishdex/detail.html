@@ -34,8 +34,9 @@
                         <img src="{% static 'icons/map.png' %}" alt="action 2" class="detail-action-icon" />
                     </a>  
                 {% endif %}
-                {% if fish_entry.thumbnail %}
-                    <img src="{{ fish_entry.thumbnail.url }}" 
+
+                {% if fish_entry.fish_dex_image %}
+                    <img src="{{ fish_entry.fish_dex_image.url }}" 
                         data-bs-toggle="modal" 
                         data-bs-target="#imageModal" class="detail-action-icon modal-trigger"/>
                 {% endif %}
@@ -61,9 +62,8 @@
                 <button id="getLocationButton" class="detail-header-btn">Save Location</button>      
             {% endif %}    
         </div>
-        <!-- <div class="divider"></div> -->
-         <br>
-         <div class="detail-fields-wrapper">
+        <br>
+        <div class="detail-fields-wrapper">
             <div class="detail-fields">
                 <div class="field-row">
                     <span class="field-label">weight</span>
@@ -90,12 +90,13 @@
     </div>
 </div>
 
-{% if fish_entry.thumbnail %}
+{% if fish_entry.fish_dex_image %}
 <div class="modal fade" id="imageModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-body">
-                <img src="{{ fish_entry.fish_dex_image.url }}" class="img-fluid" alt="popup image" />
+        <div class="modal-content" style="background: transparent; border: none;">
+            <div class="modal-body p-0 text-center">
+                <button type="button" class="btn-close btn-close-white mb-2" data-bs-dismiss="modal"></button>
+                <img src="{{ fish_entry.fish_dex_image.url }}" style="max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 12px;" />
             </div>
         </div>
     </div>
@@ -143,6 +144,3 @@
     });
 </script>
 {% endblock %}
- <!--If fish passes a set size make it a shiny, will use an icon of star or some sort to display that
-    need caught_at added
- -->
