@@ -14,6 +14,7 @@ from django.forms import modelform_factory
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Prefetch
 
 
 class CreateGroupChat(LoginRequiredMixin, View):
@@ -44,7 +45,15 @@ class CreateGroupChat(LoginRequiredMixin, View):
 class ChatListView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request):
-        group_chats = GroupChat.objects.filter(Q(owner=request.user)| Q(users=request.user), deleted_at=None).distinct().prefetch_related(Prefetch('notifications'))
+        group_chats = GroupChat.objects.filter(Q(owner=request.user)| Q(users=request.user), deleted_at=None).distinct().annotate(
+            unread_count=Count(
+                'notifications',
+                filter=Q(
+                    notifications__recipient=request.user,
+                    notifications__is_read=False
+                ), distinct=True
+            )
+        )
 
         context = {
             'group_chats':group_chats
@@ -70,8 +79,8 @@ class ChatView(LoginRequiredMixin, View):
             messages_with_reactions.append((message, reactions))
 
         EditGroupChatForm = modelform_factory(GroupChat, fields=['group_name', 'image',])
-
-        Notification.objects.filter(recipient=request.user, is_read=False, content_object=group_chat).update(is_read=True)
+        gc_content_type = ContentType.objects.get_for_model(GroupChat)
+        Notification.objects.filter(recipient=request.user, is_read=False, content_type=gc_content_type, object_id=group_chat.id).update(is_read=True)
 
         context = {
             'group_chat':group_chat,
@@ -146,6 +155,8 @@ class GroupChatAddView(LoginRequiredMixin, View):
             if group_chat.owner != user_to_add and not GroupChat.objects.filter(id=gc_id, users=user_to_add).exists():
                 try:
                     group_chat.users.add(user_to_add)
+                    notification_msg = f"you have been added to a group chat"
+                    Notification.objects.create(recipient=user_to_add, sender=request.user, message=notification_msg, content_object=group_chat)
                     return JsonResponse({'status': 'ok'})
                 except ValueError as e:
                     return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

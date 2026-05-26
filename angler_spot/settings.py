@@ -82,6 +82,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'angler.context_processors.notification_counter',
+                'angler.context_processors.message_counter'
             ],
         },
     },
