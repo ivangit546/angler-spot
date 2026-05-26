@@ -2,10 +2,9 @@ from django.db import models
 from django.utils import timezone
 from angler.models.user import User
 from angler.mixins import ImageRotateMixin
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from angler.models.notification import Notification
 
 class GroupChat(ImageRotateMixin, models.Model):
     """
@@ -20,6 +19,7 @@ class GroupChat(ImageRotateMixin, models.Model):
     users = models.ManyToManyField(User, blank=True, related_name='gc_users')
     created_at = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
+    notifications = GenericRelation(Notification)
 
     def __str__(self):
         return self.group_name
