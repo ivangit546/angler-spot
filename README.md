@@ -3,6 +3,12 @@ With Angler Spot users are able to have am immersive and enjoyable way to enhanc
 Make and share post about your day out in the water? Interact and meet new anglers with the same passion? Well Angler Spot is the Web Application for you!
 As of May 10, 2026 Angler Spot allows you to enter new catches, create and interact with other users' post, instantly direct message users and add/remove/edit groupchats with multiple users.
 
+Instant Messaging Feature
+<img width="400" height="225" alt="dms" src="https://github.com/user-attachments/assets/1f9c6243-8c79-4526-b799-b98b3bbeb186" />
+
+Custom User Fish Entries with geolocation save option
+<img width="400" height="225" alt="fish_entry" src="https://github.com/user-attachments/assets/b56e9af1-3631-4ca8-b9df-56970fd5e748" />
+
 Upcoming Plans and Updates:
 * Direct/Group message notifications
 * Allow users to block other users.
