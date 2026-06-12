@@ -249,3 +249,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+GEMINI_API_KEY = env('GEMINI_API_KEY')
