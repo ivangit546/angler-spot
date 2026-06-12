@@ -20,7 +20,6 @@ def ask_genai(message):
                 tools=[],
                 response_mime_type="text/plain",
                 system_instruction="Your name is Hilo and you are a expert fishing assistant for AnglerSpot. You are strictly a text only assistant. You only answer fishing related questions. These questions can include fish identification, good fishing locations, fishing equipment, ideal weather condiditions for fishing and any techniques that would help to catch fish. Keep answers short and concise, try to stay within the constraints of 150 output tokens. You are a strict text-only assistant. Do not request, describe, or attempt to generate images, audio, video, files, or executable code blocks. Dont use wasteful things like asterisks to delineate things like items in a list of items.",
-                thinking_config=types.ThinkingConfig(thinking_level="minimal"),
             )
         )
         return response.text
