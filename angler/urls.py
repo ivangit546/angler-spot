@@ -15,6 +15,7 @@ from angler.views.edit import SettingsView, DeleteAccountView, EditAccountView
 from angler.views.leaderboard import LeaderboardView
 from angler.views.notification import NotificationView, ReadNotificationView
 from angler.views.direct_message import CreateGroupChat, ChatView, ChatListView, ReactMessageView, GroupChatEditView, GroupChatAddView, LeaveGroupChatView
+from angler.views.chat_bot import ChatBotView
 urlpatterns = [
    
     #Authentication
@@ -101,5 +102,9 @@ urlpatterns = [
     path('react/<int:message_id>/', ReactMessageView.as_view(), name='react_message'),
     path('chat/<int:gc_id>/edit/', GroupChatEditView.as_view(), name='edit_group_chat'),
     path('chat/<int:gc_id>/add/', GroupChatAddView.as_view(), name='add_member'),
-    path('chat/<int:gc_id>/manage-member/', LeaveGroupChatView.as_view(), name='manage_member'),  
+    path('chat/<int:gc_id>/manage-member/', LeaveGroupChatView.as_view(), name='manage_member'),
+
+    #AI Chat Bot
+    path('chatbot', ChatBotView.as_view(), name='chat_bot'),
+
 ]
