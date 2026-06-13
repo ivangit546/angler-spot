@@ -5,7 +5,7 @@ As of June 12, 2026 Angler Spot allows you to enter new catches, create and inte
 
 **Hilo AI Chatbot:**
 
-<img width="400" height="225" alt="hilo_demo" src="https://github.com/user-attachments/assets/d0ba3974-8068-4f3e-88ce-1a4fb81be2bb" />
+<img width="400" height="225" alt="hilo2" src="https://github.com/user-attachments/assets/dd98a3a6-6a26-453f-85ad-efd48b24eaca" />
 
 **Instant Messaging Feature:**
 
