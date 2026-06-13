@@ -12,7 +12,15 @@
     flex-direction: column;
     gap: 16px;
 }
+.messages-box {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
 
+.messages-inner {
+    margin-top: auto;
+}
 .message {
     margin-bottom: 0;
     list-style: none;
